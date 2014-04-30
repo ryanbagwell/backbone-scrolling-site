@@ -1,2 +1,2 @@
-scrolling-site-framework
-========================
+Backbone Scrolling Site
+=======================

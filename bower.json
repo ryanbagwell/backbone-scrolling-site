@@ -1,12 +1,11 @@
 {
-  "name": "scrolling-site-framework",
+  "name": "backbone-scrolling-site",
   "version": "0.0.0",
-  "homepage": "https://github.com/ryanbagwell/scrolling-site-framework",
+  "homepage": "https://github.com/ryanbagwell/backbone-scrolling-site",
   "authors": [
     "Ryan Bagwell <ryan@ryanbagwell.com>"
   ],
   "description": "A framework for building single-page scrolling sites",
-  "main": "framework.coffee",
   "moduleType": [
     "amd"
   ],
