@@ -21,6 +21,7 @@
     "jquery": ">=1.9.0",
     "backbone": ">=1.0.0",
     "underscore": ">=1.4.2",
-    "jquery.scrollTo": ">=1.4.11"
+    "jquery.scrollTo": ">=1.4.11",
+    "underscore.string": "~2.3.3"
   }
 }

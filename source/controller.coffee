@@ -1,6 +1,8 @@
 define (require) ->
     $ = require 'jquery'
     _ = require 'underscore'
+    _.str = require 'underscore-string'
+    _.mixin _.str.exports()
     Backbone = require 'backbone'
     require 'jquery-scrollto'
 
@@ -52,7 +54,6 @@ define (require) ->
         #
         pageMeta: []
 
-
         currentResolution: 0
 
         previousResolution: 0
@@ -67,9 +68,17 @@ define (require) ->
             debug: false
 
 
+        # initialize: ->
+        #     super
+        #     console.log @navigate
+
         initialize: (options) ->
             @options = options
-            _.bindAll @, 'loadSection'
+
+            super(options)
+
+            _.bind(@[name], @) for name of @ when _.isFunction(@[name])
+
 
             #
             # Dynamically create our routes
@@ -85,8 +94,6 @@ define (require) ->
             # Set our default options
             #
             this.options = _.extend(this.defaultOptions, options)
-
-            console.log this.options
 
             #
             # A global event dispatcher
@@ -138,11 +145,29 @@ define (require) ->
             $(window).on 'orientationchange', ->
                 $(window).trigger 'resize'
 
+
             #send a notification of new breakpoints
             $(window).on 'resize', _.bind(@_resolutionChanged, this)
 
-            #Load our child views
-            _.each @sections, this.loadSection
+            #
+            # Dynamically create a route function for each
+            # specified section
+            #
+            _.each @sections, (params, name, sections) ->
+                @route params.route, name, @navigate if _.has params, 'route'
+            , @
+
+            #
+            # Trigger a navigation event on all
+            # local urls
+            @_bindNavigate()
+
+            #
+            # Load our child views
+            #
+            # _.each @sections, this.loadSection
+
+
 
 
         #
@@ -158,8 +183,6 @@ define (require) ->
             super _.ltrim(route, '/'), options
 
             @updatePageMeta route
-
-            # console.log route, options
 
             return unless options.trigger
 
@@ -192,6 +215,8 @@ define (require) ->
         # Called after all pages are loaded
         #
         appLoaded: (viewName) ->
+
+            console.log @
 
             targetSection = @_fragmentToSection()
 
@@ -237,19 +262,7 @@ define (require) ->
                 currentResolution: @_getResolution().name
                 el: section.el
 
-            view.load()
-
-            return if _.isUndefined section.route
-
-
-        reinitializeSection: (viewName) ->
-            instance = @sections[viewName].instance
-            $cleanHTML = instance.$cleanHTML.clone()
-            $prevSibiling = instance.$el.prev()
-            instance.remove()
-            $prevSibiling.after $cleanHTML
-            @sections[viewName].instance.remove()
-            @loadSection @sections[viewName], viewName, @sections
+            view.render()
 
 
 
@@ -387,6 +400,22 @@ define (require) ->
             $('title').text(pageMeta.get('page_title'))
             $('meta[name="description"]').text(pageMeta.get('page_description'))
             $('title[name="keywords"]').text(pageMeta.get('page_keywords'))
+
+
+        #
+        # Bind click handlers to local urls
+        # to call the navigate event
+        #
+        _bindNavigate: ->
+            $('a[href^="/"],a[href^="'+window.location.origin+'"]').not("[data-unbind]").on 'click', _.bind(@_handleNavClick, @)
+
+        #
+        #
+        #
+        _handleNavClick: (e) ->
+            e.preventDefault()
+            console.log @
+            @navigate $(e.currentTarget).attr('href'), {trigger: true}
 
 
 

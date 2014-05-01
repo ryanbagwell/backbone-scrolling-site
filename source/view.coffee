@@ -31,6 +31,7 @@ define (require) ->
             @options = options
             super(options)
 
+            @.on 'rendered', _.bind(@afterRender, @)
 
             try
                 @currentResolution = @options.currentResolution
@@ -48,6 +49,7 @@ define (require) ->
         #
         render: ->
             @rendered = true
+            console.log 'render'
             @trigger "rendered"
 
 
@@ -56,6 +58,7 @@ define (require) ->
         # and when the section is ready to be displayed
         #
         afterRender: ->
+            console.log 'afterRender'
             @sendNotification "sectionReady", @options.pageName
             @_setLocalUrlNavigate()
             @afterReady()
