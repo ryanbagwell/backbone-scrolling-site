@@ -15,7 +15,7 @@ module.exports = (grunt) ->
         files: [
           expand: true
           cwd: './source'
-          src: ['**/*.coffee']
+          src: ['**/*.{coffee,litcoffee}']
           dest: './dist'
           ext: '.js'
         ]
@@ -25,7 +25,7 @@ module.exports = (grunt) ->
         spawn: true
       coffee:
         cwd: './source/'
-        files: ['**/*.coffee']
+        files: ['**/*.{coffee,litcoffee}']
         tasks: ['coffee']
 
 
@@ -42,12 +42,12 @@ module.exports = (grunt) ->
         ]
       }
 
-  # Load grunt plugins
-  grunt.loadNpmTasks 'grunt-contrib-coffee'
-  grunt.loadNpmTasks 'grunt-contrib-watch'
-  grunt.loadNpmTasks 'grunt-contrib-uglify'
-  grunt.loadNpmTasks 'grunt-contrib-concat'
+    #Load grunt plugins
+    grunt.loadNpmTasks 'grunt-contrib-coffee'
+    grunt.loadNpmTasks 'grunt-contrib-watch'
+    grunt.loadNpmTasks 'grunt-contrib-uglify'
+    grunt.loadNpmTasks 'grunt-contrib-concat'
 
-  # Define tasks.
-  grunt.registerTask 'build', ['coffee', 'concat']
-  grunt.registerTask 'default', ['coffee']
+    # Define tasks.
+    grunt.registerTask 'build', ['coffee', 'concat']
+    grunt.registerTask 'default', ['coffee']

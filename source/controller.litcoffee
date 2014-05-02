@@ -1,21 +1,25 @@
+The SinglePageScrollingController
+
     define (require) ->
         $ = require 'jquery'
         _ = require 'underscore'
-        _.str = require 'underscore-string'
+        _.str = require 'underscore.string'
         _.mixin _.str.exports()
         Backbone = require 'backbone'
-        require 'jquery-scrollto'
+        require 'jquery.scrollTo'
+        SinglePageScrollingView = require 'SinglePageScrollingView'
 
 
         class SinglePageScrollingController extends Backbone.Router
 
-            #
-            # An array of sections
-            # Each should be an object consisting of:
-            #   viewName:
-            #       route: 'path-to-route' (optional)
-            #       el: $('div') #the views element
-            #
+
+An object to represent the site sections/pages.
+Example:
+
+viewName:
+  route: 'path-to-route' (optional)
+  el: $('div') #the views element
+
             sections: {}
 
             #
@@ -68,9 +72,6 @@
                 debug: false
 
 
-            # initialize: ->
-            #     super
-            #     console.log @navigate
 
             initialize: (options) ->
                 @options = options
@@ -79,15 +80,12 @@
 
                 _.bind(@[name], @) for name of @ when _.isFunction(@[name])
 
-
                 #
                 # Dynamically create our routes
                 #
                 _.each @sections, (section, name) ->
                     return if _.isUndefined section.route
-
                     @route section.route, -> null
-
                 , @
 
                 #
@@ -116,7 +114,7 @@
                 # Listen for the sectionReady event
                 # from our child views
                 #
-                this.notifications.on 'view:sectionReady', @appLoaded
+                this.notifications.on 'view:sectionReady', @appLoaded, @
 
                 #
                 # Listen for the navigate event
@@ -138,85 +136,83 @@
                 , 500), this))
 
 
-                #
-                # trigger the window resize event when the orientation
-                # is changed
-                #
+Trigger the window resize event when the orientation
+is changed
+
                 $(window).on 'orientationchange', ->
                     $(window).trigger 'resize'
 
+When the window is resized, send a notification to child views if
+a responsive breakpoint threshold is crossed
 
-                #send a notification of new breakpoints
                 $(window).on 'resize', _.bind(@_resolutionChanged, this)
 
-                #
-                # Dynamically create a route function for each
-                # specified section
-                #
+
+Dynamically create a route function for each specified section
+
                 _.each @sections, (params, name, sections) ->
                     @route params.route, name, @navigate if _.has params, 'route'
                 , @
 
-                #
-                # Trigger a navigation event on all
-                # local urls
-                @_bindNavigate()
+Start Backbone.history
 
-                #
-                # Load our child views
-                #
-                # _.each @sections, this.loadSection
+                Backbone.history.start
+                    pushState: true
+                    silent: true
 
+Bind click handlers to all local 'a' tags in order to
+trigger our navigate function. A tags with an attribute of 'data-unbind'
+will be ignored.
 
+                $('a[href^="/"], a[href^="'+window.location.origin+'"]').not("[data-nobind]").on 'click', _.bind( (e) ->
+                    e.preventDefault()
+                    @navigate $(e.currentTarget).attr('href')
+                ,@)
 
+Initialize any section views.
 
-            #
-            # Receives the navigate event from the
-            # global event dispatcher
-            #
+                _.each @sections, @loadSection, @
+
+The navigate function is bound to all clicks on local urls.
+
             navigate: (route, options) ->
 
                 return if not @ready
 
-                options = _.extend {trigger:true}, options
+                options = _.extend trigger:false, options
 
                 super _.ltrim(route, '/'), options
 
                 @updatePageMeta route
 
-                return unless options.trigger
-
-                section = @_fragmentToSection()
+                section = @_fragmentToSection(_.ltrim(route, '/'))
 
                 id = section.instance.options.pageName
 
                 @scrollToSection id
 
                 @notify 'header:navigate', id
+
                 @notify id+':navigate', route
 
 
+Scrolls the page to the target section.
 
-            #
-            # Scrolls the page to the given section
-            #
             scrollToSection: (section) ->
 
                 @scrolling = true
 
                 $.scrollTo '#'+section, 500,
-                    offset: -50
+                    offset: -40
                     onAfter: _.bind ->
                       @scrolling = false
                     , this
 
 
-            #
-            # Called after all pages are loaded
-            #
-            appLoaded: (viewName) ->
+Each time a view is ready, it triggers a call to the appLoaded method,
+which checks to see if all views are 'ready'.
 
-                console.log @
+            appLoaded: (viewName) ->
 
                 targetSection = @_fragmentToSection()
 
@@ -231,30 +227,18 @@
 
                 @ready = true
 
-                #
-                # Start backbone.history
-                #
-                Backbone.history.start
-                    pushState: true
-
                 @navigate Backbone.history.fragment
-
-                window.loading.on 'removed', ->
-                    @notify 'appLoaded'
-                    $(window).on 'scroll', @updateNavigation
-                , @
-
-                window.loading.remove()
 
                 @_appLoaded = true
 
+Load a section view function.
 
-            #
-            # Instantiates the given section view.
-            # If the view doesn't have any dependencies,
-            # calls the load() method
-            #
             loadSection: (section, name, sections) ->
+
+Mock a view instance object if a view function wasn't specified.
+
+                if not _.has(section, 'view')
+                    @sections[name].view = SinglePageScrollingView
 
                 view = @sections[name].instance = new section.view
                     notifications: @notifications
@@ -265,11 +249,9 @@
                 view.render()
 
 
+Checks if all of the sections have reached the
+'ready' phase of the loading process
 
-            #
-            # Checks if all of the sections have reached the
-            # 'ready' phase of the loading process
-            #
             _allSectionsReady: ->
 
                 sectionNotReady = _.find this.sections, (section) ->
@@ -279,9 +261,9 @@
 
                 return _.isUndefined sectionNotReady
 
-            #
-            # Returns true if the given section is ready. Otherwise, false
-            #
+
+Returns true if the given section is ready. Otherwise, false
+
             _isSectionReady: (name) ->
 
                 try
@@ -290,12 +272,12 @@
                     return false
 
 
-            #
-            # Watches the width of the browser,
-            # and sends a notification if the width
-            # has crossed one of the thresholds
-            # listed in resolutionBreakPoints object
-            #
+
+Watches the width of the browser,
+and sends a notification if the width
+has crossed one of the thresholds
+listed in resolutionBreakPoints object
+
             _resolutionChanged: (e) ->
                 @_setResolution()
 
@@ -313,17 +295,17 @@
                 @previousResolution = @currentResolution
 
 
-            #
-            # Sets the current browser width based on the
-            # resolution breakpoints object
-            #
+
+Sets the current browser width based on the
+resolution breakpoints object
+
             _setResolution: ->
                 @currentResolution = @_getResolution()
 
 
-            #
-            # Retrieves the name of the current resolution
-            #
+
+Retrieves the name of the current resolution
+
             _getResolution: ->
                 currWidth = $(window).width()
 
@@ -340,31 +322,33 @@
                     console.trace() if trace
                 catch error
 
-            #
-            # Checks to see if the current URL fragment corresponds to
-            # one of our sections, and returns the section object
-            #
-            _fragmentToSection: ->
+
+Checks to see if the current URL fragment corresponds to
+one of our sections, and returns the section object
+
+            _fragmentToSection: (fragment) ->
+
+                if _.isUndefined fragment
+                    fragment = Backbone.history.fragment
 
                 _.find @sections, (section, name) ->
                     return false if _.isUndefined section.route
                     regex = @_routeToRegExp(section.route)
-                    return true if regex.test(Backbone.history.fragment)
-
+                    true if regex.test(fragment)
                 , @
 
-            #
-            # Dispatches a namespaced event notification
-            #
+
+Dispatches a namespaced event notification
+
             notify: ->
 
                 args = [].slice.call(arguments)
                 args[0] = 'controller:'+args[0]
                 @notifications.trigger.apply @notifications, args
 
-            #
-            # Updates the navigation items
-            #
+
+Updates the navigation items
+
             updateNavigation: (e) ->
 
                 return if @scrolling
@@ -381,10 +365,8 @@
                 @navigate route,
                     trigger: false
 
+Updates the page meta data
 
-            #
-            # Updates the page meta data
-            #
             updatePageMeta: (route) ->
 
                 if _.isEmpty route
@@ -402,19 +384,6 @@
                 $('title[name="keywords"]').text(pageMeta.get('page_keywords'))
 
 
-            #
-            # Bind click handlers to local urls
-            # to call the navigate event
-            #
-            _bindNavigate: ->
-                $('a[href^="/"],a[href^="'+window.location.origin+'"]').not("[data-unbind]").on 'click', _.bind(@_handleNavClick, @)
-
-            #
-            #
-            #
-            _handleNavClick: (e) ->
-                e.preventDefault()
-                @navigate $(e.currentTarget).attr('href'), {trigger: true}
 
 
 

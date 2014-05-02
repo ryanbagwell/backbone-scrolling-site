@@ -6,6 +6,8 @@
     var $, Backbone, SinglePageScrollingController, _;
     $ = require('jquery');
     _ = require('underscore');
+    _.str = require('underscore-string');
+    _.mixin(_.str.exports());
     Backbone = require('backbone');
     require('jquery-scrollto');
     return SinglePageScrollingController = (function(_super) {
@@ -56,7 +58,14 @@
       };
 
       SinglePageScrollingController.prototype.initialize = function(options) {
-        _.bindAll(this, 'loadSection');
+        var name;
+        this.options = options;
+        SinglePageScrollingController.__super__.initialize.call(this, options);
+        for (name in this) {
+          if (_.isFunction(this[name])) {
+            _.bind(this[name], this);
+          }
+        }
         _.each(this.sections, function(section, name) {
           if (_.isUndefined(section.route)) {
             return;
@@ -66,7 +75,6 @@
           });
         }, this);
         this.options = _.extend(this.defaultOptions, options);
-        console.log(this.options);
         this.notifications = _.clone(Backbone.Events);
         this._resolutionChanged();
         this.pageMetaCollection = new Backbone.Collection(this.pageMeta);
@@ -80,7 +88,12 @@
           return $(window).trigger('resize');
         });
         $(window).on('resize', _.bind(this._resolutionChanged, this));
-        return _.each(this.sections, this.loadSection);
+        _.each(this.sections, function(params, name, sections) {
+          if (_.has(params, 'route')) {
+            return this.route(params.route, name, this.navigate);
+          }
+        }, this);
+        return this._bindNavigate();
       };
 
       SinglePageScrollingController.prototype.navigate = function(route, options) {
@@ -115,6 +128,7 @@
 
       SinglePageScrollingController.prototype.appLoaded = function(viewName) {
         var instanceReady, targetSection;
+        console.log(this);
         targetSection = this._fragmentToSection();
         try {
           instanceReady = targetSection.instance.ready;
@@ -148,21 +162,7 @@
           currentResolution: this._getResolution().name,
           el: section.el
         });
-        view.load();
-        if (_.isUndefined(section.route)) {
-
-        }
-      };
-
-      SinglePageScrollingController.prototype.reinitializeSection = function(viewName) {
-        var $cleanHTML, $prevSibiling, instance;
-        instance = this.sections[viewName].instance;
-        $cleanHTML = instance.$cleanHTML.clone();
-        $prevSibiling = instance.$el.prev();
-        instance.remove();
-        $prevSibiling.after($cleanHTML);
-        this.sections[viewName].instance.remove();
-        return this.loadSection(this.sections[viewName], viewName, this.sections);
+        return view.render();
       };
 
       SinglePageScrollingController.prototype._allSectionsReady = function() {
@@ -288,6 +288,17 @@
         $('title').text(pageMeta.get('page_title'));
         $('meta[name="description"]').text(pageMeta.get('page_description'));
         return $('title[name="keywords"]').text(pageMeta.get('page_keywords'));
+      };
+
+      SinglePageScrollingController.prototype._bindNavigate = function() {
+        return $('a[href^="/"],a[href^="' + window.location.origin + '"]').not("[data-unbind]").on('click', _.bind(this._handleNavClick, this));
+      };
+
+      SinglePageScrollingController.prototype._handleNavClick = function(e) {
+        e.preventDefault();
+        return this.navigate($(e.currentTarget).attr('href'), {
+          trigger: true
+        });
       };
 
       return SinglePageScrollingController;

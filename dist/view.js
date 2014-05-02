@@ -20,7 +20,9 @@
 
       SinglePageScrollingView.prototype.initialize = function(options) {
         var eventName;
+        this.options = options;
         SinglePageScrollingView.__super__.initialize.call(this, options);
+        this.on('rendered', _.bind(this.afterRender, this));
         try {
           this.currentResolution = this.options.currentResolution;
           this.notifications = this.options.notifications;
@@ -37,10 +39,12 @@
 
       SinglePageScrollingView.prototype.render = function() {
         this.rendered = true;
+        console.log('render');
         return this.trigger("rendered");
       };
 
       SinglePageScrollingView.prototype.afterRender = function() {
+        console.log('afterRender');
         this.sendNotification("sectionReady", this.options.pageName);
         this._setLocalUrlNavigate();
         return this.afterReady();
