@@ -10,11 +10,13 @@ notifications and commonly used utility functions
 
         class SinglePageScrollingView extends Backbone.View
 
+By default, the HTML tag will be a section
+            tagName: 'section'
+
 A placeholder for the global event disptatcher
 object that should be passed in
 
             notifications: null
-
 
 A placeholder property that is updated when
 the view is notifified of a change in resolution
@@ -28,7 +30,7 @@ Initially, the view isn't ready
 Initialize the view.
 
             initialize: (options) ->
-                @options = options
+                @options = _.extend {}, options
                 super(options)
 
                 @.on 'rendered', _.bind(@afterRender, @)

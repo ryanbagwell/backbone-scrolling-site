@@ -9,7 +9,6 @@ The SinglePageScrollingController
         require 'jquery.scrollTo'
         SinglePageScrollingView = require 'SinglePageScrollingView'
 
-
         class SinglePageScrollingController extends Backbone.Router
 
 
