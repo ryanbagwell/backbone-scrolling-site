@@ -33,6 +33,12 @@ Initialize the view.
                 @options = _.extend {}, options
                 super(options)
 
+Bind the property context to all of the methods
+
+                _.bind(@[name], @) for name of @ when _.isFunction(@[name])
+
+Call 'afterRender()' when the rendered event is triggered
+
                 @.on 'rendered', _.bind(@afterRender, @)
 
                 try

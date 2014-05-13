@@ -6,6 +6,8 @@
     var $, Backbone, SinglePageScrollingView, _;
     $ = require("jquery");
     _ = require("underscore");
+    _.str = require('underscore.string');
+    _.mixin(_.str.exports());
     Backbone = require("backbone");
     return SinglePageScrollingView = (function(_super) {
       __extends(SinglePageScrollingView, _super);
@@ -18,10 +20,17 @@
 
       SinglePageScrollingView.prototype.currentResolution = null;
 
+      SinglePageScrollingView.prototype.ready = false;
+
       SinglePageScrollingView.prototype.initialize = function(options) {
-        var eventName;
-        this.options = options;
+        var eventName, name;
+        this.options = _.extend({}, options);
         SinglePageScrollingView.__super__.initialize.call(this, options);
+        for (name in this) {
+          if (_.isFunction(this[name])) {
+            _.bind(this[name], this);
+          }
+        }
         this.on('rendered', _.bind(this.afterRender, this));
         try {
           this.currentResolution = this.options.currentResolution;
@@ -39,14 +48,12 @@
 
       SinglePageScrollingView.prototype.render = function() {
         this.rendered = true;
-        console.log('render');
         return this.trigger("rendered");
       };
 
       SinglePageScrollingView.prototype.afterRender = function() {
-        console.log('afterRender');
+        this.ready = true;
         this.sendNotification("sectionReady", this.options.pageName);
-        this._setLocalUrlNavigate();
         return this.afterReady();
       };
 
@@ -66,7 +73,7 @@
       SinglePageScrollingView.prototype.onResolutionChanged = function(resolution) {
         var methodName;
         this.currentResolution = resolution.newSize;
-        methodName = ["onChangeFrom", Utilities.capitalize(resolution.prevSize), "To", Utilities.capitalize(resolution.newSize)].join("");
+        methodName = _.join('', 'onChangeFrom', _.str.capitalize(resolution.prevSize), 'To', _.str.capitalize(resolution.newSize));
         try {
           this[methodName]();
         } catch (_error) {}
@@ -98,17 +105,6 @@
           error = _error;
           return [];
         }
-      };
-
-      SinglePageScrollingView.prototype._setLocalUrlNavigate = function(contextObj) {
-        if (_.isUndefined(contextObj)) {
-          contextObj = this;
-        }
-        this.$el.find("a[href^=\"/\"]").not('[trigger-exclude]').on("click", _.bind(function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          this.sendNavigation($(e.currentTarget).attr("href"));
-        }, contextObj));
       };
 
       return SinglePageScrollingView;

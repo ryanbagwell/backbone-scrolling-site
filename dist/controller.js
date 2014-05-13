@@ -3,13 +3,14 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(function(require) {
-    var $, Backbone, SinglePageScrollingController, _;
+    var $, Backbone, SinglePageScrollingController, SinglePageScrollingView, _;
     $ = require('jquery');
     _ = require('underscore');
-    _.str = require('underscore-string');
+    _.str = require('underscore.string');
     _.mixin(_.str.exports());
     Backbone = require('backbone');
-    require('jquery-scrollto');
+    require('jquery.scrollTo');
+    SinglePageScrollingView = require('SinglePageScrollingView');
     return SinglePageScrollingController = (function(_super) {
       __extends(SinglePageScrollingController, _super);
 
@@ -78,7 +79,7 @@
         this.notifications = _.clone(Backbone.Events);
         this._resolutionChanged();
         this.pageMetaCollection = new Backbone.Collection(this.pageMeta);
-        this.notifications.on('view:sectionReady', this.appLoaded);
+        this.notifications.on('view:sectionReady', this.appLoaded, this);
         this.notifications.on('view:navigate', this.navigate);
         this.notifications.on('view:reinitializeSection', this.reinitializeSection);
         $(window).on('resize', _.bind(_.debounce(function() {
@@ -93,7 +94,15 @@
             return this.route(params.route, name, this.navigate);
           }
         }, this);
-        return this._bindNavigate();
+        Backbone.history.start({
+          pushState: true,
+          silent: true
+        });
+        $('a[href^="/"], a[href^="' + window.location.origin + '"]').not("[data-nobind]").on('click', _.bind(function(e) {
+          e.preventDefault();
+          return this.navigate($(e.currentTarget).attr('href'));
+        }, this));
+        return _.each(this.sections, this.loadSection, this);
       };
 
       SinglePageScrollingController.prototype.navigate = function(route, options) {
@@ -102,14 +111,11 @@
           return;
         }
         options = _.extend({
-          trigger: true
+          trigger: false
         }, options);
         SinglePageScrollingController.__super__.navigate.call(this, _.ltrim(route, '/'), options);
         this.updatePageMeta(route);
-        if (!options.trigger) {
-          return;
-        }
-        section = this._fragmentToSection();
+        section = this._fragmentToSection(_.ltrim(route, '/'));
         id = section.instance.options.pageName;
         this.scrollToSection(id);
         this.notify('header:navigate', id);
@@ -119,7 +125,7 @@
       SinglePageScrollingController.prototype.scrollToSection = function(section) {
         this.scrolling = true;
         return $.scrollTo('#' + section, 500, {
-          offset: -50,
+          offset: -40,
           onAfter: _.bind(function() {
             return this.scrolling = false;
           }, this)
@@ -128,7 +134,6 @@
 
       SinglePageScrollingController.prototype.appLoaded = function(viewName) {
         var instanceReady, targetSection;
-        console.log(this);
         targetSection = this._fragmentToSection();
         try {
           instanceReady = targetSection.instance.ready;
@@ -142,20 +147,15 @@
           return;
         }
         this.ready = true;
-        Backbone.history.start({
-          pushState: true
-        });
         this.navigate(Backbone.history.fragment);
-        window.loading.on('removed', function() {
-          this.notify('appLoaded');
-          return $(window).on('scroll', this.updateNavigation);
-        }, this);
-        window.loading.remove();
         return this._appLoaded = true;
       };
 
       SinglePageScrollingController.prototype.loadSection = function(section, name, sections) {
         var view;
+        if (!_.has(section, 'view')) {
+          this.sections[name].view = SinglePageScrollingView;
+        }
         view = this.sections[name].instance = new section.view({
           notifications: this.notifications,
           pageName: name,
@@ -235,14 +235,17 @@
         }
       };
 
-      SinglePageScrollingController.prototype._fragmentToSection = function() {
+      SinglePageScrollingController.prototype._fragmentToSection = function(fragment) {
+        if (_.isUndefined(fragment)) {
+          fragment = Backbone.history.fragment;
+        }
         return _.find(this.sections, function(section, name) {
           var regex;
           if (_.isUndefined(section.route)) {
             return false;
           }
           regex = this._routeToRegExp(section.route);
-          if (regex.test(Backbone.history.fragment)) {
+          if (regex.test(fragment)) {
             return true;
           }
         }, this);
@@ -288,17 +291,6 @@
         $('title').text(pageMeta.get('page_title'));
         $('meta[name="description"]').text(pageMeta.get('page_description'));
         return $('title[name="keywords"]').text(pageMeta.get('page_keywords'));
-      };
-
-      SinglePageScrollingController.prototype._bindNavigate = function() {
-        return $('a[href^="/"],a[href^="' + window.location.origin + '"]').not("[data-unbind]").on('click', _.bind(this._handleNavClick, this));
-      };
-
-      SinglePageScrollingController.prototype._handleNavClick = function(e) {
-        e.preventDefault();
-        return this.navigate($(e.currentTarget).attr('href'), {
-          trigger: true
-        });
       };
 
       return SinglePageScrollingController;
