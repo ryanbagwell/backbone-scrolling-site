@@ -42,11 +42,15 @@ module.exports = (grunt) ->
         ]
       }
 
+    bump:
+      files: ['package.json', 'bower.json']
+
     #Load grunt plugins
     grunt.loadNpmTasks 'grunt-contrib-coffee'
     grunt.loadNpmTasks 'grunt-contrib-watch'
     grunt.loadNpmTasks 'grunt-contrib-uglify'
     grunt.loadNpmTasks 'grunt-contrib-concat'
+    grunt.loadNpmTasks 'grunt-bump'
 
     # Define tasks.
     grunt.registerTask 'build', ['coffee', 'concat']
