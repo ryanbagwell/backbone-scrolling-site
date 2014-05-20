@@ -123,7 +123,7 @@ Merge our options with the defaultOptions
 
 Call the onResolutionChanged method upon notification
 
-                @notifications.on 'controller:resolutionChanged', @onResolutionChanged
+                @notifications.on 'controller:resolutionChanged', @onResolutionChanged, @
 
                 #
                 # Listen for the sectionReady event
@@ -303,19 +303,15 @@ listed in resolutionBreakPoints object
                 @_setResolution()
 
                 try
-                    return if @previousResolution.name is @currentResolution.name
+                    return if @previousResolution is @currentResolution
                 catch
                     return
 
-                @_logMessage "Resolution changed: " + @currentResolution.name
+                @_logMessage "Resolution changed: " + @currentResolution
 
                 @notify 'resolutionChanged',
-                    newSize: this.currentResolution.name
-                    prevSize: this.previousResolution.name
-
-                # @onResolutionChanged
-                #     newSize: this.currentResolution.name
-                #     prevSize: this.previousResolution.name
+                    newSize: @currentResolution
+                    prevSize: @previousResolution
 
                 @previousResolution = @currentResolution
 
@@ -325,7 +321,7 @@ Sets the current browser width based on the
 resolution breakpoints object
 
             _setResolution: ->
-                @currentResolution = @_getResolution()
+                @currentResolution = @_getResolution().name
 
 
 

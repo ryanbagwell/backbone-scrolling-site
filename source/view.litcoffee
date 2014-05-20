@@ -37,8 +37,6 @@ Initialize the view.
             initialize: (options) ->
                 @options = _.extend {}, options
 
-
-
                 @[name] = _.bind(method, @) for name, method of Base
 
                 super(options)
