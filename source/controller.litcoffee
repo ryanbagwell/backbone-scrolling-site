@@ -1,4 +1,6 @@
-The SinglePageScrollingController
+The SinglePageScrollingController class.
+
+It has a number of require.js dependencies.
 
     define (require) ->
         $ = require 'jquery'
@@ -11,28 +13,21 @@ The SinglePageScrollingController
 
         class SinglePageScrollingController extends Backbone.Router
 
+The sections object represents all sections/pages of the site. Each item should
+consist key=>value pairs. The key will become the name of the view (i.e. 'home'). The value should be an object consisting of the following parameters:
 
-An object to represent the site sections/pages.
-Example:
-
-viewName:
-  route: 'path-to-route' (optional)
-  el: $('div') #the views element
+route: the route that will trigger a scrolling navigation event to that section
+el: the html element that will attach to the view
+view: an uninitialized view that is a subclasee of SinglePageScrollingView
 
             sections: {}
 
-            #
-            # Load each section asynchronously.
-            # Set to false to load each section in order
-            #
             loadAync: true
 
 
-            #
-            # A dictionary of responsive
-            # break points that define when
-            # notifications are sent
-            #
+
+A dictionary of responsive break points that child view will be notified of.
+
             resolutionBreakPoints: [
                 name: 'large'
                 min: 1200
@@ -51,26 +46,38 @@ viewName:
                 max: 767
             ]
 
-            #
-            # A dictionary that will supply
-            # our page meta and SEO data
-            #
+
+A dictionary that will supply our page meta and SEO data
+
             pageMeta: []
+
+A placeholder for the current resolution
 
             currentResolution: 0
 
+A placeholder for the previous resolution
+
             previousResolution: 0
+
+A placeholder for our notifications object
 
             notifications: null
 
+The site is not ready.
+
             ready: false
 
+The site is not scrolling.
+
             scrolling: false
+
+Some default options. Setting debug to true will print
+debug information to the console.
 
             defaultOptions:
                 debug: false
 
-
+Initialize the controller.
 
             initialize: (options) ->
                 @options = options
