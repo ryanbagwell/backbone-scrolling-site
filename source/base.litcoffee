@@ -20,8 +20,6 @@ to handle responsive events, i.e. onChangeFromLargeToSmall
                     'To',
                     _.str.capitalize(resolution.newSize)
 
-                console.log methodName
-
                 try
                     this[methodName]()
                 return
