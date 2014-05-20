@@ -34,19 +34,19 @@ viewName:
             # notifications are sent
             #
             resolutionBreakPoints: [
-                name: 'large-devices'
+                name: 'large'
                 min: 1200
                 max: 100000000
             ,
-                name: 'medium-devices'
+                name: 'medium'
                 min: 992
                 max: 1199
             ,
-                name: 'small-devices'
+                name: 'small'
                 min: 768
                 max: 991
             ,
-                name: 'extra-small-devices'
+                name: 'extraSmall'
                 min: 0
                 max: 767
             ]
