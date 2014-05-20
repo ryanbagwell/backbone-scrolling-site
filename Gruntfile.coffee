@@ -44,6 +44,8 @@ module.exports = (grunt) ->
 
     bump:
       files: ['package.json', 'bower.json']
+      options:
+        pushTo: 'origin'
 
     #Load grunt plugins
     grunt.loadNpmTasks 'grunt-contrib-coffee'
