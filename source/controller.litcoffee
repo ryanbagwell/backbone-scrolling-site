@@ -24,8 +24,6 @@ view: an uninitialized view that is a subclasee of SinglePageScrollingView
 
             loadAync: true
 
-
-
 A dictionary of responsive break points that child view will be notified of.
 
             resolutionBreakPoints: [
@@ -71,20 +69,30 @@ The site is not scrolling.
 
             scrolling: false
 
-Some default options. Setting debug to true will print
-debug information to the console.
+Some default options that will be merged with any user-defined options.
 
             defaultOptions:
+
+Setting debug to true will print debug information to the console.
                 debug: false
+
+The time in milliseconds it takes to scroll to a section.
+
+                scrollTime: 500
+
+Pass in options for the scrollTo jquery plugin
+
+                scrollToOptions: {}
 
 Initialize the controller.
 
             initialize: (options) ->
-                @options = options
+
+Merge our options with the defaultOptions
+
+                @options = _.extend(@defaultOptions, options)
 
                 super(options)
-
-                _.bind(@[name], @) for name of @ when _.isFunction(@[name])
 
                 #
                 # Dynamically create our routes
@@ -93,11 +101,6 @@ Initialize the controller.
                     return if _.isUndefined section.route
                     @route section.route, -> null
                 , @
-
-                #
-                # Set our default options
-                #
-                this.options = _.extend(this.defaultOptions, options)
 
                 #
                 # A global event dispatcher
@@ -208,11 +211,18 @@ Scrolls the page to the target section.
 
                 @scrolling = true
 
-                $.scrollTo '#'+section, 500,
-                    offset: -40
-                    onAfter: _.bind ->
-                      @scrolling = false
-                    , this
+                defaultOptions =
+                    onAfter: _.bind @afterScroll, @
+
+                options = _.extend defaultOptions, @options.scrollToOptions
+
+                $.scrollTo '#'+section, @options.scrollTime, options
+
+
+A method to call after the page has stopped scrolling.
+
+            afterScroll: ->
+                @scrolling = false
 
 
 Each time a view is ready, it triggers a call to the appLoaded method,
@@ -388,11 +398,3 @@ Updates the page meta data
                 $('title').text(pageMeta.get('page_title'))
                 $('meta[name="description"]').text(pageMeta.get('page_description'))
                 $('title[name="keywords"]').text(pageMeta.get('page_keywords'))
-
-
-
-
-
-
-
-
