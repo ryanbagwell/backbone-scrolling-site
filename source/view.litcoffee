@@ -29,13 +29,12 @@ Initially, the view isn't ready
 
 Initialize the view.
 
+
+
+
             initialize: (options) ->
                 @options = _.extend {}, options
                 super(options)
-
-Bind the property context to all of the methods
-
-                _.bind(@[name], @) for name of @ when _.isFunction(@[name])
 
 Call 'afterRender()' when the rendered event is triggered
 
@@ -43,13 +42,20 @@ Call 'afterRender()' when the rendered event is triggered
 
                 try
                     @currentResolution = @options.currentResolution
+
                     @notifications = @options.notifications
-                    @notifications.on "controller:appLoaded", @onAppLoaded
-                    @notifications.on "controller:resolutionChanged", @onResolutionChanged
+
+                    @notifications.on
+                        "controller:appLoaded": @onAppLoaded
+                        "controller:resolutionChanged": @onResolutionChanged
+                    , @
+
                 catch
 
                 if _.has(@options, 'pageName')
+
                     eventName = ['controller', @options.pageName, 'navigate'].join(':')
+
                     @notifications.on eventName, @receiveNavigation
 
 Renders the HTML

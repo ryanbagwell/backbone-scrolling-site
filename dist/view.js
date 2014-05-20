@@ -23,20 +23,17 @@
       SinglePageScrollingView.prototype.ready = false;
 
       SinglePageScrollingView.prototype.initialize = function(options) {
-        var eventName, name;
+        var eventName;
         this.options = _.extend({}, options);
         SinglePageScrollingView.__super__.initialize.call(this, options);
-        for (name in this) {
-          if (_.isFunction(this[name])) {
-            _.bind(this[name], this);
-          }
-        }
         this.on('rendered', _.bind(this.afterRender, this));
         try {
           this.currentResolution = this.options.currentResolution;
           this.notifications = this.options.notifications;
-          this.notifications.on("controller:appLoaded", this.onAppLoaded);
-          this.notifications.on("controller:resolutionChanged", this.onResolutionChanged);
+          this.notifications.on({
+            "controller:appLoaded": this.onAppLoaded,
+            "controller:resolutionChanged": this.onResolutionChanged
+          }, this);
         } catch (_error) {
 
         }
