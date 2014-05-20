@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>base.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="base.html">
+                base.litcoffee
+              </a>
+            
+              
+              <a class="source" href="controller.html">
+                controller.litcoffee
+              </a>
+            
+              
+              <a class="source" href="main.html">
+                main.litcoffee
+              </a>
+            
+              
+              <a class="source" href="view.html">
+                view.litcoffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>base.litcoffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>The Base class contains common methods that are mixed in
+to the contoller and view</p>
+<p>It has a number of require.js dependencies.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>define <span class="hljs-function"><span class="hljs-params">(<span class="hljs-built_in">require</span>)</span> -&gt;</span>
+
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Base</span></span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Attempts to call the method ‘onChangeFromPreviousSizeToNewSize’
+to handle responsive events, i.e. onChangeFromLargeToSmall</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">onResolutionChanged</span>: <span class="hljs-function"><span class="hljs-params">(resolution)</span> -&gt;</span>
+
+            <span class="hljs-property">@currentResolution</span> = resolution.newSize
+
+            methodName = _.join <span class="hljs-string">''</span>,
+                <span class="hljs-string">'onChangeFrom'</span>,
+                _.str.capitalize(resolution.prevSize),
+                <span class="hljs-string">'To'</span>,
+                _.str.capitalize(resolution.newSize)
+
+            <span class="hljs-keyword">try</span>
+                <span class="hljs-keyword">this</span>[methodName]()
+            <span class="hljs-keyword">return</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

@@ -19,8 +19,18 @@
           <div id="jump_page">
             
               
+              <a class="source" href="base.html">
+                base.litcoffee
+              </a>
+            
+              
               <a class="source" href="controller.html">
                 controller.litcoffee
+              </a>
+            
+              
+              <a class="source" href="main.html">
+                main.litcoffee
               </a>
             
               
@@ -61,6 +71,7 @@ require.js config.</p>
     _ = <span class="hljs-built_in">require</span> <span class="hljs-string">"underscore"</span>
     _.str = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore.string'</span>
     _.mixin _.str.<span class="hljs-built_in">exports</span>()
+    Base = <span class="hljs-built_in">require</span> <span class="hljs-string">'./base'</span>
     Backbone = <span class="hljs-built_in">require</span> <span class="hljs-string">"backbone"</span>
 
     <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SinglePageScrollingView</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Backbone</span>.<span class="hljs-title">View</span></span></pre></div></div>
@@ -129,6 +140,9 @@ the view is notifified of a change in resolution</p>
             
             <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">initialize</span>: <span class="hljs-function"><span class="hljs-params">(options)</span> -&gt;</span>
             <span class="hljs-property">@options</span> = _.extend {}, options
+
+            @[name] = method <span class="hljs-keyword">for</span> name, method <span class="hljs-keyword">of</span> Base
+
             <span class="hljs-keyword">super</span>(options)</pre></div></div>
             
         </li>
@@ -312,34 +326,6 @@ and when the section is ready to be displayed</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <p>Attempts to call the method ‘onChangeFromPreviousSizeToNewSize’
-to handle responsive events, i.e. onChangeFromLargeToSmall</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">onResolutionChanged</span>: <span class="hljs-function"><span class="hljs-params">(resolution)</span> -&gt;</span>
-
-            <span class="hljs-property">@currentResolution</span> = resolution.newSize
-
-            methodName = _.join <span class="hljs-string">''</span>,
-                <span class="hljs-string">'onChangeFrom'</span>,
-                _.str.capitalize(resolution.prevSize),
-                <span class="hljs-string">'To'</span>,
-                _.str.capitalize(resolution.newSize)
-
-            <span class="hljs-keyword">try</span>
-                <span class="hljs-keyword">this</span>[methodName]()
-            <span class="hljs-keyword">return</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-17">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
-              </div>
               <p>Dispatches a namespaced event notification to the controller.</p>
 
             </div>
@@ -352,11 +338,11 @@ to handle responsive events, i.e. onChangeFromLargeToSmall</p>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>Sends the navigate event to the global notifier.</p>
 
@@ -368,11 +354,11 @@ to handle responsive events, i.e. onChangeFromLargeToSmall</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>Receives the global navigation event.</p>
 
@@ -384,11 +370,11 @@ to handle responsive events, i.e. onChangeFromLargeToSmall</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-19">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <p>Parses a requested url and returns its parts</p>
 

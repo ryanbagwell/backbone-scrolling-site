@@ -3,11 +3,12 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(function(require) {
-    var $, Backbone, SinglePageScrollingView, _;
+    var $, Backbone, Base, SinglePageScrollingView, _;
     $ = require("jquery");
     _ = require("underscore");
     _.str = require('underscore.string');
     _.mixin(_.str.exports());
+    Base = require('./base');
     Backbone = require("backbone");
     return SinglePageScrollingView = (function(_super) {
       __extends(SinglePageScrollingView, _super);
@@ -23,8 +24,12 @@
       SinglePageScrollingView.prototype.ready = false;
 
       SinglePageScrollingView.prototype.initialize = function(options) {
-        var eventName;
+        var eventName, method, name;
         this.options = _.extend({}, options);
+        for (name in Base) {
+          method = Base[name];
+          this[name] = method;
+        }
         SinglePageScrollingView.__super__.initialize.call(this, options);
         this.on('rendered', _.bind(this.afterRender, this));
         try {
@@ -65,15 +70,6 @@
 
       SinglePageScrollingView.prototype.onAppLoaded = function() {
         return null;
-      };
-
-      SinglePageScrollingView.prototype.onResolutionChanged = function(resolution) {
-        var methodName;
-        this.currentResolution = resolution.newSize;
-        methodName = _.join('', 'onChangeFrom', _.str.capitalize(resolution.prevSize), 'To', _.str.capitalize(resolution.newSize));
-        try {
-          this[methodName]();
-        } catch (_error) {}
       };
 
       SinglePageScrollingView.prototype.sendNotification = function() {

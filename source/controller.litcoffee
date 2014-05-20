@@ -8,8 +8,9 @@ It has a number of require.js dependencies.
         _.str = require 'underscore.string'
         _.mixin _.str.exports()
         Backbone = require 'backbone'
+        Base = require './base'
         require 'jquery.scrollTo'
-        SinglePageScrollingView = require 'SinglePageScrollingView'
+        SinglePageScrollingView = require './view'
 
         class SinglePageScrollingController extends Backbone.Router
 
@@ -92,6 +93,8 @@ Merge our options with the defaultOptions
 
                 @options = _.extend(@defaultOptions, options)
 
+                @[name] = method for name, method of Base
+
                 super(options)
 
                 #
@@ -134,7 +137,6 @@ Merge our options with the defaultOptions
                 # Listen for reinitializing a view
                 #
                 this.notifications.on 'view:reinitializeSection', @reinitializeSection
-
 
                 #
                 # dispatch the windowResized event globally

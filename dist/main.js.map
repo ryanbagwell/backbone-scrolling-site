@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "file": "main.js",
+  "sourceRoot": "../source/",
+  "sources": [
+    "main.litcoffee"
+  ],
+  "names": [],
+  "mappings": "AAAI;AAAA,EAAA,MAAA,CAAO,SAAC,OAAD,GAAA;WAEH;AAAA,MACI,UAAA,EAAY,OAAA,CAAQ,cAAR,CADhB;AAAA,MAEI,IAAA,EAAM,OAAA,CAAQ,QAAR,CAFV;MAFG;EAAA,CAAP,CAAA,CAAA;AAAA"
+}

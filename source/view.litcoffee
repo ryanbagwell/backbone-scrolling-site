@@ -10,6 +10,7 @@ require.js config.
         _ = require "underscore"
         _.str = require 'underscore.string'
         _.mixin _.str.exports()
+        Base = require './base'
         Backbone = require "backbone"
 
         class SinglePageScrollingView extends Backbone.View
@@ -35,6 +36,9 @@ Initialize the view.
 
             initialize: (options) ->
                 @options = _.extend {}, options
+
+                @[name] = method for name, method of Base
+
                 super(options)
 
 Call 'afterRender()' when the rendered event is triggered
@@ -100,23 +104,6 @@ Called when the appLoaded event is received.
 
             onAppLoaded: -> null
 
-Attempts to call the method 'onChangeFromPreviousSizeToNewSize'
-to handle responsive events, i.e. onChangeFromLargeToSmall
-
-            onResolutionChanged: (resolution) ->
-
-                @currentResolution = resolution.newSize
-
-                methodName = _.join '',
-                    'onChangeFrom',
-                    _.str.capitalize(resolution.prevSize),
-                    'To',
-                    _.str.capitalize(resolution.newSize)
-
-                try
-                    this[methodName]()
-                return
-
 
 Dispatches a namespaced event notification to the controller.
 
@@ -147,5 +134,3 @@ Parses a requested url and returns its parts
                 catch error
                     return []
                 return
-
-

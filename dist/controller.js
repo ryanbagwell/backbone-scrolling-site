@@ -3,14 +3,15 @@
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   define(function(require) {
-    var $, Backbone, SinglePageScrollingController, SinglePageScrollingView, _;
+    var $, Backbone, Base, SinglePageScrollingController, SinglePageScrollingView, _;
     $ = require('jquery');
     _ = require('underscore');
     _.str = require('underscore.string');
     _.mixin(_.str.exports());
     Backbone = require('backbone');
+    Base = require('./base');
     require('jquery.scrollTo');
-    SinglePageScrollingView = require('SinglePageScrollingView');
+    SinglePageScrollingView = require('./view');
     return SinglePageScrollingController = (function(_super) {
       __extends(SinglePageScrollingController, _super);
 
@@ -55,18 +56,18 @@
       SinglePageScrollingController.prototype.scrolling = false;
 
       SinglePageScrollingController.prototype.defaultOptions = {
-        debug: false
+        scrollTime: 500,
+        scrollToOptions: {}
       };
 
       SinglePageScrollingController.prototype.initialize = function(options) {
-        var name;
-        this.options = options;
-        SinglePageScrollingController.__super__.initialize.call(this, options);
-        for (name in this) {
-          if (_.isFunction(this[name])) {
-            _.bind(this[name], this);
-          }
+        var method, name;
+        this.options = _.extend(this.defaultOptions, options);
+        for (name in Base) {
+          method = Base[name];
+          this[name] = method;
         }
+        SinglePageScrollingController.__super__.initialize.call(this, options);
         _.each(this.sections, function(section, name) {
           if (_.isUndefined(section.route)) {
             return;
@@ -75,7 +76,6 @@
             return null;
           });
         }, this);
-        this.options = _.extend(this.defaultOptions, options);
         this.notifications = _.clone(Backbone.Events);
         this._resolutionChanged();
         this.pageMetaCollection = new Backbone.Collection(this.pageMeta);
@@ -123,13 +123,17 @@
       };
 
       SinglePageScrollingController.prototype.scrollToSection = function(section) {
+        var defaultOptions, options;
         this.scrolling = true;
-        return $.scrollTo('#' + section, 500, {
-          offset: -40,
-          onAfter: _.bind(function() {
-            return this.scrolling = false;
-          }, this)
-        });
+        defaultOptions = {
+          onAfter: _.bind(this.afterScroll, this)
+        };
+        options = _.extend(defaultOptions, this.options.scrollToOptions);
+        return $.scrollTo('#' + section, this.options.scrollTime, options);
+      };
+
+      SinglePageScrollingController.prototype.afterScroll = function() {
+        return this.scrolling = false;
       };
 
       SinglePageScrollingController.prototype.appLoaded = function(viewName) {
