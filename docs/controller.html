@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>controller.litcoffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="controller.html">
+                controller.litcoffee
+              </a>
+            
+              
+              <a class="source" href="view.html">
+                view.litcoffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>controller.litcoffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>The SinglePageScrollingController</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>define <span class="hljs-function"><span class="hljs-params">(<span class="hljs-built_in">require</span>)</span> -&gt;</span>
+    $ = <span class="hljs-built_in">require</span> <span class="hljs-string">'jquery'</span>
+    _ = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore'</span>
+    _.str = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore.string'</span>
+    _.mixin _.str.<span class="hljs-built_in">exports</span>()
+    Backbone = <span class="hljs-built_in">require</span> <span class="hljs-string">'backbone'</span>
+    <span class="hljs-built_in">require</span> <span class="hljs-string">'jquery.scrollTo'</span>
+    SinglePageScrollingView = <span class="hljs-built_in">require</span> <span class="hljs-string">'SinglePageScrollingView'</span>
+
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SinglePageScrollingController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Backbone</span>.<span class="hljs-title">Router</span></span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>An object to represent the site sections/pages.
+Example:</p>
+<p>viewName:
+  route: ‘path-to-route’ (optional)
+  el: $(‘div’) #the views element</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">sections</span>: {}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Load each section asynchronously.
+Set to false to load each section in order</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">loadAync</span>: <span class="hljs-literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>A dictionary of responsive
+break points that define when
+notifications are sent</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">resolutionBreakPoints</span>: [
+            <span class="hljs-attribute">name</span>: <span class="hljs-string">'large'</span>
+            <span class="hljs-attribute">min</span>: <span class="hljs-number">1200</span>
+            <span class="hljs-attribute">max</span>: <span class="hljs-number">100000000</span>
+        ,
+            <span class="hljs-attribute">name</span>: <span class="hljs-string">'medium'</span>
+            <span class="hljs-attribute">min</span>: <span class="hljs-number">992</span>
+            <span class="hljs-attribute">max</span>: <span class="hljs-number">1199</span>
+        ,
+            <span class="hljs-attribute">name</span>: <span class="hljs-string">'small'</span>
+            <span class="hljs-attribute">min</span>: <span class="hljs-number">768</span>
+            <span class="hljs-attribute">max</span>: <span class="hljs-number">991</span>
+        ,
+            <span class="hljs-attribute">name</span>: <span class="hljs-string">'extraSmall'</span>
+            <span class="hljs-attribute">min</span>: <span class="hljs-number">0</span>
+            <span class="hljs-attribute">max</span>: <span class="hljs-number">767</span>
+        ]</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>A dictionary that will supply
+our page meta and SEO data</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">pageMeta</span>: []
+
+        <span class="hljs-attribute">currentResolution</span>: <span class="hljs-number">0</span>
+
+        <span class="hljs-attribute">previousResolution</span>: <span class="hljs-number">0</span>
+
+        <span class="hljs-attribute">notifications</span>: <span class="hljs-literal">null</span>
+
+        <span class="hljs-attribute">ready</span>: <span class="hljs-literal">false</span>
+
+        <span class="hljs-attribute">scrolling</span>: <span class="hljs-literal">false</span>
+
+        <span class="hljs-attribute">defaultOptions</span>:
+            <span class="hljs-attribute">debug</span>: <span class="hljs-literal">false</span>
+
+
+
+        <span class="hljs-attribute">initialize</span>: <span class="hljs-function"><span class="hljs-params">(options)</span> -&gt;</span>
+            <span class="hljs-property">@options</span> = options
+
+            <span class="hljs-keyword">super</span>(options)
+
+            _.bind(@[name], @) <span class="hljs-keyword">for</span> name <span class="hljs-keyword">of</span> @ <span class="hljs-keyword">when</span> _.isFunction(@[name])</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Dynamically create our routes</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            _.each <span class="hljs-property">@sections</span>, <span class="hljs-function"><span class="hljs-params">(section, name)</span> -&gt;</span>
+                <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> _.isUndefined section.route
+                <span class="hljs-property">@route</span> section.route,<span class="hljs-function"> -&gt;</span> <span class="hljs-literal">null</span>
+            , @</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Set our default options</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">this</span>.options = _.extend(<span class="hljs-keyword">this</span>.defaultOptions, options)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>A global event dispatcher</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-property">@notifications</span> = _.clone Backbone.Events</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Set the initial browser resolution</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-property">@_resolutionChanged</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Turn our page meta json
+into a backbone collection</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-property">@pageMetaCollection</span> = <span class="hljs-keyword">new</span> Backbone.Collection(<span class="hljs-property">@pageMeta</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Listen for the sectionReady event
+from our child views</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">this</span>.notifications.<span class="hljs-literal">on</span> <span class="hljs-string">'view:sectionReady'</span>, <span class="hljs-property">@appLoaded</span>, @</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Listen for the navigate event</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-property">@notifications</span>.<span class="hljs-literal">on</span> <span class="hljs-string">'view:navigate'</span>, <span class="hljs-property">@navigate</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Listen for reinitializing a view</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">this</span>.notifications.<span class="hljs-literal">on</span> <span class="hljs-string">'view:reinitializeSection'</span>, <span class="hljs-property">@reinitializeSection</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>dispatch the windowResized event globally
+to notify all view the window has been resized</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            $(<span class="hljs-built_in">window</span>).<span class="hljs-literal">on</span>(<span class="hljs-string">'resize'</span>, _.bind(_.debounce(<span class="hljs-function">-&gt;</span>
+                <span class="hljs-property">@notify</span> <span class="hljs-string">'windowResized'</span>
+            , <span class="hljs-number">500</span>), <span class="hljs-keyword">this</span>))</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Trigger the window resize event when the orientation
+is changed</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            $(<span class="hljs-built_in">window</span>).<span class="hljs-literal">on</span> <span class="hljs-string">'orientationchange'</span>,<span class="hljs-function"> -&gt;</span>
+                $(<span class="hljs-built_in">window</span>).trigger <span class="hljs-string">'resize'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>When the window is resized, send a notification to child views if
+a responsive breakpoint threshold is crossed</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            $(<span class="hljs-built_in">window</span>).<span class="hljs-literal">on</span> <span class="hljs-string">'resize'</span>, _.bind(<span class="hljs-property">@_resolutionChanged</span>, <span class="hljs-keyword">this</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>Dynamically create a route function for each specified section</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            _.each <span class="hljs-property">@sections</span>, <span class="hljs-function"><span class="hljs-params">(params, name, sections)</span> -&gt;</span>
+                <span class="hljs-property">@route</span> params.route, name, <span class="hljs-property">@navigate</span> <span class="hljs-keyword">if</span> _.has params, <span class="hljs-string">'route'</span>
+            , @</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Start Backbone.history</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            Backbone.history.start
+                <span class="hljs-attribute">pushState</span>: <span class="hljs-literal">true</span>
+                <span class="hljs-attribute">silent</span>: <span class="hljs-literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Bind click handlers to all local ‘a’ tags in order to
+trigger our navigate function. A tags with an attribute of ‘data-unbind’
+will be ignored.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            $<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">'a[href^="/"], a[href^="'</span>+<span class="hljs-built_in">window</span>.location.origin+<span class="hljs-string">'"]'</span>)</span>.<span class="hljs-title">not</span><span class="hljs-params">(<span class="hljs-string">"[data-nobind]"</span>)</span>.<span class="hljs-title">on</span> '<span class="hljs-title">click</span>', <span class="hljs-title">_</span>.<span class="hljs-title">bind</span><span class="hljs-params">( (e) -&gt;
+                e.preventDefault()
+                <span class="hljs-property">@navigate</span> $(e.currentTarget).attr(<span class="hljs-string">'href'</span>)
+            ,@)</span>
+
+</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Initialize any section views.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            _.each <span class="hljs-property">@sections</span>, <span class="hljs-property">@loadSection</span>, @</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>The navigate function is bound to all clicks on local urls.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">navigate</span>: <span class="hljs-function"><span class="hljs-params">(route, options)</span> -&gt;</span>
+
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-property">@ready</span>
+
+            options = _.extend <span class="hljs-attribute">trigger</span>:<span class="hljs-literal">false</span>, options
+
+            <span class="hljs-keyword">super</span> _.ltrim(route, <span class="hljs-string">'/'</span>), options
+
+            <span class="hljs-property">@updatePageMeta</span> route
+
+            section = <span class="hljs-property">@_fragmentToSection</span>(_.ltrim(route, <span class="hljs-string">'/'</span>))
+
+            id = section.instance.options.pageName
+
+            <span class="hljs-property">@scrollToSection</span> id
+
+            <span class="hljs-property">@notify</span> <span class="hljs-string">'header:navigate'</span>, id
+
+            <span class="hljs-property">@notify</span> id+<span class="hljs-string">':navigate'</span>, route</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Scrolls the page to the target section.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">scrollToSection</span>: <span class="hljs-function"><span class="hljs-params">(section)</span> -&gt;</span>
+
+            <span class="hljs-property">@scrolling</span> = <span class="hljs-literal">true</span>
+
+            $.scrollTo <span class="hljs-string">'#'</span>+section, <span class="hljs-number">500</span>,
+                <span class="hljs-attribute">offset</span>: -<span class="hljs-number">40</span>
+                <span class="hljs-attribute">onAfter</span>: _.bind<span class="hljs-function"> -&gt;</span>
+                  <span class="hljs-property">@scrolling</span> = <span class="hljs-literal">false</span>
+                , <span class="hljs-keyword">this</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Each time a view is ready, it triggers a call to the appLoaded method,
+which checks to see if all views are ‘ready’.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">appLoaded</span>: <span class="hljs-function"><span class="hljs-params">(viewName)</span> -&gt;</span>
+
+            targetSection = <span class="hljs-property">@_fragmentToSection</span>()
+
+            <span class="hljs-keyword">try</span>
+                instanceReady = targetSection.instance.ready
+            <span class="hljs-keyword">catch</span>
+                instanceReady = <span class="hljs-literal">false</span>
+
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">unless</span> (<span class="hljs-property">@_allSectionsReady</span>() <span class="hljs-keyword">or</span> <span class="hljs-property">@ready</span> <span class="hljs-keyword">or</span> instanceReady)
+
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> <span class="hljs-property">@_appLoaded</span>
+
+            <span class="hljs-property">@ready</span> = <span class="hljs-literal">true</span>
+
+            <span class="hljs-property">@navigate</span> Backbone.history.fragment
+
+            <span class="hljs-property">@_appLoaded</span> = <span class="hljs-literal">true</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>Load a section view function.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">loadSection</span>: <span class="hljs-function"><span class="hljs-params">(section, name, sections)</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>Mock a view instance object if a view function wasn’t specified.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> _.has(section, <span class="hljs-string">'view'</span>)
+                <span class="hljs-property">@sections</span>[name].view = SinglePageScrollingView
+
+            view = <span class="hljs-property">@sections</span>[name].instance = <span class="hljs-keyword">new</span> section.view
+                <span class="hljs-attribute">notifications</span>: <span class="hljs-property">@notifications</span>
+                <span class="hljs-attribute">pageName</span>: name
+                <span class="hljs-attribute">currentResolution</span>: <span class="hljs-property">@_getResolution</span>().name
+                <span class="hljs-attribute">el</span>: section.el
+
+            view.render()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>Checks if all of the sections have reached the
+‘ready’ phase of the loading process</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">_allSectionsReady</span>:<span class="hljs-function"> -&gt;</span>
+
+            sectionNotReady = _.find <span class="hljs-keyword">this</span>.sections, <span class="hljs-function"><span class="hljs-params">(section)</span> -&gt;</span>
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span> <span class="hljs-keyword">if</span> _.isUndefined section.instance
+                <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> _.isUndefined section.route
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> section.instance.ready
+
+            <span class="hljs-keyword">return</span> _.isUndefined sectionNotReady</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>Returns true if the given section is ready. Otherwise, false</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">_isSectionReady</span>: <span class="hljs-function"><span class="hljs-params">(name)</span> -&gt;</span>
+
+            <span class="hljs-keyword">try</span>
+                <span class="hljs-keyword">return</span> <span class="hljs-property">@sections</span>[name].instance.ready
+            <span class="hljs-keyword">catch</span>
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Watches the width of the browser,
+and sends a notification if the width
+has crossed one of the thresholds
+listed in resolutionBreakPoints object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">_resolutionChanged</span>: <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
+            <span class="hljs-property">@_setResolution</span>()
+
+            <span class="hljs-keyword">try</span>
+                <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> <span class="hljs-property">@previousResolution</span>.name <span class="hljs-keyword">is</span> <span class="hljs-property">@currentResolution</span>.name
+            <span class="hljs-keyword">catch</span>
+                <span class="hljs-keyword">return</span>
+
+            <span class="hljs-property">@_logMessage</span> <span class="hljs-string">"Resolution changed: "</span> + <span class="hljs-property">@currentResolution</span>.name
+
+            <span class="hljs-property">@notify</span> <span class="hljs-string">'resolutionChanged'</span>,
+                <span class="hljs-attribute">newSize</span>: <span class="hljs-keyword">this</span>.currentResolution.name
+                <span class="hljs-attribute">prevSize</span>: <span class="hljs-keyword">this</span>.previousResolution.name
+
+            <span class="hljs-property">@previousResolution</span> = <span class="hljs-property">@currentResolution</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>Sets the current browser width based on the
+resolution breakpoints object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">_setResolution</span>:<span class="hljs-function"> -&gt;</span>
+            <span class="hljs-property">@currentResolution</span> = <span class="hljs-property">@_getResolution</span>()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>Retrieves the name of the current resolution</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">_getResolution</span>:<span class="hljs-function"> -&gt;</span>
+            currWidth = $(<span class="hljs-built_in">window</span>).width()
+
+            <span class="hljs-keyword">return</span> _.find <span class="hljs-property">@resolutionBreakPoints</span>, <span class="hljs-function"><span class="hljs-params">(res)</span> -&gt;</span>
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span> <span class="hljs-keyword">if</span> (currWidth &gt; res.min <span class="hljs-keyword">and</span> currWidth &lt;= res.max)
+
+
+        <span class="hljs-attribute">_logMessage</span>: <span class="hljs-function"><span class="hljs-params">(message, trace)</span> -&gt;</span>
+
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-keyword">this</span>.options.debug
+
+            <span class="hljs-keyword">try</span>
+                <span class="hljs-built_in">console</span>.log(message);
+                <span class="hljs-built_in">console</span>.trace() <span class="hljs-keyword">if</span> trace
+            <span class="hljs-keyword">catch</span> error</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>Checks to see if the current URL fragment corresponds to
+one of our sections, and returns the section object</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">_fragmentToSection</span>: <span class="hljs-function"><span class="hljs-params">(fragment)</span> -&gt;</span>
+
+            <span class="hljs-keyword">if</span> _.isUndefined fragment
+                fragment = Backbone.history.fragment
+
+            _.find <span class="hljs-property">@sections</span>, <span class="hljs-function"><span class="hljs-params">(section, name)</span> -&gt;</span>
+                <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> <span class="hljs-keyword">if</span> _.isUndefined section.route
+                regex = <span class="hljs-property">@_routeToRegExp</span>(section.route)
+                <span class="hljs-literal">true</span> <span class="hljs-keyword">if</span> regex.test(fragment)
+            , @</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>Dispatches a namespaced event notification</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">notify</span>:<span class="hljs-function"> -&gt;</span>
+
+            args = [].slice.call(arguments)
+            args[<span class="hljs-number">0</span>] = <span class="hljs-string">'controller:'</span>+args[<span class="hljs-number">0</span>]
+            <span class="hljs-property">@notifications</span>.trigger.apply <span class="hljs-property">@notifications</span>, args</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>Updates the navigation items</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">updateNavigation</span>: <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
+
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> <span class="hljs-property">@scrolling</span>
+
+            sectionEl = _.filter $<span class="hljs-function"><span class="hljs-params">(<span class="hljs-string">'section'</span>)</span>, <span class="hljs-params">(el)</span> -&gt;</span>
+                <span class="hljs-keyword">return</span> _.inViewport el
+
+            sectionId = $(sectionEl).attr <span class="hljs-string">'id'</span>
+
+            route = $(<span class="hljs-string">'header li.'</span>+sectionId+<span class="hljs-string">' a'</span>).attr <span class="hljs-string">'href'</span>
+
+            <span class="hljs-property">@notify</span> <span class="hljs-string">'updateNav'</span>, sectionId
+
+            <span class="hljs-property">@navigate</span> route,
+                <span class="hljs-attribute">trigger</span>: <span class="hljs-literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>Updates the page meta data</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">updatePageMeta</span>: <span class="hljs-function"><span class="hljs-params">(route)</span> -&gt;</span>
+
+            <span class="hljs-keyword">if</span> _.isEmpty route
+                route = <span class="hljs-string">''</span>
+            <span class="hljs-attribute">else</span>:
+                route = [<span class="hljs-string">'/'</span>, _.trim(route, <span class="hljs-string">'/'</span>), <span class="hljs-string">'/'</span>].join(<span class="hljs-string">''</span>)
+
+            pageMeta = <span class="hljs-keyword">this</span>.pageMetaCollection.findWhere
+                <span class="hljs-attribute">url</span>: route
+
+            <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> _.isUndefined pageMeta
+
+            $(<span class="hljs-string">'title'</span>).text(pageMeta.get(<span class="hljs-string">'page_title'</span>))
+            $(<span class="hljs-string">'meta[name="description"]'</span>).text(pageMeta.get(<span class="hljs-string">'page_description'</span>))
+            $(<span class="hljs-string">'title[name="keywords"]'</span>).text(pageMeta.get(<span class="hljs-string">'page_keywords'</span>))</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

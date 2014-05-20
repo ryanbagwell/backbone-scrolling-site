@@ -1,5 +1,9 @@
 A base view that provides some global event
-notifications and commonly used utility functions
+notifications and commonly used utility functions.
+
+This is an AMD module designed to be used with require.js. Therefore, it
+relies on the following dependencies that we should define in our
+require.js config.
 
     define (require) ->
         $ = require "jquery"
@@ -29,9 +33,6 @@ Initially, the view isn't ready
 
 Initialize the view.
 
-
-
-
             initialize: (options) ->
                 @options = _.extend {}, options
                 super(options)
@@ -41,9 +42,17 @@ Call 'afterRender()' when the rendered event is triggered
                 @.on 'rendered', _.bind(@afterRender, @)
 
                 try
+
+Set the initial value of currentResolution
+
                     @currentResolution = @options.currentResolution
 
+Set the value of the event dispatcher
+
                     @notifications = @options.notifications
+
+Bind some event handlers to the appLoaded and resolutionChaged events
+from the controller
 
                     @notifications.on
                         "controller:appLoaded": @onAppLoaded
@@ -52,13 +61,16 @@ Call 'afterRender()' when the rendered event is triggered
 
                 catch
 
+Only listen for navigation even notifications if the notification
+is being sent to this particular view.
+
                 if _.has(@options, 'pageName')
 
                     eventName = ['controller', @options.pageName, 'navigate'].join(':')
 
                     @notifications.on eventName, @receiveNavigation
 
-Renders the HTML
+Render the HTML, and triggers the "rendered" event
 
             render: ->
                 @rendered = true
@@ -88,8 +100,8 @@ Called when the appLoaded event is received.
 
             onAppLoaded: -> null
 
-Attempts to call the method 'onChangeFrom<previousSize>To<newSize>'
-to handle responsive events
+Attempts to call the method 'onChangeFromPreviousSizeToNewSize'
+to handle responsive events, i.e. onChangeFromLargeToSmall
 
             onResolutionChanged: (resolution) ->
 
@@ -105,12 +117,14 @@ to handle responsive events
                     this[methodName]()
                 return
 
-Dispatches a namespaced event notification.
+
+Dispatches a namespaced event notification to the controller.
 
             sendNotification: ->
                 args = [].slice.call(arguments)
                 args[0] = 'view:'+args[0]
                 @notifications.trigger.apply @notifications, args
+
 
 Sends the navigate event to the global notifier.
 

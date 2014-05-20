@@ -25,6 +25,7 @@
     "grunt-cli": "^0.1.13",
     "grunt": "^0.4.4",
     "grunt-contrib-concat": "^0.4.0",
-    "grunt-bump": "0.0.14"
+    "grunt-bump": "0.0.14",
+    "grunt-docco": "^0.3.3"
   }
 }

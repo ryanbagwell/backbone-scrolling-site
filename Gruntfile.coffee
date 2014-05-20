@@ -42,6 +42,11 @@ module.exports = (grunt) ->
         ]
       }
 
+    docco:
+      src: ['source/**/*.litcoffee']
+      options:
+        output: 'docs/'
+
     bump:
       files: ['package.json', 'bower.json']
       options:
@@ -52,7 +57,8 @@ module.exports = (grunt) ->
     grunt.loadNpmTasks 'grunt-contrib-watch'
     grunt.loadNpmTasks 'grunt-contrib-uglify'
     grunt.loadNpmTasks 'grunt-bump'
+    grunt.loadNpmTasks 'grunt-docco'
 
     # Define tasks.
-    grunt.registerTask 'build', ['coffee',]
-    grunt.registerTask 'default', ['coffee']
+    grunt.registerTask 'build', ['coffee', 'docco']
+    grunt.registerTask 'default', ['build']
