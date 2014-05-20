@@ -5,7 +5,7 @@ It has a number of require.js dependencies.
 
     define (require) ->
 
-        class Base
+        baseMethods =
 
 Attempts to call the method 'onChangeFromPreviousSizeToNewSize'
 to handle responsive events, i.e. onChangeFromLargeToSmall
@@ -19,6 +19,8 @@ to handle responsive events, i.e. onChangeFromLargeToSmall
                     _.str.capitalize(resolution.prevSize),
                     'To',
                     _.str.capitalize(resolution.newSize)
+
+                console.log methodName
 
                 try
                     this[methodName]()

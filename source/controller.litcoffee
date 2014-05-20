@@ -93,7 +93,7 @@ Merge our options with the defaultOptions
 
                 @options = _.extend(@defaultOptions, options)
 
-                @[name] = method for name, method of Base
+                @[name] = _.bind(method, @) for name, method of Base
 
                 super(options)
 
@@ -121,6 +121,9 @@ Merge our options with the defaultOptions
                 #
                 @pageMetaCollection = new Backbone.Collection(@pageMeta)
 
+Call the onResolutionChanged method upon notification
+
+                @notifications.on 'controller:resolutionChanged', @onResolutionChanged
 
                 #
                 # Listen for the sectionReady event
@@ -309,6 +312,10 @@ listed in resolutionBreakPoints object
                 @notify 'resolutionChanged',
                     newSize: this.currentResolution.name
                     prevSize: this.previousResolution.name
+
+                # @onResolutionChanged
+                #     newSize: this.currentResolution.name
+                #     prevSize: this.previousResolution.name
 
                 @previousResolution = @currentResolution
 
