@@ -65,7 +65,7 @@
         this.options = _.extend(this.defaultOptions, options);
         for (name in Base) {
           method = Base[name];
-          this[name] = method;
+          this[name] = _.bind(method, this);
         }
         SinglePageScrollingController.__super__.initialize.call(this, options);
         _.each(this.sections, function(section, name) {
@@ -79,6 +79,7 @@
         this.notifications = _.clone(Backbone.Events);
         this._resolutionChanged();
         this.pageMetaCollection = new Backbone.Collection(this.pageMeta);
+        this.notifications.on('controller:resolutionChanged', this.onResolutionChanged, this);
         this.notifications.on('view:sectionReady', this.appLoaded, this);
         this.notifications.on('view:navigate', this.navigate);
         this.notifications.on('view:reinitializeSection', this.reinitializeSection);
@@ -98,10 +99,12 @@
           pushState: true,
           silent: true
         });
-        $('a[href^="/"], a[href^="' + window.location.origin + '"]').not("[data-nobind]").on('click', _.bind(function(e) {
-          e.preventDefault();
-          return this.navigate($(e.currentTarget).attr('href'));
-        }, this));
+        $('body').on('click', 'a[href^="/"]:not([data-nobind]), body a[href^="' + window.location.origin + '"]:not([data-nobind])', (function(_this) {
+          return function(e) {
+            _this.navigate($(e.currentTarget).attr('href'));
+            return false;
+          };
+        })(this));
         return _.each(this.sections, this.loadSection, this);
       };
 
@@ -196,22 +199,22 @@
       SinglePageScrollingController.prototype._resolutionChanged = function(e) {
         this._setResolution();
         try {
-          if (this.previousResolution.name === this.currentResolution.name) {
+          if (this.previousResolution === this.currentResolution) {
             return;
           }
         } catch (_error) {
           return;
         }
-        this._logMessage("Resolution changed: " + this.currentResolution.name);
+        this._logMessage("Resolution changed: " + this.currentResolution);
         this.notify('resolutionChanged', {
-          newSize: this.currentResolution.name,
-          prevSize: this.previousResolution.name
+          newSize: this.currentResolution,
+          prevSize: this.previousResolution
         });
         return this.previousResolution = this.currentResolution;
       };
 
       SinglePageScrollingController.prototype._setResolution = function() {
-        return this.currentResolution = this._getResolution();
+        return this.currentResolution = this._getResolution().name;
       };
 
       SinglePageScrollingController.prototype._getResolution = function() {

@@ -28,7 +28,7 @@
         this.options = _.extend({}, options);
         for (name in Base) {
           method = Base[name];
-          this[name] = method;
+          this[name] = _.bind(method, this);
         }
         SinglePageScrollingView.__super__.initialize.call(this, options);
         this.on('rendered', _.bind(this.afterRender, this));
