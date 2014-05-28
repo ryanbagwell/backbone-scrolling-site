@@ -178,10 +178,11 @@ Bind click handlers to all local 'a' tags in order to
 trigger our navigate function. A tags with an attribute of 'data-unbind'
 will be ignored.
 
-                $('a[href^="/"], a[href^="'+window.location.origin+'"]').not("[data-nobind]").on 'click', _.bind( (e) ->
-                    e.preventDefault()
-                    @navigate $(e.currentTarget).attr('href')
-                ,@)
+                $('body').on 'click',
+                    'a[href^="/"]:not([data-nobind]), body a[href^="'+window.location.origin+'"]:not([data-nobind])',
+                    (e) =>
+                        @navigate $(e.currentTarget).attr('href')
+                        false
 
 Initialize any section views.
 
