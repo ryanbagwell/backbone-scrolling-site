@@ -125,21 +125,14 @@ Call the onResolutionChanged method upon notification
 
                 @notifications.on 'controller:resolutionChanged', @onResolutionChanged, @
 
-                #
-                # Listen for the sectionReady event
-                # from our child views
-                #
+Listen for "sectionReady" event notifcations that come from child views.
+
                 this.notifications.on 'view:sectionReady', @appLoaded, @
 
-                #
-                # Listen for the navigate event
-                #
-                @notifications.on 'view:navigate', @navigate
+Listen for "navigate" notifications that originate from child views.
 
-                #
-                # Listen for reinitializing a view
-                #
-                this.notifications.on 'view:reinitializeSection', @reinitializeSection
+                @notifications.on 'view:navigate', @navigate, @
+
 
                 #
                 # dispatch the windowResized event globally
