@@ -325,7 +325,7 @@ Retrieves the name of the current resolution
                 currWidth = $(window).width()
 
                 return _.find @resolutionBreakPoints, (res) ->
-                    return true if (currWidth > res.min and currWidth <= res.max)
+                    return true if (res.min <= currWidth <= res.max)
 
 
             _logMessage: (message, trace) ->
