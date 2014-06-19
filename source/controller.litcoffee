@@ -66,9 +66,15 @@ The site is not ready.
 
             ready: false
 
+
 The site is not scrolling.
 
             scrolling: false
+
+How many pixels of a section should be visible in the viewport
+for it to be considered the active section?
+
+            navigationOffset: 0
 
 Some default options that will be merged with any user-defined options.
 
@@ -246,6 +252,10 @@ which checks to see if all views are 'ready'.
 
                 @_appLoaded = true
 
+Start listening for scroll events to upadate the navigation
+
+                $(window).on 'scroll', => @sendScrollNotification()
+
 Load a section view function.
 
             loadSection: (section, name, sections) ->
@@ -362,23 +372,17 @@ Dispatches a namespaced event notification
                 @notifications.trigger.apply @notifications, args
 
 
-Updates the navigation items
+Notify all views when the user is manually scrolling, and provide the
+section that is most visible.
 
-            updateNavigation: (e) ->
+            sendScrollNotification: (e) ->
 
                 return if @scrolling
 
-                sectionEl = _.filter $('section'), (el) ->
-                    return _.inViewport el
+                section = _.max @sections, (section) =>
+                    @inViewport(section.el)
 
-                sectionId = $(sectionEl).attr 'id'
-
-                route = $('header li.'+sectionId+' a').attr 'href'
-
-                @notify 'updateNav', sectionId
-
-                @navigate route,
-                    trigger: false
+                @notify 'manualScroll', section
 
 Updates the page meta data
 
@@ -397,3 +401,24 @@ Updates the page meta data
                 $('title').text(pageMeta.get('page_title'))
                 $('meta[name="description"]').text(pageMeta.get('page_description'))
                 $('title[name="keywords"]').text(pageMeta.get('page_keywords'))
+
+Checks to see if the given element is substantially in the
+viewport. Returns the height of visible portion of the element.
+
+            inViewport: (el) ->
+
+                elBounds = $(el).get(0).getBoundingClientRect()
+
+                # the el is not visible
+                return 0 if elBounds.bottom <= 0 or elBounds.top >= window.innerHeight
+
+                #the el is entirely visible
+                return $(el).height() if elBounds.top >= 0 and elBounds.bottom <= window.innerHeight
+
+                #if the el's top is visible but not the bottom
+                if elBounds.top >= 0 and elBounds.bottom >= window.innerHeight
+                    return $(el).height() - (elBounds.bottom - window.innerHeight)
+
+                #if the el's bottom is visible but not the top
+                if elBounds.bottom < window.innerHeight and elBounds.top < 0
+                    return $(el).height() - (elBounds.top * -1)
