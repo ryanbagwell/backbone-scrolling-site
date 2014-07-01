@@ -50,7 +50,7 @@ module.exports = (grunt) ->
     bump:
       options:
         pushTo: 'origin'
-        filepaths: ['package.json', 'bower.json']
+        files: ['package.json', 'bower.json']
         syncVersions: true
 
     #Load grunt plugins
