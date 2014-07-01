@@ -52,6 +52,7 @@ module.exports = (grunt) ->
         pushTo: 'origin'
         files: ['package.json', 'bower.json']
         syncVersions: true
+        commitFiles: ['**.*']
 
     #Load grunt plugins
     grunt.loadNpmTasks 'grunt-contrib-coffee'
