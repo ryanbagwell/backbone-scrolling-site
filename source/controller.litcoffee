@@ -193,7 +193,10 @@ The navigate function is bound to all clicks on local urls.
 
                 return if not @ready
 
-                options = _.extend trigger:false, options
+                options = _.extend
+                    trigger: false
+                    scroll: true
+                , options
 
                 super _.ltrim(route, '/'), options
 
@@ -201,11 +204,11 @@ The navigate function is bound to all clicks on local urls.
 
                 section = @_fragmentToSection(_.ltrim(route, '/'))
 
+                @currentSection = section
+
                 id = section.instance.options.pageName
 
-                @scrollToSection id
-
-                @notify 'header:navigate', id
+                @scrollToSection(id) unless options.scroll is false
 
                 @notify id+':navigate', route
 
@@ -229,7 +232,6 @@ A method to call after the page has stopped scrolling.
             afterScroll: ->
                 @scrolling = false
 
-
 Each time a view is ready, it triggers a call to the appLoaded method,
 which checks to see if all views are 'ready'.
 
@@ -252,9 +254,9 @@ which checks to see if all views are 'ready'.
 
                 @_appLoaded = true
 
-Start listening for scroll events to upadate the navigation
+Start listening for scroll events to call the navigation method
 
-                $(window).on 'scroll', => @sendScrollNotification()
+                $(window).on 'scroll', => @navigateOnScroll()
 
 Load a section view function.
 
@@ -372,17 +374,21 @@ Dispatches a namespaced event notification
                 @notifications.trigger.apply @notifications, args
 
 
-Notify all views when the user is manually scrolling, and provide the
-section that is most visible.
+Call the navigate method when the user is manually scrolling
+and the most visible section has changed.
 
-            sendScrollNotification: (e) ->
+            navigateOnScroll: (e) ->
 
                 return if @scrolling
 
                 section = _.max @sections, (section) =>
                     @inViewport(section.el)
 
-                @notify 'manualScroll', section
+                return if section == @currentSection
+
+                @navigate section.route, scroll:false
+
+                @currentSection = section
 
 Updates the page meta data
 
