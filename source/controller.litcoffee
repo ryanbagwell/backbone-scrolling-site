@@ -334,7 +334,7 @@ resolution breakpoints object
 Retrieves the name of the current resolution
 
             _getResolution: ->
-                currWidth = $(window).width()
+                currWidth = window.outerWidth
 
                 return _.find @resolutionBreakPoints, (res) ->
                     return true if (res.min <= currWidth <= res.max)
