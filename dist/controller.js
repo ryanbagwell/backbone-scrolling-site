@@ -55,9 +55,12 @@
 
       SinglePageScrollingController.prototype.scrolling = false;
 
+      SinglePageScrollingController.prototype.navigationOffset = 0;
+
       SinglePageScrollingController.prototype.defaultOptions = {
         scrollTime: 500,
-        scrollToOptions: {}
+        scrollToOptions: {},
+        navigateOnManualScroll: true
       };
 
       SinglePageScrollingController.prototype.initialize = function(options) {
@@ -81,8 +84,7 @@
         this.pageMetaCollection = new Backbone.Collection(this.pageMeta);
         this.notifications.on('controller:resolutionChanged', this.onResolutionChanged, this);
         this.notifications.on('view:sectionReady', this.appLoaded, this);
-        this.notifications.on('view:navigate', this.navigate);
-        this.notifications.on('view:reinitializeSection', this.reinitializeSection);
+        this.notifications.on('view:navigate', this.navigate, this);
         $(window).on('resize', _.bind(_.debounce(function() {
           return this.notify('windowResized');
         }, 500), this));
@@ -114,14 +116,17 @@
           return;
         }
         options = _.extend({
-          trigger: false
+          trigger: false,
+          scroll: true
         }, options);
         SinglePageScrollingController.__super__.navigate.call(this, _.ltrim(route, '/'), options);
         this.updatePageMeta(route);
         section = this._fragmentToSection(_.ltrim(route, '/'));
+        this.currentSection = section;
         id = section.instance.options.pageName;
-        this.scrollToSection(id);
-        this.notify('header:navigate', id);
+        if (options.scroll !== false) {
+          this.scrollToSection(id);
+        }
         return this.notify(id + ':navigate', route);
       };
 
@@ -155,7 +160,12 @@
         }
         this.ready = true;
         this.navigate(Backbone.history.fragment);
-        return this._appLoaded = true;
+        this._appLoaded = true;
+        return $(window).on('scroll', (function(_this) {
+          return function() {
+            return _this.navigateOnScroll();
+          };
+        })(this));
       };
 
       SinglePageScrollingController.prototype.loadSection = function(section, name, sections) {
@@ -219,9 +229,9 @@
 
       SinglePageScrollingController.prototype._getResolution = function() {
         var currWidth;
-        currWidth = $(window).width();
+        currWidth = window.outerWidth;
         return _.find(this.resolutionBreakPoints, function(res) {
-          if (currWidth > res.min && currWidth <= res.max) {
+          if ((res.min <= currWidth && currWidth <= res.max)) {
             return true;
           }
         });
@@ -265,20 +275,26 @@
         return this.notifications.trigger.apply(this.notifications, args);
       };
 
-      SinglePageScrollingController.prototype.updateNavigation = function(e) {
-        var route, sectionEl, sectionId;
+      SinglePageScrollingController.prototype.navigateOnScroll = function(e) {
+        var section;
+        if (!this.options.navigateOnManualScroll) {
+          return;
+        }
         if (this.scrolling) {
           return;
         }
-        sectionEl = _.filter($('section'), function(el) {
-          return _.inViewport(el);
+        section = _.max(this.sections, (function(_this) {
+          return function(section) {
+            return _this.inViewport(section.el);
+          };
+        })(this));
+        if (section === this.currentSection) {
+          return;
+        }
+        this.navigate(section.route, {
+          scroll: false
         });
-        sectionId = $(sectionEl).attr('id');
-        route = $('header li.' + sectionId + ' a').attr('href');
-        this.notify('updateNav', sectionId);
-        return this.navigate(route, {
-          trigger: false
-        });
+        return this.currentSection = section;
       };
 
       SinglePageScrollingController.prototype.updatePageMeta = function(route) {
@@ -298,6 +314,23 @@
         $('title').text(pageMeta.get('page_title'));
         $('meta[name="description"]').text(pageMeta.get('page_description'));
         return $('title[name="keywords"]').text(pageMeta.get('page_keywords'));
+      };
+
+      SinglePageScrollingController.prototype.inViewport = function(el) {
+        var elBounds;
+        elBounds = $(el).get(0).getBoundingClientRect();
+        if (elBounds.bottom <= 0 || elBounds.top >= window.innerHeight) {
+          return 0;
+        }
+        if (elBounds.top >= 0 && elBounds.bottom <= window.innerHeight) {
+          return $(el).height();
+        }
+        if (elBounds.top >= 0 && elBounds.bottom >= window.innerHeight) {
+          return $(el).height() - (elBounds.bottom - window.innerHeight);
+        }
+        if (elBounds.bottom < window.innerHeight && elBounds.top < 0) {
+          return $(el).height() - (elBounds.top * -1);
+        }
       };
 
       return SinglePageScrollingController;

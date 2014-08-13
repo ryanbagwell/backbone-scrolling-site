@@ -91,6 +91,10 @@ Pass in options for the scrollTo jquery plugin
 
                 scrollToOptions: {}
 
+Enable/Disable navigation on manual scroll
+
+                navigateOnManualScroll: true
+
 Initialize the controller.
 
             initialize: (options) ->
@@ -378,6 +382,8 @@ Call the navigate method when the user is manually scrolling
 and the most visible section has changed.
 
             navigateOnScroll: (e) ->
+
+                return unless @options.navigateOnManualScroll
 
                 return if @scrolling
 
