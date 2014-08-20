@@ -72,7 +72,8 @@ is being sent to this particular view.
 
                     eventName = ['controller', @options.pageName, 'navigate'].join(':')
 
-                    @notifications.on eventName, @receiveNavigation
+                    @notifications.on eventName, (route) =>
+                        @receiveNavigation route
 
 Render the HTML, and triggers the "rendered" event
 
