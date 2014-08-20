@@ -231,7 +231,8 @@ is being sent to this particular view.</p>
 
                 eventName = [<span class="hljs-string">'controller'</span>, <span class="hljs-property">@options</span>.pageName, <span class="hljs-string">'navigate'</span>].join(<span class="hljs-string">':'</span>)
 
-                <span class="hljs-property">@notifications</span>.<span class="hljs-literal">on</span> eventName, <span class="hljs-property">@receiveNavigation</span></pre></div></div>
+                <span class="hljs-property">@notifications</span>.<span class="hljs-literal">on</span> eventName, <span class="hljs-function"><span class="hljs-params">(route)</span> =&gt;</span>
+                    <span class="hljs-property">@receiveNavigation</span> route</pre></div></div>
             
         </li>
         

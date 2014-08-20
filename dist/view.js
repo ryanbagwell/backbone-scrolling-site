@@ -44,7 +44,11 @@
         }
         if (_.has(this.options, 'pageName')) {
           eventName = ['controller', this.options.pageName, 'navigate'].join(':');
-          return this.notifications.on(eventName, this.receiveNavigation);
+          return this.notifications.on(eventName, (function(_this) {
+            return function(route) {
+              return _this.receiveNavigation(route);
+            };
+          })(this));
         }
       };
 
