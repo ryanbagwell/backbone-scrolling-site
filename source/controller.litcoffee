@@ -392,7 +392,12 @@ and the most visible section has changed.
 
                 return if section == @currentSection
 
-                @navigate section.route, scroll:false
+                try
+                    route = section.instance.getRoute()
+                catch e
+                    route = section.route
+
+                @navigate route, scroll:false
 
                 @currentSection = section
 
