@@ -410,9 +410,9 @@ Updates the page meta data
 
                 return if _.isUndefined pageMeta
 
-                $('title').text(pageMeta.get('page_title'))
-                $('meta[name="description"]').text(pageMeta.get('page_description'))
-                $('title[name="keywords"]').text(pageMeta.get('page_keywords'))
+                $('title').text pageMeta.get('title')
+                $('meta[name="description"]').text pageMeta.get('description')
+                $('title[name="keywords"]').text pageMeta.get('keywords')
 
 Checks to see if the given element is substantially in the
 viewport. Returns the height of visible portion of the element.
