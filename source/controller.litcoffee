@@ -45,11 +45,6 @@ A dictionary of responsive break points that child view will be notified of.
                 max: 767
             ]
 
-
-A dictionary that will supply our page meta and SEO data
-
-            pageMeta: []
-
 A placeholder for the current resolution
 
             currentResolution: 0
@@ -129,7 +124,7 @@ Merge our options with the defaultOptions
                 # Turn our page meta json
                 # into a backbone collection
                 #
-                @pageMetaCollection = new Backbone.Collection(@pageMeta)
+                @pageMetaCollection = new Backbone.Collection(@options.pageMeta)
 
 Call the onResolutionChanged method upon notification
 
@@ -410,7 +405,7 @@ Updates the page meta data
                 else:
                     route = ['/', _.trim(route, '/'), '/'].join('')
 
-                pageMeta = this.pageMetaCollection.findWhere
+                pageMeta = @pageMetaCollection.findWhere
                     url: route
 
                 return if _.isUndefined pageMeta
