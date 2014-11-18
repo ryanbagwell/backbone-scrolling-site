@@ -43,8 +43,6 @@
         }
       ];
 
-      SinglePageScrollingController.prototype.pageMeta = [];
-
       SinglePageScrollingController.prototype.currentResolution = 0;
 
       SinglePageScrollingController.prototype.previousResolution = 0;
@@ -81,7 +79,7 @@
         }, this);
         this.notifications = _.clone(Backbone.Events);
         this._resolutionChanged();
-        this.pageMetaCollection = new Backbone.Collection(this.pageMeta);
+        this.pageMetaCollection = new Backbone.Collection(this.options.pageMeta);
         this.notifications.on('controller:resolutionChanged', this.onResolutionChanged, this);
         this.notifications.on('view:sectionReady', this.appLoaded, this);
         this.notifications.on('view:navigate', this.navigate, this);
@@ -276,7 +274,7 @@
       };
 
       SinglePageScrollingController.prototype.navigateOnScroll = function(e) {
-        var section;
+        var route, section;
         if (!this.options.navigateOnManualScroll) {
           return;
         }
@@ -291,7 +289,13 @@
         if (section === this.currentSection) {
           return;
         }
-        this.navigate(section.route, {
+        try {
+          route = section.instance.getRoute();
+        } catch (_error) {
+          e = _error;
+          route = section.route;
+        }
+        this.navigate(route, {
           scroll: false
         });
         return this.currentSection = section;
@@ -311,9 +315,9 @@
         if (_.isUndefined(pageMeta)) {
           return;
         }
-        $('title').text(pageMeta.get('page_title'));
-        $('meta[name="description"]').text(pageMeta.get('page_description'));
-        return $('title[name="keywords"]').text(pageMeta.get('page_keywords'));
+        $('title').text(pageMeta.get('title'));
+        $('meta[name="description"]').text(pageMeta.get('description'));
+        return $('title[name="keywords"]').text(pageMeta.get('keywords'));
       };
 
       SinglePageScrollingController.prototype.inViewport = function(el) {
