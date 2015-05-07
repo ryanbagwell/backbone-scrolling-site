@@ -1,9 +1,6 @@
 The main entry point.
 
-    define (require) ->
+    module.exports =
 
-        {
-            Controller: require './controller'
-            View: require './view'
-        }
-
+      Controller: require './controller'
+      View: require './view'

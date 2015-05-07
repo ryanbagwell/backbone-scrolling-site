@@ -1,10 +1,8 @@
 (function() {
-  define(function(require) {
-    return {
-      Controller: require('./controller'),
-      View: require('./view')
-    };
-  });
+  module.exports = {
+    Controller: require('./controller'),
+    View: require('./view')
+  };
 
 }).call(this);
 

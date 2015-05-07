@@ -60,13 +60,13 @@
               </div>
               <p>The Base class contains common methods that are mixed in
 to the contoller and view</p>
-<p>It has a number of require.js dependencies.</p>
+<p>It has some dependencies:</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>define <span class="hljs-function"><span class="hljs-params">(<span class="hljs-built_in">require</span>)</span> -&gt;</span>
+            <div class="content"><div class='highlight'><pre>s = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore.string'</span>
 
-    baseMethods =</pre></div></div>
+<span class="hljs-built_in">module</span>.exports =</pre></div></div>
             
         </li>
         
@@ -82,19 +82,18 @@ to handle responsive events, i.e. onChangeFromLargeToSmall</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>        <span class="hljs-attribute">onResolutionChanged</span>: <span class="hljs-function"><span class="hljs-params">(resolution)</span> -&gt;</span>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">onResolutionChanged</span>: <span class="hljs-function"><span class="hljs-params">(resolution)</span> -&gt;</span>
 
-            <span class="hljs-property">@currentResolution</span> = resolution.newSize
+    <span class="hljs-property">@currentResolution</span> = resolution.newSize
 
-            methodName = _.join <span class="hljs-string">''</span>,
-                <span class="hljs-string">'onChangeFrom'</span>,
-                _.str.capitalize(resolution.prevSize),
-                <span class="hljs-string">'To'</span>,
-                _.str.capitalize(resolution.newSize)
-
-            <span class="hljs-keyword">try</span>
-                <span class="hljs-keyword">this</span>[methodName]()
-            <span class="hljs-keyword">return</span></pre></div></div>
+    methodName = _.join <span class="hljs-string">''</span>,
+      <span class="hljs-string">'onChangeFrom'</span>,
+      s.capitalize(resolution.prevSize),
+      <span class="hljs-string">'To'</span>,
+      s.capitalize(resolution.newSize)
+    <span class="hljs-keyword">try</span>
+        <span class="hljs-keyword">this</span>[methodName]()
+    <span class="hljs-keyword">return</span></pre></div></div>
             
         </li>
         
