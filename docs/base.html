@@ -86,11 +86,8 @@ to handle responsive events, i.e. onChangeFromLargeToSmall</p>
 
     <span class="hljs-property">@currentResolution</span> = resolution.newSize
 
-    methodName = _s.join <span class="hljs-string">''</span>,
-      <span class="hljs-string">'onChangeFrom'</span>,
-      s.capitalize(resolution.prevSize),
-      <span class="hljs-string">'To'</span>,
-      s.capitalize(resolution.newSize)
+    methodname = <span class="hljs-string">"onChangeFrom<span class="hljs-subst">#{_s.capitalize(resolution.prevSize)}</span>To<span class="hljs-subst">#{_s.capitalize(resolution.newSize)}</span>"</span>
+
     <span class="hljs-keyword">try</span>
         <span class="hljs-keyword">this</span>[methodName]()
     <span class="hljs-keyword">return</span></pre></div></div>
