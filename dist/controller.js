@@ -1,26 +1,24 @@
 (function() {
-  var $, Backbone, Base, SinglePageScrollingController, SinglePageScrollingView, _,
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
+  var $, Backbone, Base, SinglePageScrollingController, SinglePageScrollingView, _, _s,
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   $ = require('jquery');
 
   _ = require('underscore');
 
-  _.str = require('underscore.string');
-
-  _.mixin(_.str.exports());
+  _s = require('underscore.string');
 
   Backbone = require('backbone');
 
   Base = require('./base');
 
-  require('jquery.scrollTo');
+  require('jquery.scrollto');
 
   SinglePageScrollingView = require('./view');
 
-  module.exports = SinglePageScrollingController = (function(superClass) {
-    extend(SinglePageScrollingController, superClass);
+  module.exports = SinglePageScrollingController = (function(_super) {
+    __extends(SinglePageScrollingController, _super);
 
     function SinglePageScrollingController() {
       return SinglePageScrollingController.__super__.constructor.apply(this, arguments);
@@ -125,7 +123,7 @@
         trigger: false,
         scroll: true
       }, options);
-      SinglePageScrollingController.__super__.navigate.call(this, _.ltrim(route, '/'), options);
+      SinglePageScrollingController.__super__.navigate.call(this, _s.ltrim(route, '/'), options);
       this.updatePageMeta(route);
       section = this._fragmentToSection(_.ltrim(route, '/'));
       this.currentSection = section;

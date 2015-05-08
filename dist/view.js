@@ -1,7 +1,7 @@
 (function() {
   var $, Backbone, Base, SinglePageScrollingView, _,
-    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    hasProp = {}.hasOwnProperty;
+    __hasProp = {}.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   $ = require("jquery");
 
@@ -15,8 +15,8 @@
 
   Backbone = require("backbone");
 
-  module.exports = SinglePageScrollingView = (function(superClass) {
-    extend(SinglePageScrollingView, superClass);
+  module.exports = SinglePageScrollingView = (function(_super) {
+    __extends(SinglePageScrollingView, _super);
 
     function SinglePageScrollingView() {
       return SinglePageScrollingView.__super__.constructor.apply(this, arguments);
@@ -31,8 +31,11 @@
     SinglePageScrollingView.prototype.ready = false;
 
     SinglePageScrollingView.prototype.initialize = function(options) {
-      var eventName, method, name, notifications;
-      this.options = _.extend({}, options);
+      var eventName, method, name;
+      if (options == null) {
+        options = {};
+      }
+      this.options = options;
       for (name in Base) {
         method = Base[name];
         this[name] = _.bind(method, this);
@@ -41,7 +44,7 @@
       this.on('rendered', _.bind(this.afterRender, this));
       try {
         this.currentResolution = this.options.currentResolution;
-        notifications = this.options.notifications;
+        this.notifications = this.options.notifications;
         return this.notifications.on({
           "controller:appLoaded": this.onAppLoaded,
           "controller:resolutionChanged": this.onResolutionChanged
