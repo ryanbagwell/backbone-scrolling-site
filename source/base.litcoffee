@@ -3,7 +3,7 @@ to the contoller and view
 
 It has some dependencies:
 
-    s = require 'underscore.string'
+    _s = require 'underscore.string'
 
     module.exports =
 
@@ -14,7 +14,7 @@ to handle responsive events, i.e. onChangeFromLargeToSmall
 
         @currentResolution = resolution.newSize
 
-        methodName = _.join '',
+        methodName = _s.join '',
           'onChangeFrom',
           s.capitalize(resolution.prevSize),
           'To',

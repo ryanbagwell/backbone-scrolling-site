@@ -64,7 +64,7 @@ to the contoller and view</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>s = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore.string'</span>
+            <div class="content"><div class='highlight'><pre>_s = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore.string'</span>
 
 <span class="hljs-built_in">module</span>.exports =</pre></div></div>
             
@@ -86,7 +86,7 @@ to handle responsive events, i.e. onChangeFromLargeToSmall</p>
 
     <span class="hljs-property">@currentResolution</span> = resolution.newSize
 
-    methodName = _.join <span class="hljs-string">''</span>,
+    methodName = _s.join <span class="hljs-string">''</span>,
       <span class="hljs-string">'onChangeFrom'</span>,
       s.capitalize(resolution.prevSize),
       <span class="hljs-string">'To'</span>,

@@ -65,11 +65,10 @@
             
             <div class="content"><div class='highlight'><pre>$ = <span class="hljs-built_in">require</span> <span class="hljs-string">'jquery'</span>
 _ = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore'</span>
-_.str = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore.string'</span>
-_.mixin _.str.exports()
+_s = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore.string'</span>
 Backbone = <span class="hljs-built_in">require</span> <span class="hljs-string">'backbone'</span>
 Base = <span class="hljs-built_in">require</span> <span class="hljs-string">'./base'</span>
-<span class="hljs-built_in">require</span> <span class="hljs-string">'jquery-scrollto'</span>
+<span class="hljs-built_in">require</span> <span class="hljs-string">'jquery.scrollto'</span>
 SinglePageScrollingView = <span class="hljs-built_in">require</span> <span class="hljs-string">'./view'</span></pre></div></div>
             
         </li>
@@ -578,7 +577,7 @@ will be ignored.</p>
         <span class="hljs-attribute">scroll</span>: <span class="hljs-literal">true</span>
     , options
 
-    <span class="hljs-keyword">super</span> _.ltrim(route, <span class="hljs-string">'/'</span>), options
+    <span class="hljs-keyword">super</span> _s.ltrim(route, <span class="hljs-string">'/'</span>), options
 
     <span class="hljs-property">@updatePageMeta</span> route
 

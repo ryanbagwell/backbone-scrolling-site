@@ -1,13 +1,13 @@
 (function() {
-  var s;
+  var _s;
 
-  s = require('underscore.string');
+  _s = require('underscore.string');
 
   module.exports = {
     onResolutionChanged: function(resolution) {
       var methodName;
       this.currentResolution = resolution.newSize;
-      methodName = _.join('', 'onChangeFrom', s.capitalize(resolution.prevSize), 'To', s.capitalize(resolution.newSize));
+      methodName = _s.join('', 'onChangeFrom', s.capitalize(resolution.prevSize), 'To', s.capitalize(resolution.newSize));
       try {
         this[methodName]();
       } catch (_error) {}
