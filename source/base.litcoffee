@@ -14,11 +14,8 @@ to handle responsive events, i.e. onChangeFromLargeToSmall
 
         @currentResolution = resolution.newSize
 
-        methodName = _s.join '',
-          'onChangeFrom',
-          s.capitalize(resolution.prevSize),
-          'To',
-          s.capitalize(resolution.newSize)
+        methodname = "onChangeFrom#{_s.capitalize(resolution.prevSize)}To#{_s.capitalize(resolution.newSize)}"
+
         try
             this[methodName]()
         return
