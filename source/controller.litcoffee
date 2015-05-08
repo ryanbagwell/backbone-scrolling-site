@@ -4,11 +4,10 @@ It has a number of dependencies.
 
     $ = require 'jquery'
     _ = require 'underscore'
-    _.str = require 'underscore.string'
-    _.mixin _.str.exports()
+    _s = require 'underscore.string'
     Backbone = require 'backbone'
     Base = require './base'
-    require 'jquery.scrollTo'
+    require 'jquery.scrollto'
     SinglePageScrollingView = require './view'
 
 The sections object represents all sections/pages of the site. Each item should
@@ -195,7 +194,7 @@ The navigate function is bound to all clicks on local urls.
             scroll: true
         , options
 
-        super _.ltrim(route, '/'), options
+        super _s.ltrim(route, '/'), options
 
         @updatePageMeta route
 

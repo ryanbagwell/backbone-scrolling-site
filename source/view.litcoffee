@@ -36,8 +36,8 @@ Initially, the view isn't ready
 
 Initialize the view.
 
-      initialize: (options) ->
-        @options = _.extend {}, options
+      initialize: (options={}) ->
+        @options = options
 
         @[name] = _.bind(method, @) for name, method of Base
 
@@ -55,7 +55,7 @@ Set the initial value of currentResolution
 
 Set the value of the event dispatcher
 
-          notifications = @options.notifications
+          @notifications = @options.notifications
 
 Bind some event handlers to the appLoaded and resolutionChaged events
 from the controller
