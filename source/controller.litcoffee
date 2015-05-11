@@ -53,7 +53,7 @@ A placeholder for the previous resolution
 
 A placeholder for our notifications object
 
-      notifications: null
+      notifications: _.clone Backbone.Events
 
 The site is not ready.
 
@@ -107,11 +107,6 @@ Merge our options with the defaultOptions
           return if _.isUndefined section.route
           @route section.route, -> null
         , @
-
-        #
-        # A global event dispatcher
-        #
-        @notifications = _.clone Backbone.Events
 
         #
         # Set the initial browser resolution
