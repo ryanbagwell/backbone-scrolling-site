@@ -9,6 +9,10 @@
   "moduleType": [
     "amd"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:ryanbagwell/backbone-scrolling-site.git"
+  },
   "main": "./dist/main.js",
   "license": "MIT",
   "ignore": [
@@ -30,6 +34,7 @@
     "grunt-docco": "^0.3.3"
   },
   "dependencies": {
+    "backbone": "^1.1.2",
     "jquery": "^2.1.4",
     "jquery.scrollto": "^2.1.0",
     "underscore": "^1.8.3",
