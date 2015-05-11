@@ -52,7 +52,7 @@
 
     SinglePageScrollingController.prototype.previousResolution = 0;
 
-    SinglePageScrollingController.prototype.notifications = null;
+    SinglePageScrollingController.prototype.notifications = _.clone(Backbone.Events);
 
     SinglePageScrollingController.prototype.ready = false;
 
@@ -83,7 +83,6 @@
           return null;
         });
       }, this);
-      this.notifications = _.clone(Backbone.Events);
       this._resolutionChanged();
       this.pageMetaCollection = new Backbone.Collection(this.options.pageMeta);
       this.notifications.on('controller:resolutionChanged', this.onResolutionChanged, this);
