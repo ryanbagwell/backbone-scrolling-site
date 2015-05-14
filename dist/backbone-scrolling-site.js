@@ -55,19 +55,10 @@ module.exports =
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(19);
-	var decap = __webpack_require__(17);
+	var trim = __webpack_require__(18);
 	
-	module.exports = function camelize(str, decapitalize) {
-	  str = trim(str).replace(/[-_\s]+(.)?/g, function(match, c) {
-	    return c ? c.toUpperCase() : "";
-	  });
-	
-	  if (decapitalize === true) {
-	    return decap(str);
-	  } else {
-	    return str;
-	  }
+	module.exports = function underscored(str) {
+	  return trim(str).replace(/([a-z\d])([A-Z]+)/g, '$1_$2').replace(/[-\s]+/g, '_').toLowerCase();
 	};
 
 
@@ -79,17 +70,17 @@ module.exports =
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 	  hasProp = {}.hasOwnProperty;
 	
-	$ = __webpack_require__(7);
+	$ = __webpack_require__(8);
 	
-	_ = __webpack_require__(5);
+	_ = __webpack_require__(6);
 	
-	_.str = __webpack_require__(12);
+	_.str = __webpack_require__(5);
 	
 	_.mixin(_.str.exports());
 	
 	Base = __webpack_require__(3);
 	
-	Backbone = __webpack_require__(10);
+	Backbone = __webpack_require__(11);
 	
 	module.exports = SinglePageScrollingView = (function(superClass) {
 	  extend(SinglePageScrollingView, superClass);
@@ -200,13 +191,13 @@ module.exports =
 
 	var _s;
 	
-	_s = __webpack_require__(12);
+	_s = __webpack_require__(5);
 	
 	module.exports = {
 	  onResolutionChanged: function(resolution) {
-	    var methodname;
+	    var methodName;
 	    this.currentResolution = resolution.newSize;
-	    methodname = "onChangeFrom" + (_s.capitalize(resolution.prevSize)) + "To" + (_s.capitalize(resolution.newSize));
+	    methodName = "onChangeFrom" + (_s.capitalize(resolution.prevSize)) + "To" + (_s.capitalize(resolution.newSize));
 	    try {
 	      this[methodName]();
 	    } catch (_error) {}
@@ -230,7 +221,7 @@ module.exports =
 	;(function(define) {
 		'use strict';
 	
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(7)], __WEBPACK_AMD_DEFINE_RESULT__ = function($) {
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(8)], __WEBPACK_AMD_DEFINE_RESULT__ = function($) {
 			var $scrollTo = $.scrollTo = function(target, duration, settings) {
 				return $(window).scrollTo(target, duration, settings);
 			};
@@ -417,18 +408,160 @@ module.exports =
 			// AMD requirement
 			return $scrollTo;
 		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(13)));
+	}(__webpack_require__(74)));
 
 
 /***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["_"] = __webpack_require__(6);
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+	//  Underscore.string
+	//  (c) 2010 Esa-Matti Suuronen <esa-matti aet suuronen dot org>
+	//  Underscore.string is freely distributable under the terms of the MIT license.
+	//  Documentation: https://github.com/epeli/underscore.string
+	//  Some code is borrowed from MooTools and Alexandru Marasteanu.
+	//  Version '3.0.3'
+	
+	'use strict';
+	
+	function s(value) {
+	  /* jshint validthis: true */
+	  if (!(this instanceof s)) return new s(value);
+	  this._wrapped = value;
+	}
+	
+	s.VERSION = '3.0.3';
+	
+	s.isBlank          = __webpack_require__(13);
+	s.stripTags        = __webpack_require__(14);
+	s.capitalize       = __webpack_require__(15);
+	s.decapitalize     = __webpack_require__(16);
+	s.chop             = __webpack_require__(17);
+	s.trim             = __webpack_require__(18);
+	s.clean            = __webpack_require__(19);
+	s.count            = __webpack_require__(20);
+	s.chars            = __webpack_require__(23);
+	s.swapCase         = __webpack_require__(21);
+	s.escapeHTML       = __webpack_require__(22);
+	s.unescapeHTML     = __webpack_require__(24);
+	s.splice           = __webpack_require__(25);
+	s.insert           = __webpack_require__(26);
+	s.replaceAll       = __webpack_require__(27);
+	s.include          = __webpack_require__(28);
+	s.join             = __webpack_require__(29);
+	s.lines            = __webpack_require__(30);
+	s.dedent           = __webpack_require__(31);
+	s.reverse          = __webpack_require__(32);
+	s.startsWith       = __webpack_require__(33);
+	s.endsWith         = __webpack_require__(34);
+	s.pred             = __webpack_require__(35);
+	s.succ             = __webpack_require__(36);
+	s.titleize         = __webpack_require__(37);
+	s.camelize         = __webpack_require__(38);
+	s.underscored      = __webpack_require__(1);
+	s.dasherize        = __webpack_require__(40);
+	s.classify         = __webpack_require__(41);
+	s.humanize         = __webpack_require__(42);
+	s.ltrim            = __webpack_require__(43);
+	s.rtrim            = __webpack_require__(44);
+	s.truncate         = __webpack_require__(45);
+	s.prune            = __webpack_require__(46);
+	s.words            = __webpack_require__(47);
+	s.pad              = __webpack_require__(48);
+	s.lpad             = __webpack_require__(49);
+	s.rpad             = __webpack_require__(50);
+	s.lrpad            = __webpack_require__(51);
+	s.sprintf          = __webpack_require__(52);
+	s.vsprintf         = __webpack_require__(53);
+	s.toNumber         = __webpack_require__(54);
+	s.numberFormat     = __webpack_require__(55);
+	s.strRight         = __webpack_require__(56);
+	s.strRightBack     = __webpack_require__(57);
+	s.strLeft          = __webpack_require__(58);
+	s.strLeftBack      = __webpack_require__(59);
+	s.toSentence       = __webpack_require__(60);
+	s.toSentenceSerial = __webpack_require__(61);
+	s.slugify          = __webpack_require__(62);
+	s.surround         = __webpack_require__(63);
+	s.quote            = __webpack_require__(64);
+	s.unquote          = __webpack_require__(65);
+	s.repeat           = __webpack_require__(66);
+	s.naturalCmp       = __webpack_require__(67);
+	s.levenshtein      = __webpack_require__(68);
+	s.toBoolean        = __webpack_require__(69);
+	s.exports          = __webpack_require__(70);
+	s.escapeRegExp     = __webpack_require__(71);
+	
+	// Aliases
+	s.strip     = s.trim;
+	s.lstrip    = s.ltrim;
+	s.rstrip    = s.rtrim;
+	s.center    = s.lrpad;
+	s.rjust     = s.lpad;
+	s.ljust     = s.rpad;
+	s.contains  = s.include;
+	s.q         = s.quote;
+	s.toBool    = s.toBoolean;
+	s.camelcase = s.camelize;
+	
+	
+	// Implement chaining
+	s.prototype = {
+	  value: function value() {
+	    return this._wrapped;
+	  }
+	};
+	
+	function fn2method(key, fn) {
+	    if (typeof fn !== "function") return;
+	    s.prototype[key] = function() {
+	      var args = [this._wrapped].concat(Array.prototype.slice.call(arguments));
+	      var res = fn.apply(null, args);
+	      // if the result is non-string stop the chain and return the value
+	      return typeof res === 'string' ? new s(res) : res;
+	    };
+	}
+	
+	// Copy functions to instance methods for chaining
+	for (var key in s) fn2method(key, s[key]);
+	
+	fn2method("tap", function tap(string, fn) {
+	  return fn(string);
+	});
+	
+	function prototype2method(methodName) {
+	  fn2method(methodName, function(context) {
+	    var args = Array.prototype.slice.call(arguments, 1);
+	    return String.prototype[methodName].apply(context, args);
+	  });
+	}
+	
+	var prototypeMethods = [
+	  "toUpperCase",
+	  "toLowerCase",
+	  "split",
+	  "replace",
+	  "slice",
+	  "substring",
+	  "substr",
+	  "concat"
+	];
+	
+	for (var key in prototypeMethods) prototype2method(prototypeMethods[key]);
+	
+	
+	module.exports = s;
+
 
 /***/ },
 /* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["_"] = __webpack_require__(7);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscore.js 1.8.3
@@ -1982,21 +2115,21 @@ module.exports =
 
 
 /***/ },
-/* 7 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(8);
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(9);
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(9);
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 /* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(10);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -11212,14 +11345,14 @@ module.exports =
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Backbone"] = __webpack_require__(11);
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Backbone"] = __webpack_require__(12);
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Backbone.js 1.1.2
@@ -11233,7 +11366,7 @@ module.exports =
 	
 	  // Set up Backbone appropriately for the environment. Start with AMD.
 	  if (true) {
-	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(5), __webpack_require__(7), exports], __WEBPACK_AMD_DEFINE_RESULT__ = function(_, $, exports) {
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(6), __webpack_require__(8), exports], __WEBPACK_AMD_DEFINE_RESULT__ = function(_, $, exports) {
 	      // Export global even in AMD case in case this script is loaded with
 	      // others that may still expect a global Backbone.
 	      root.Backbone = factory(root, exports, _, $);
@@ -12833,159 +12966,21 @@ module.exports =
 
 
 /***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	//  Underscore.string
-	//  (c) 2010 Esa-Matti Suuronen <esa-matti aet suuronen dot org>
-	//  Underscore.string is freely distributable under the terms of the MIT license.
-	//  Documentation: https://github.com/epeli/underscore.string
-	//  Some code is borrowed from MooTools and Alexandru Marasteanu.
-	//  Version '3.0.3'
-	
-	'use strict';
-	
-	function s(value) {
-	  /* jshint validthis: true */
-	  if (!(this instanceof s)) return new s(value);
-	  this._wrapped = value;
-	}
-	
-	s.VERSION = '3.0.3';
-	
-	s.isBlank          = __webpack_require__(15);
-	s.stripTags        = __webpack_require__(14);
-	s.capitalize       = __webpack_require__(16);
-	s.decapitalize     = __webpack_require__(17);
-	s.chop             = __webpack_require__(18);
-	s.trim             = __webpack_require__(19);
-	s.clean            = __webpack_require__(20);
-	s.count            = __webpack_require__(21);
-	s.chars            = __webpack_require__(22);
-	s.swapCase         = __webpack_require__(23);
-	s.escapeHTML       = __webpack_require__(24);
-	s.unescapeHTML     = __webpack_require__(25);
-	s.splice           = __webpack_require__(26);
-	s.insert           = __webpack_require__(27);
-	s.replaceAll       = __webpack_require__(28);
-	s.include          = __webpack_require__(29);
-	s.join             = __webpack_require__(30);
-	s.lines            = __webpack_require__(31);
-	s.dedent           = __webpack_require__(32);
-	s.reverse          = __webpack_require__(33);
-	s.startsWith       = __webpack_require__(34);
-	s.endsWith         = __webpack_require__(35);
-	s.pred             = __webpack_require__(36);
-	s.succ             = __webpack_require__(37);
-	s.titleize         = __webpack_require__(38);
-	s.camelize         = __webpack_require__(1);
-	s.underscored      = __webpack_require__(40);
-	s.dasherize        = __webpack_require__(41);
-	s.classify         = __webpack_require__(42);
-	s.humanize         = __webpack_require__(43);
-	s.ltrim            = __webpack_require__(44);
-	s.rtrim            = __webpack_require__(45);
-	s.truncate         = __webpack_require__(46);
-	s.prune            = __webpack_require__(47);
-	s.words            = __webpack_require__(48);
-	s.pad              = __webpack_require__(49);
-	s.lpad             = __webpack_require__(50);
-	s.rpad             = __webpack_require__(51);
-	s.lrpad            = __webpack_require__(52);
-	s.sprintf          = __webpack_require__(53);
-	s.vsprintf         = __webpack_require__(54);
-	s.toNumber         = __webpack_require__(55);
-	s.numberFormat     = __webpack_require__(56);
-	s.strRight         = __webpack_require__(57);
-	s.strRightBack     = __webpack_require__(58);
-	s.strLeft          = __webpack_require__(59);
-	s.strLeftBack      = __webpack_require__(60);
-	s.toSentence       = __webpack_require__(61);
-	s.toSentenceSerial = __webpack_require__(62);
-	s.slugify          = __webpack_require__(63);
-	s.surround         = __webpack_require__(64);
-	s.quote            = __webpack_require__(65);
-	s.unquote          = __webpack_require__(66);
-	s.repeat           = __webpack_require__(67);
-	s.naturalCmp       = __webpack_require__(68);
-	s.levenshtein      = __webpack_require__(69);
-	s.toBoolean        = __webpack_require__(70);
-	s.exports          = __webpack_require__(71);
-	s.escapeRegExp     = __webpack_require__(72);
-	
-	// Aliases
-	s.strip     = s.trim;
-	s.lstrip    = s.ltrim;
-	s.rstrip    = s.rtrim;
-	s.center    = s.lrpad;
-	s.rjust     = s.lpad;
-	s.ljust     = s.rpad;
-	s.contains  = s.include;
-	s.q         = s.quote;
-	s.toBool    = s.toBoolean;
-	s.camelcase = s.camelize;
-	
-	
-	// Implement chaining
-	s.prototype = {
-	  value: function value() {
-	    return this._wrapped;
-	  }
-	};
-	
-	function fn2method(key, fn) {
-	    if (typeof fn !== "function") return;
-	    s.prototype[key] = function() {
-	      var args = [this._wrapped].concat(Array.prototype.slice.call(arguments));
-	      var res = fn.apply(null, args);
-	      // if the result is non-string stop the chain and return the value
-	      return typeof res === 'string' ? new s(res) : res;
-	    };
-	}
-	
-	// Copy functions to instance methods for chaining
-	for (var key in s) fn2method(key, s[key]);
-	
-	fn2method("tap", function tap(string, fn) {
-	  return fn(string);
-	});
-	
-	function prototype2method(methodName) {
-	  fn2method(methodName, function(context) {
-	    var args = Array.prototype.slice.call(arguments, 1);
-	    return String.prototype[methodName].apply(context, args);
-	  });
-	}
-	
-	var prototypeMethods = [
-	  "toUpperCase",
-	  "toLowerCase",
-	  "split",
-	  "replace",
-	  "slice",
-	  "substring",
-	  "substr",
-	  "concat"
-	];
-	
-	for (var key in prototypeMethods) prototype2method(prototypeMethods[key]);
-	
-	
-	module.exports = s;
-
-
-/***/ },
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = function() { throw new Error("define cannot be used indirect"); };
+	var makeString = __webpack_require__(72);
+	
+	module.exports = function isBlank(str) {
+	  return (/^\s*$/).test(makeString(str));
+	};
 
 
 /***/ },
 /* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function stripTags(str) {
 	  return makeString(str).replace(/<\/?[^>]+>/g, '');
@@ -12996,18 +12991,7 @@ module.exports =
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
-	
-	module.exports = function isBlank(str) {
-	  return (/^\s*$/).test(makeString(str));
-	};
-
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function capitalize(str) {
 	  str = makeString(str);
@@ -13016,10 +13000,10 @@ module.exports =
 
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function decapitalize(str) {
 	  str = makeString(str);
@@ -13028,7 +13012,7 @@ module.exports =
 
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function chop(str, step) {
@@ -13040,11 +13024,11 @@ module.exports =
 
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
-	var defaultToWhiteSpace = __webpack_require__(74);
+	var makeString = __webpack_require__(72);
+	var defaultToWhiteSpace = __webpack_require__(73);
 	var nativeTrim = String.prototype.trim;
 	
 	module.exports = function trim(str, characters) {
@@ -13056,10 +13040,10 @@ module.exports =
 
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(19);
+	var trim = __webpack_require__(18);
 	
 	module.exports = function clean(str) {
 	  return trim(str).replace(/\s+/g, ' ');
@@ -13067,10 +13051,10 @@ module.exports =
 
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function(str, substr) {
 	  str = makeString(str);
@@ -13094,21 +13078,10 @@ module.exports =
 
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
-	
-	module.exports = function chars(str) {
-	  return makeString(str).split('');
-	};
-
-
-/***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function swapCase(str) {
 	  return makeString(str).replace(/\S/g, function(c) {
@@ -13118,10 +13091,10 @@ module.exports =
 
 
 /***/ },
-/* 24 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	var escapeChars = __webpack_require__(75);
 	var reversedEscapeChars = {};
 	
@@ -13136,10 +13109,21 @@ module.exports =
 
 
 /***/ },
-/* 25 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
+	
+	module.exports = function chars(str) {
+	  return makeString(str).split('');
+	};
+
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(72);
 	var escapeChars = __webpack_require__(75);
 	
 	module.exports = function unescapeHTML(str) {
@@ -13160,10 +13144,10 @@ module.exports =
 
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var chars = __webpack_require__(22);
+	var chars = __webpack_require__(23);
 	
 	module.exports = function splice(str, i, howmany, substr) {
 	  var arr = chars(str);
@@ -13173,10 +13157,10 @@ module.exports =
 
 
 /***/ },
-/* 27 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var splice = __webpack_require__(26);
+	var splice = __webpack_require__(25);
 	
 	module.exports = function insert(str, i, substr) {
 	  return splice(str, i, 0, substr);
@@ -13184,10 +13168,10 @@ module.exports =
 
 
 /***/ },
-/* 28 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function replaceAll(str, find, replace, ignorecase) {
 	  var flags = (ignorecase === true)?'gi':'g';
@@ -13198,10 +13182,10 @@ module.exports =
 
 
 /***/ },
-/* 29 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function include(str, needle) {
 	  if (needle === '') return true;
@@ -13210,10 +13194,10 @@ module.exports =
 
 
 /***/ },
-/* 30 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	var slice = [].slice;
 	
 	module.exports = function join() {
@@ -13225,7 +13209,7 @@ module.exports =
 
 
 /***/ },
-/* 31 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function lines(str) {
@@ -13235,10 +13219,10 @@ module.exports =
 
 
 /***/ },
-/* 32 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	function getIndent(str) {
 	  var matches = str.match(/^[\s\\t]*/gm);
@@ -13269,10 +13253,10 @@ module.exports =
 
 
 /***/ },
-/* 33 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var chars = __webpack_require__(22);
+	var chars = __webpack_require__(23);
 	
 	module.exports = function reverse(str) {
 	  return chars(str).reverse().join('');
@@ -13280,10 +13264,10 @@ module.exports =
 
 
 /***/ },
-/* 34 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	var toPositive = __webpack_require__(76);
 	
 	module.exports = function startsWith(str, starts, position) {
@@ -13295,10 +13279,10 @@ module.exports =
 
 
 /***/ },
-/* 35 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	var toPositive = __webpack_require__(76);
 	
 	module.exports = function endsWith(str, ends, position) {
@@ -13314,7 +13298,7 @@ module.exports =
 
 
 /***/ },
-/* 36 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var adjacent = __webpack_require__(77);
@@ -13325,7 +13309,7 @@ module.exports =
 
 
 /***/ },
-/* 37 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var adjacent = __webpack_require__(77);
@@ -13336,15 +13320,35 @@ module.exports =
 
 
 /***/ },
-/* 38 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function titleize(str) {
 	  return makeString(str).toLowerCase().replace(/(?:^|\s|-)\S/g, function(c) {
 	    return c.toUpperCase();
 	  });
+	};
+
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var trim = __webpack_require__(18);
+	var decap = __webpack_require__(16);
+	
+	module.exports = function camelize(str, decapitalize) {
+	  str = trim(str).replace(/[-_\s]+(.)?/g, function(match, c) {
+	    return c ? c.toUpperCase() : "";
+	  });
+	
+	  if (decapitalize === true) {
+	    return decap(str);
+	  } else {
+	    return str;
+	  }
 	};
 
 
@@ -13356,13 +13360,13 @@ module.exports =
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 	  hasProp = {}.hasOwnProperty;
 	
-	$ = __webpack_require__(7);
+	$ = __webpack_require__(8);
 	
-	_ = __webpack_require__(5);
+	_ = __webpack_require__(6);
 	
-	_s = __webpack_require__(12);
+	_s = __webpack_require__(5);
 	
-	Backbone = __webpack_require__(10);
+	Backbone = __webpack_require__(11);
 	
 	Base = __webpack_require__(3);
 	
@@ -13706,18 +13710,7 @@ module.exports =
 /* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(19);
-	
-	module.exports = function underscored(str) {
-	  return trim(str).replace(/([a-z\d])([A-Z]+)/g, '$1_$2').replace(/[-\s]+/g, '_').toLowerCase();
-	};
-
-
-/***/ },
-/* 41 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var trim = __webpack_require__(19);
+	var trim = __webpack_require__(18);
 	
 	module.exports = function dasherize(str) {
 	  return trim(str).replace(/([A-Z])/g, '-$1').replace(/[-_\s]+/g, '-').toLowerCase();
@@ -13725,12 +13718,12 @@ module.exports =
 
 
 /***/ },
-/* 42 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var capitalize = __webpack_require__(16);
-	var camelize = __webpack_require__(1);
-	var makeString = __webpack_require__(73);
+	var capitalize = __webpack_require__(15);
+	var camelize = __webpack_require__(38);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function classify(str) {
 	  str = makeString(str);
@@ -13739,12 +13732,12 @@ module.exports =
 
 
 /***/ },
-/* 43 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var capitalize = __webpack_require__(16);
-	var underscored = __webpack_require__(40);
-	var trim = __webpack_require__(19);
+	var capitalize = __webpack_require__(15);
+	var underscored = __webpack_require__(1);
+	var trim = __webpack_require__(18);
 	
 	module.exports = function humanize(str) {
 	  return capitalize(trim(underscored(str).replace(/_id$/, '').replace(/_/g, ' ')));
@@ -13752,11 +13745,11 @@ module.exports =
 
 
 /***/ },
-/* 44 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
-	var defaultToWhiteSpace = __webpack_require__(74);
+	var makeString = __webpack_require__(72);
+	var defaultToWhiteSpace = __webpack_require__(73);
 	var nativeTrimLeft = String.prototype.trimLeft;
 	
 	module.exports = function ltrim(str, characters) {
@@ -13768,11 +13761,11 @@ module.exports =
 
 
 /***/ },
-/* 45 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
-	var defaultToWhiteSpace = __webpack_require__(74);
+	var makeString = __webpack_require__(72);
+	var defaultToWhiteSpace = __webpack_require__(73);
 	var nativeTrimRight = String.prototype.trimRight;
 	
 	module.exports = function rtrim(str, characters) {
@@ -13784,10 +13777,10 @@ module.exports =
 
 
 /***/ },
-/* 46 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function truncate(str, length, truncateStr) {
 	  str = makeString(str);
@@ -13798,7 +13791,7 @@ module.exports =
 
 
 /***/ },
-/* 47 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -13806,8 +13799,8 @@ module.exports =
 	 * prune extra chars, never leaving a half-chopped word.
 	 * @author github.com/rwz
 	 */
-	var makeString = __webpack_require__(73);
-	var rtrim = __webpack_require__(45);
+	var makeString = __webpack_require__(72);
+	var rtrim = __webpack_require__(44);
 	
 	module.exports = function prune(str, length, pruneStr) {
 	  str = makeString(str);
@@ -13831,11 +13824,11 @@ module.exports =
 
 
 /***/ },
-/* 48 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isBlank = __webpack_require__(15);
-	var trim = __webpack_require__(19);
+	var isBlank = __webpack_require__(13);
+	var trim = __webpack_require__(18);
 	
 	module.exports = function words(str, delimiter) {
 	  if (isBlank(str)) return [];
@@ -13844,10 +13837,10 @@ module.exports =
 
 
 /***/ },
-/* 49 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	var strRepeat = __webpack_require__(78);
 	
 	module.exports = function pad(str, length, padStr, type) {
@@ -13876,10 +13869,10 @@ module.exports =
 
 
 /***/ },
-/* 50 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var pad = __webpack_require__(49);
+	var pad = __webpack_require__(48);
 	
 	module.exports = function lpad(str, length, padStr) {
 	  return pad(str, length, padStr);
@@ -13887,10 +13880,10 @@ module.exports =
 
 
 /***/ },
-/* 51 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var pad = __webpack_require__(49);
+	var pad = __webpack_require__(48);
 	
 	module.exports = function rpad(str, length, padStr) {
 	  return pad(str, length, padStr, 'right');
@@ -13898,10 +13891,10 @@ module.exports =
 
 
 /***/ },
-/* 52 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var pad = __webpack_require__(49);
+	var pad = __webpack_require__(48);
 	
 	module.exports = function lrpad(str, length, padStr) {
 	  return pad(str, length, padStr, 'both');
@@ -13909,7 +13902,7 @@ module.exports =
 
 
 /***/ },
-/* 53 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// sprintf() for JavaScript 0.7-beta1
@@ -14039,10 +14032,10 @@ module.exports =
 
 
 /***/ },
-/* 54 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var sprintf = __webpack_require__(53);
+	var sprintf = __webpack_require__(52);
 	
 	module.exports = function vsprintf(fmt, argv) {
 	  argv.unshift(fmt);
@@ -14051,10 +14044,10 @@ module.exports =
 
 
 /***/ },
-/* 55 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(19);
+	var trim = __webpack_require__(18);
 	var parseNumber = function(source) {
 	  return source * 1 || 0;
 	};
@@ -14067,7 +14060,7 @@ module.exports =
 
 
 /***/ },
-/* 56 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function numberFormat(number, dec, dsep, tsep) {
@@ -14085,10 +14078,10 @@ module.exports =
 
 
 /***/ },
-/* 57 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function strRight(str, sep) {
 	  str = makeString(str);
@@ -14099,10 +14092,10 @@ module.exports =
 
 
 /***/ },
-/* 58 */
+/* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function strRightBack(str, sep) {
 	  str = makeString(str);
@@ -14113,10 +14106,10 @@ module.exports =
 
 
 /***/ },
-/* 59 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function strLeft(str, sep) {
 	  str = makeString(str);
@@ -14127,10 +14120,10 @@ module.exports =
 
 
 /***/ },
-/* 60 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function strLeftBack(str, sep) {
 	  str = makeString(str);
@@ -14141,10 +14134,10 @@ module.exports =
 
 
 /***/ },
-/* 61 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var rtrim = __webpack_require__(45);
+	var rtrim = __webpack_require__(44);
 	
 	module.exports = function toSentence(array, separator, lastSeparator, serial) {
 	  separator = separator || ', ';
@@ -14159,10 +14152,10 @@ module.exports =
 
 
 /***/ },
-/* 62 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var toSentence = __webpack_require__(61);
+	var toSentence = __webpack_require__(60);
 	
 	module.exports = function toSentenceSerial(array, sep, lastSep) {
 	  return toSentence(array, sep, lastSep, true);
@@ -14170,13 +14163,13 @@ module.exports =
 
 
 /***/ },
-/* 63 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
-	var defaultToWhiteSpace = __webpack_require__(74);
-	var trim = __webpack_require__(19);
-	var dasherize = __webpack_require__(41);
+	var makeString = __webpack_require__(72);
+	var defaultToWhiteSpace = __webpack_require__(73);
+	var trim = __webpack_require__(18);
+	var dasherize = __webpack_require__(40);
 	
 	module.exports = function slugify(str) {
 	  var from  = "ąàáäâãåæăćčĉęèéëêĝĥìíïîĵłľńňòóöőôõðøśșšŝťțŭùúüűûñÿýçżźž",
@@ -14193,7 +14186,7 @@ module.exports =
 
 
 /***/ },
-/* 64 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function surround(str, wrapper) {
@@ -14202,10 +14195,10 @@ module.exports =
 
 
 /***/ },
-/* 65 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var surround = __webpack_require__(64);
+	var surround = __webpack_require__(63);
 	
 	module.exports = function quote(str, quoteChar) {
 	  return surround(str, quoteChar || '"');
@@ -14213,7 +14206,7 @@ module.exports =
 
 
 /***/ },
-/* 66 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function unquote(str, quoteChar) {
@@ -14225,10 +14218,10 @@ module.exports =
 
 
 /***/ },
-/* 67 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	var strRepeat = __webpack_require__(78);
 	
 	module.exports = function repeat(str, qty, separator) {
@@ -14246,7 +14239,7 @@ module.exports =
 
 
 /***/ },
-/* 68 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function naturalCmp(str1, str2) {
@@ -14281,10 +14274,10 @@ module.exports =
 
 
 /***/ },
-/* 69 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function levenshtein(str1, str2) {
 	  str1 = makeString(str1);
@@ -14312,10 +14305,10 @@ module.exports =
 
 
 /***/ },
-/* 70 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(19);
+	var trim = __webpack_require__(18);
 	
 	function boolMatch(s, matchers) {
 	  var i, matcher, down = s.toLowerCase();
@@ -14338,7 +14331,7 @@ module.exports =
 
 
 /***/ },
-/* 71 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function() {
@@ -14354,10 +14347,10 @@ module.exports =
 
 
 /***/ },
-/* 72 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function escapeRegExp(str) {
 	  return makeString(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
@@ -14365,7 +14358,7 @@ module.exports =
 
 
 /***/ },
-/* 73 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -14378,10 +14371,10 @@ module.exports =
 
 
 /***/ },
-/* 74 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var escapeRegExp = __webpack_require__(72);
+	var escapeRegExp = __webpack_require__(71);
 	
 	module.exports = function defaultToWhiteSpace(characters) {
 	  if (characters == null)
@@ -14391,6 +14384,13 @@ module.exports =
 	  else
 	    return '[' + escapeRegExp(characters) + ']';
 	};
+
+
+/***/ },
+/* 74 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ },
@@ -14421,7 +14421,7 @@ module.exports =
 /* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(73);
+	var makeString = __webpack_require__(72);
 	
 	module.exports = function adjacent(str, direction) {
 	  str = makeString(str);
