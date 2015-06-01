@@ -319,7 +319,7 @@ for it to be considered the active section?</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@options</span> = _.extend(<span class="hljs-property">@defaultOptions</span>, options)
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@options</span> = _.extend {}, <span class="hljs-property">@defaultOptions</span>, options
 
     @[name] = _.bind(method, @) <span class="hljs-keyword">for</span> name, method <span class="hljs-keyword">of</span> Base
 
