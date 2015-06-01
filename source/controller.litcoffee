@@ -94,7 +94,7 @@ Initialize the controller.
 
 Merge our options with the defaultOptions
 
-        @options = _.extend(@defaultOptions, options)
+        @options = _.extend {}, @defaultOptions, options
 
         @[name] = _.bind(method, @) for name, method of Base
 
