@@ -47,10 +47,8 @@
     "underscore.string": "^3.0.3"
   },
   "gitHead": "ee5a2e85ea7b3a80743fe46c5fad7b70e0204431",
-  "_id": "backbone-scrolling-site@0.6.0",
   "scripts": {},
   "_shasum": "6945ed433492ea7c34663f3186f7fafa841b52b1",
-  "_from": "backbone-scrolling-site@^0.6.0",
   "_npmVersion": "1.4.28",
   "_npmUser": {
     "name": "rmb185",
@@ -61,12 +59,5 @@
       "name": "rmb185",
       "email": "ryan@ryanbagwell.com"
     }
-  ],
-  "dist": {
-    "shasum": "6945ed433492ea7c34663f3186f7fafa841b52b1",
-    "tarball": "http://registry.npmjs.org/backbone-scrolling-site/-/backbone-scrolling-site-0.6.0.tgz"
-  },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/backbone-scrolling-site/-/backbone-scrolling-site-0.6.0.tgz",
-  "readme": "ERROR: No README data found!"
+  ]
 }
