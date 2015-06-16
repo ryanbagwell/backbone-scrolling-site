@@ -557,7 +557,7 @@ will be ignored.</p>
 
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-property">@ready</span>
 
-    options = _.extend
+    options = _.extend {},
         <span class="hljs-attribute">trigger</span>: <span class="hljs-literal">false</span>
         <span class="hljs-attribute">scroll</span>: <span class="hljs-literal">true</span>
     , options
@@ -574,7 +574,7 @@ will be ignored.</p>
 
     <span class="hljs-property">@scrollToSection</span>(id) <span class="hljs-keyword">unless</span> options.scroll <span class="hljs-keyword">is</span> <span class="hljs-literal">false</span>
 
-    <span class="hljs-property">@notify</span> id+<span class="hljs-string">':navigate'</span>, route</pre></div></div>
+    <span class="hljs-property">@notify</span> <span class="hljs-string">"<span class="hljs-subst">#{id}</span>:navigate"</span>, route</pre></div></div>
             
         </li>
         
