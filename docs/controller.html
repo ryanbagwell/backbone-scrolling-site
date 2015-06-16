@@ -468,7 +468,7 @@ a responsive breakpoint threshold is crossed</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    $(<span class="hljs-built_in">window</span>).<span class="hljs-literal">on</span> <span class="hljs-string">'resize'</span>, _.bind(<span class="hljs-property">@_resolutionChanged</span>, <span class="hljs-keyword">this</span>)</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    $(<span class="hljs-built_in">window</span>).<span class="hljs-literal">on</span> <span class="hljs-string">'resize'</span>, <span class="hljs-function">=&gt;</span> <span class="hljs-property">@_resolutionChanged</span>()</pre></div></div>
             
         </li>
         
@@ -763,11 +763,13 @@ listed in resolutionBreakPoints object</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">_resolutionChanged</span>: <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
+
       <span class="hljs-property">@_setResolution</span>()
 
       <span class="hljs-keyword">try</span>
           <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> <span class="hljs-property">@previousResolution</span> <span class="hljs-keyword">is</span> <span class="hljs-property">@currentResolution</span>
-      <span class="hljs-keyword">catch</span>
+      <span class="hljs-keyword">catch</span> e
+          <span class="hljs-built_in">console</span>.log e
           <span class="hljs-keyword">return</span>
 
       <span class="hljs-property">@_logMessage</span> <span class="hljs-string">"Resolution changed: "</span> + <span class="hljs-property">@currentResolution</span>
@@ -809,11 +811,9 @@ resolution breakpoints object</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">_getResolution</span>: <span class="hljs-function">-&gt;</span>
-      currWidth = <span class="hljs-built_in">window</span>.outerWidth
 
-      <span class="hljs-keyword">return</span> _.find <span class="hljs-property">@resolutionBreakPoints</span>, <span class="hljs-function"><span class="hljs-params">(res)</span> -&gt;</span>
-          <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span> <span class="hljs-keyword">if</span> (res.min &lt;= currWidth &lt;= res.max)
-
+      <span class="hljs-keyword">for</span> bp <span class="hljs-keyword">in</span> <span class="hljs-property">@resolutionBreakPoints</span>
+        <span class="hljs-keyword">return</span> bp <span class="hljs-keyword">if</span> bp.min &lt;= <span class="hljs-built_in">window</span>.outerWidth &lt;= bp.max
 
   <span class="hljs-attribute">_logMessage</span>: <span class="hljs-function"><span class="hljs-params">(message, trace)</span> -&gt;</span>
 
