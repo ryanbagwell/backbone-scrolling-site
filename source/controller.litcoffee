@@ -201,7 +201,7 @@ The navigate function is bound to all clicks on local urls.
 
         @scrollToSection(id) unless options.scroll is false
 
-        @notify id+':navigate', route
+        @notify "#{id}:navigate", route
 
 
 Scrolls the page to the target section.
