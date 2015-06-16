@@ -184,7 +184,7 @@ The navigate function is bound to all clicks on local urls.
 
         return if not @ready
 
-        options = _.extend
+        options = _.extend {},
             trigger: false
             scroll: true
         , options
