@@ -58,24 +58,16 @@ Set the value of the event dispatcher
           @notifications = @options.notifications
 
 Bind some event handlers to the appLoaded and resolutionChaged events
-from the controller
+from the controller, as well as navigation events for this view
 
           @notifications.on
               "controller:appLoaded": @onAppLoaded
               "controller:resolutionChanged": @onResolutionChanged
+              "controller:#{if @options.pageName? then @options.pageName else 'foo'}:navigate": @receiveNavigation
           , @
 
-        catch
-
-Only listen for navigation even notifications if the notification
-is being sent to this particular view.
-
-          if _.has(@options, 'pageName')
-
-            eventName = ['controller', @options.pageName, 'navigate'].join(':')
-
-            @notifications.on eventName, (route) =>
-                @receiveNavigation route
+        catch e
+          console.warn "backbone-scrolling-site: Couldn't bind events to view named #{@options.pageName}"
 
 Render the HTML, and triggers the "rendered" event
 
