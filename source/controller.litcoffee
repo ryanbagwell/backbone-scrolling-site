@@ -149,7 +149,7 @@ is changed
 When the window is resized, send a notification to child views if
 a responsive breakpoint threshold is crossed
 
-        $(window).on 'resize', _.bind(@_resolutionChanged, this)
+        $(window).on 'resize', => @_resolutionChanged()
 
 
 Dynamically create a route function for each specified section
@@ -295,11 +295,13 @@ has crossed one of the thresholds
 listed in resolutionBreakPoints object
 
       _resolutionChanged: (e) ->
+
           @_setResolution()
 
           try
               return if @previousResolution is @currentResolution
-          catch
+          catch e
+              console.log e
               return
 
           @_logMessage "Resolution changed: " + @currentResolution
@@ -310,24 +312,18 @@ listed in resolutionBreakPoints object
 
           @previousResolution = @currentResolution
 
-
-
 Sets the current browser width based on the
 resolution breakpoints object
 
       _setResolution: ->
           @currentResolution = @_getResolution().name
 
-
-
 Retrieves the name of the current resolution
 
       _getResolution: ->
-          currWidth = window.outerWidth
 
-          return _.find @resolutionBreakPoints, (res) ->
-              return true if (res.min <= currWidth <= res.max)
-
+          for bp in @resolutionBreakPoints
+            return bp if bp.min <= window.outerWidth <= bp.max
 
       _logMessage: (message, trace) ->
 
