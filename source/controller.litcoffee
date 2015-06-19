@@ -423,7 +423,10 @@ Bind all 'a' tags whose href attributes match a section's route
         if selectors is null
           selectors = (for a in $('a:not([data-nobind])')
                         href = $(a).attr('href')
-                        continue unless @_fragmentToSection(href)
+                        continue unless href
+                        section = @_fragmentToSection(href)
+                        continue unless section
+                        continue unless section.el.length
                         "[href='#{href}']"
                       ).unique().join(',')
 
