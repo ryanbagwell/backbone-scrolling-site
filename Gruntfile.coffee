@@ -56,6 +56,10 @@ module.exports = (grunt) ->
         watch: false
         keepalive: false
 
+      dev:
+        watch: true
+        keepalive: true
+
     docco:
       src: ['source/**/*.litcoffee']
       options:
