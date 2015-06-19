@@ -6,6 +6,7 @@ It has a number of dependencies.
     _ = require 'underscore'
     _s = require 'underscore.string'
     debounce = require 'debounce'
+    Array = require './lib/array.unique'
     Backbone = require 'backbone'
     Base = require './base'
     require 'jquery.scrollto'
@@ -164,15 +165,9 @@ Start Backbone.history
           pushState: true
           silent: true
 
-Bind click handlers to all local 'a' tags in order to
-trigger our navigate function. A tags with an attribute of 'data-unbind'
-will be ignored.
+Bind click handlers to 'a' tags with routes that exist in a section
 
-        $('body').on 'click',
-            'a[href^="/"]:not([data-nobind]), body a[href^="'+window.location.origin+'"]:not([data-nobind])',
-            (e) =>
-                @navigate $(e.currentTarget).attr('href')
-                false
+        @bindUrlsToRoutes()
 
 Initialize any section views.
 
@@ -195,7 +190,7 @@ The navigate function is bound to all clicks on local urls.
 
         @updatePageMeta route
 
-        section = @_fragmentToSection(_.ltrim(route, '/'))
+        section = @_fragmentToSection route
 
         @currentSection = section
 
@@ -340,17 +335,14 @@ Retrieves the name of the current resolution
 Checks to see if the current URL fragment corresponds to
 one of our sections, and returns the section object
 
-      _fragmentToSection: (fragment) ->
+      _fragmentToSection: (fragment = Backbone.history.fragment) ->
 
-          if _.isUndefined fragment
-              fragment = Backbone.history.fragment
+          fragment = _.ltrim fragment, '/'
 
-          _.find @sections, (section, name) ->
-              return false if _.isUndefined section.route
+          for name, section of @sections
+              continue unless section.route?
               regex = @_routeToRegExp(section.route)
-              true if regex.test(fragment)
-          , @
-
+              return section if regex.test(fragment)
 
 Dispatches a namespaced event notification
 
@@ -423,6 +415,21 @@ viewport. Returns the height of visible portion of the element.
         #if the el's bottom is visible but not the top
         if elBounds.bottom < window.innerHeight and elBounds.top < 0
             return $(el).height() - (elBounds.top * -1)
+
+Bind all 'a' tags whose href attributes match a section's route
+
+      bindUrlsToRoutes: (selectors = null)->
+
+        if selectors is null
+          selectors = (for a in $('a:not([data-nobind])')
+                        href = $(a).attr('href')
+                        continue unless @_fragmentToSection(href)
+                        "[href='#{href}']"
+                      ).unique().join(',')
+
+        $('body').on 'click', selectors, (e) =>
+          @navigate $(e.currentTarget).attr('href')
+          false
 
 Export the class
 
