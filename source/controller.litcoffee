@@ -131,10 +131,9 @@ Listen for "navigate" notifications that originate from child views.
 
         @notifications.on 'view:navigate', @navigate, @
 
-
         #
         # dispatch the windowResized event globally
-        # to notify all view the window has been resized
+        # to notify all views that the window has been resized
         #
         $(window).on('resize', _.bind(_.debounce(->
             @notify 'windowResized'
@@ -152,11 +151,12 @@ a responsive breakpoint threshold is crossed
         $(window).on 'resize', => @_resolutionChanged()
 
 
-Dynamically create a route function for each specified section
+Dynamically create a route function for each specified section, but only if
+a route has been specified and the section exists
 
-        _.each @sections, (params, name, sections) ->
-            @route params.route, name, @navigate if _.has params, 'route'
-        , @
+        for name, params of @sections
+          if params.route? and params.el?.length
+            @route params.route, name, @navigate
 
 Start Backbone.history
 
@@ -176,7 +176,9 @@ will be ignored.
 
 Initialize any section views.
 
-        _.each @sections, @loadSection, @
+        for name, params of @sections
+          if params.el?.length
+            @loadSection params, name
 
 The navigate function is bound to all clicks on local urls.
 
@@ -255,7 +257,7 @@ Load a section view function.
 
 Mock a view instance object if a view function wasn't specified.
 
-        if not _.has(section, 'view')
+        if not section.view
           @sections[name].view = SinglePageScrollingView
 
         view = @sections[name].instance = new section.view
@@ -364,9 +366,8 @@ and the most visible section has changed.
 
       navigateOnScroll: (e) ->
 
-          return unless @options.navigateOnManualScroll
-
-          return if @scrolling
+          if not @options.navigateOnManualScroll or @scrolling
+            return
 
           section = _.max @sections, (section) =>
               @inViewport(section.el)
@@ -404,6 +405,8 @@ Checks to see if the given element is substantially in the
 viewport. Returns the height of visible portion of the element.
 
       inViewport: (el) ->
+
+        return unless $(el).length
 
         elBounds = $(el).get(0).getBoundingClientRect()
 
