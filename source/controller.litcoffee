@@ -5,6 +5,7 @@ It has a number of dependencies.
     $ = require 'jquery'
     _ = require 'underscore'
     _s = require 'underscore.string'
+    debounce = require 'debounce'
     Backbone = require 'backbone'
     Base = require './base'
     require 'jquery.scrollto'
@@ -135,9 +136,8 @@ Listen for "navigate" notifications that originate from child views.
         # dispatch the windowResized event globally
         # to notify all views that the window has been resized
         #
-        $(window).on('resize', _.bind(_.debounce(->
-            @notify 'windowResized'
-        , 500), this))
+        $(window).on 'resize', =>
+          debounce (=> @notify 'windowResized'), 500
 
 Trigger the window resize event when the orientation
 is changed
