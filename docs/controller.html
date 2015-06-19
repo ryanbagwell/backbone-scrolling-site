@@ -66,6 +66,8 @@
             <div class="content"><div class='highlight'><pre>$ = <span class="hljs-built_in">require</span> <span class="hljs-string">'jquery'</span>
 _ = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore'</span>
 _s = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore.string'</span>
+debounce = <span class="hljs-built_in">require</span> <span class="hljs-string">'debounce'</span>
+Array = <span class="hljs-built_in">require</span> <span class="hljs-string">'./lib/array.unique'</span>
 Backbone = <span class="hljs-built_in">require</span> <span class="hljs-string">'backbone'</span>
 Base = <span class="hljs-built_in">require</span> <span class="hljs-string">'./base'</span>
 <span class="hljs-built_in">require</span> <span class="hljs-string">'jquery.scrollto'</span>
@@ -429,13 +431,12 @@ into a backbone collection</p>
                 <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>dispatch the windowResized event globally
-to notify all view the window has been resized</p>
+to notify all views that the window has been resized</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    $(<span class="hljs-built_in">window</span>).<span class="hljs-literal">on</span>(<span class="hljs-string">'resize'</span>, _.bind(_.debounce(<span class="hljs-function">-&gt;</span>
-        <span class="hljs-property">@notify</span> <span class="hljs-string">'windowResized'</span>
-    , <span class="hljs-number">500</span>), <span class="hljs-keyword">this</span>))</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    $(<span class="hljs-built_in">window</span>).<span class="hljs-literal">on</span> <span class="hljs-string">'resize'</span>, <span class="hljs-function">=&gt;</span>
+      debounce (<span class="hljs-function">=&gt;</span> <span class="hljs-property">@notify</span> <span class="hljs-string">'windowResized'</span>), <span class="hljs-number">500</span></pre></div></div>
             
         </li>
         
@@ -479,13 +480,14 @@ a responsive breakpoint threshold is crossed</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
-              <p>Dynamically create a route function for each specified section</p>
+              <p>Dynamically create a route function for each specified section, but only if
+a route has been specified and the section exists</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    _.each <span class="hljs-property">@sections</span>, <span class="hljs-function"><span class="hljs-params">(params, name, sections)</span> -&gt;</span>
-        <span class="hljs-property">@route</span> params.route, name, <span class="hljs-property">@navigate</span> <span class="hljs-keyword">if</span> _.has params, <span class="hljs-string">'route'</span>
-    , @</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">for</span> name, params <span class="hljs-keyword">of</span> <span class="hljs-property">@sections</span>
+      <span class="hljs-keyword">if</span> params.route? <span class="hljs-keyword">and</span> params.el?.length
+        <span class="hljs-property">@route</span> params.route, name, <span class="hljs-property">@navigate</span></pre></div></div>
             
         </li>
         
@@ -513,17 +515,11 @@ a responsive breakpoint threshold is crossed</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
-              <p>Bind click handlers to all local ‘a’ tags in order to
-trigger our navigate function. A tags with an attribute of ‘data-unbind’
-will be ignored.</p>
+              <p>Bind click handlers to ‘a’ tags with routes that exist in a section</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    $(<span class="hljs-string">'body'</span>).<span class="hljs-literal">on</span> <span class="hljs-string">'click'</span>,
-        <span class="hljs-string">'a[href^="/"]:not([data-nobind]), body a[href^="'</span>+<span class="hljs-built_in">window</span>.location.origin+<span class="hljs-string">'"]:not([data-nobind])'</span>,
-        <span class="hljs-function"><span class="hljs-params">(e)</span> =&gt;</span>
-            <span class="hljs-property">@navigate</span> $(e.currentTarget).attr(<span class="hljs-string">'href'</span>)
-            <span class="hljs-literal">false</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@bindUrlsToRoutes</span>()</pre></div></div>
             
         </li>
         
@@ -538,7 +534,9 @@ will be ignored.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    _.each <span class="hljs-property">@sections</span>, <span class="hljs-property">@loadSection</span>, @</pre></div></div>
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">for</span> name, params <span class="hljs-keyword">of</span> <span class="hljs-property">@sections</span>
+      <span class="hljs-keyword">if</span> params.el?.length
+        <span class="hljs-property">@loadSection</span> params, name</pre></div></div>
             
         </li>
         
@@ -566,7 +564,7 @@ will be ignored.</p>
 
     <span class="hljs-property">@updatePageMeta</span> route
 
-    section = <span class="hljs-property">@_fragmentToSection</span>(_.ltrim(route, <span class="hljs-string">'/'</span>))
+    section = <span class="hljs-property">@_fragmentToSection</span> route
 
     <span class="hljs-property">@currentSection</span> = section
 
@@ -692,7 +690,7 @@ which checks to see if all views are ‘ready’.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> _.has(section, <span class="hljs-string">'view'</span>)
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> section.view
       <span class="hljs-property">@sections</span>[name].view = SinglePageScrollingView
 
     view = <span class="hljs-property">@sections</span>[name].instance = <span class="hljs-keyword">new</span> section.view
@@ -838,16 +836,14 @@ one of our sections, and returns the section object</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">_fragmentToSection</span>: <span class="hljs-function"><span class="hljs-params">(fragment)</span> -&gt;</span>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">_fragmentToSection</span>: <span class="hljs-function"><span class="hljs-params">(fragment = Backbone.history.fragment)</span> -&gt;</span>
 
-      <span class="hljs-keyword">if</span> _.isUndefined fragment
-          fragment = Backbone.history.fragment
+      fragment = _.ltrim fragment, <span class="hljs-string">'/'</span>
 
-      _.find <span class="hljs-property">@sections</span>, <span class="hljs-function"><span class="hljs-params">(section, name)</span> -&gt;</span>
-          <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span> <span class="hljs-keyword">if</span> _.isUndefined section.route
+      <span class="hljs-keyword">for</span> name, section <span class="hljs-keyword">of</span> <span class="hljs-property">@sections</span>
+          <span class="hljs-keyword">continue</span> <span class="hljs-keyword">unless</span> section.route?
           regex = <span class="hljs-property">@_routeToRegExp</span>(section.route)
-          <span class="hljs-literal">true</span> <span class="hljs-keyword">if</span> regex.test(fragment)
-      , @</pre></div></div>
+          <span class="hljs-keyword">return</span> section <span class="hljs-keyword">if</span> regex.test(fragment)</pre></div></div>
             
         </li>
         
@@ -884,9 +880,8 @@ and the most visible section has changed.</p>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">navigateOnScroll</span>: <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
 
-      <span class="hljs-keyword">return</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@options</span>.navigateOnManualScroll
-
-      <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> <span class="hljs-property">@scrolling</span>
+      <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-property">@options</span>.navigateOnManualScroll <span class="hljs-keyword">or</span> <span class="hljs-property">@scrolling</span>
+        <span class="hljs-keyword">return</span>
 
       section = _.max <span class="hljs-property">@sections</span>, <span class="hljs-function"><span class="hljs-params">(section)</span> =&gt;</span>
           <span class="hljs-property">@inViewport</span>(section.el)
@@ -946,6 +941,8 @@ viewport. Returns the height of visible portion of the element.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">inViewport</span>: <span class="hljs-function"><span class="hljs-params">(el)</span> -&gt;</span>
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">unless</span> $(el).length
 
     elBounds = $(el).get(<span class="hljs-number">0</span>).getBoundingClientRect()</pre></div></div>
             
@@ -1019,6 +1016,35 @@ viewport. Returns the height of visible portion of the element.</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-51">&#182;</a>
+              </div>
+              <p>Bind all ‘a’ tags whose href attributes match a section’s route</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">bindUrlsToRoutes</span>: <span class="hljs-function"><span class="hljs-params">(selectors = <span class="hljs-literal">null</span>)</span>-&gt;</span>
+
+    <span class="hljs-keyword">if</span> selectors <span class="hljs-keyword">is</span> <span class="hljs-literal">null</span>
+      selectors = (<span class="hljs-keyword">for</span> a <span class="hljs-keyword">in</span> $(<span class="hljs-string">'a:not([data-nobind])'</span>)
+                    href = $(a).attr(<span class="hljs-string">'href'</span>)
+                    <span class="hljs-keyword">continue</span> <span class="hljs-keyword">unless</span> href
+                    section = <span class="hljs-property">@_fragmentToSection</span>(href)
+                    <span class="hljs-keyword">continue</span> <span class="hljs-keyword">unless</span> section
+                    <span class="hljs-keyword">continue</span> <span class="hljs-keyword">unless</span> section.el.length
+                    <span class="hljs-string">"[href='<span class="hljs-subst">#{href}</span>']"</span>
+                  ).unique().join(<span class="hljs-string">','</span>)
+
+    $(<span class="hljs-string">'body'</span>).<span class="hljs-literal">on</span> <span class="hljs-string">'click'</span>, selectors, <span class="hljs-function"><span class="hljs-params">(e)</span> =&gt;</span>
+      <span class="hljs-property">@navigate</span> $(e.currentTarget).attr(<span class="hljs-string">'href'</span>)
+      <span class="hljs-literal">false</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
               </div>
               <p>Export the class</p>
 

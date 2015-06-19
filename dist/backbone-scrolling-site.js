@@ -46,7 +46,7 @@ module.exports =
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
-	  Controller: __webpack_require__(39),
+	  Controller: __webpack_require__(41),
 	  View: __webpack_require__(2)
 	};
 
@@ -55,8 +55,8 @@ module.exports =
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(18);
-	var decap = __webpack_require__(16);
+	var trim = __webpack_require__(20);
+	var decap = __webpack_require__(18);
 	
 	module.exports = function camelize(str, decapitalize) {
 	  str = trim(str).replace(/[-_\s]+(.)?/g, function(match, c) {
@@ -79,17 +79,17 @@ module.exports =
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 	  hasProp = {}.hasOwnProperty;
 	
-	$ = __webpack_require__(5);
+	$ = __webpack_require__(8);
 	
-	_ = __webpack_require__(8);
+	_ = __webpack_require__(11);
 	
-	_.str = __webpack_require__(4);
+	_.str = __webpack_require__(6);
 	
 	_.mixin(_.str.exports());
 	
-	Base = __webpack_require__(3);
+	Base = __webpack_require__(4);
 	
-	Backbone = __webpack_require__(10);
+	Backbone = __webpack_require__(13);
 	
 	module.exports = SinglePageScrollingView = (function(superClass) {
 	  extend(SinglePageScrollingView, superClass);
@@ -196,9 +196,30 @@ module.exports =
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
+	Array.prototype.unique = function() {
+	  var i, key, output, ref, results, value;
+	  output = {};
+	  for (key = i = 0, ref = this.length; 0 <= ref ? i < ref : i > ref; key = 0 <= ref ? ++i : --i) {
+	    output[this[key]] = this[key];
+	  }
+	  results = [];
+	  for (key in output) {
+	    value = output[key];
+	    results.push(value);
+	  }
+	  return results;
+	};
+	
+	module.exports = Array.prototype;
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var _s;
 	
-	_s = __webpack_require__(4);
+	_s = __webpack_require__(6);
 	
 	module.exports = {
 	  onResolutionChanged: function(resolution) {
@@ -213,7 +234,66 @@ module.exports =
 
 
 /***/ },
-/* 4 */
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/**
+	 * Module dependencies.
+	 */
+	
+	var now = __webpack_require__(22);
+	
+	/**
+	 * Returns a function, that, as long as it continues to be invoked, will not
+	 * be triggered. The function will be called after it stops being called for
+	 * N milliseconds. If `immediate` is passed, trigger the function on the
+	 * leading edge, instead of the trailing.
+	 *
+	 * @source underscore.js
+	 * @see http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
+	 * @param {Function} function to wrap
+	 * @param {Number} timeout in ms (`100`)
+	 * @param {Boolean} whether to execute at the beginning (`false`)
+	 * @api public
+	 */
+	
+	module.exports = function debounce(func, wait, immediate){
+	  var timeout, args, context, timestamp, result;
+	  if (null == wait) wait = 100;
+	
+	  function later() {
+	    var last = now() - timestamp;
+	
+	    if (last < wait && last > 0) {
+	      timeout = setTimeout(later, wait - last);
+	    } else {
+	      timeout = null;
+	      if (!immediate) {
+	        result = func.apply(context, args);
+	        if (!timeout) context = args = null;
+	      }
+	    }
+	  };
+	
+	  return function debounced() {
+	    context = this;
+	    args = arguments;
+	    timestamp = now();
+	    var callNow = immediate && !timeout;
+	    if (!timeout) timeout = setTimeout(later, wait);
+	    if (callNow) {
+	      result = func.apply(context, args);
+	      context = args = null;
+	    }
+	
+	    return result;
+	  };
+	};
+
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//  Underscore.string
@@ -233,65 +313,65 @@ module.exports =
 	
 	s.VERSION = '3.0.3';
 	
-	s.isBlank          = __webpack_require__(13);
-	s.stripTags        = __webpack_require__(14);
-	s.capitalize       = __webpack_require__(15);
-	s.decapitalize     = __webpack_require__(16);
-	s.chop             = __webpack_require__(17);
-	s.trim             = __webpack_require__(18);
-	s.clean            = __webpack_require__(19);
-	s.count            = __webpack_require__(20);
-	s.chars            = __webpack_require__(22);
-	s.swapCase         = __webpack_require__(21);
-	s.escapeHTML       = __webpack_require__(23);
-	s.unescapeHTML     = __webpack_require__(24);
-	s.splice           = __webpack_require__(25);
-	s.insert           = __webpack_require__(26);
-	s.replaceAll       = __webpack_require__(27);
-	s.include          = __webpack_require__(36);
-	s.join             = __webpack_require__(28);
-	s.lines            = __webpack_require__(29);
-	s.dedent           = __webpack_require__(30);
-	s.reverse          = __webpack_require__(31);
-	s.startsWith       = __webpack_require__(32);
-	s.endsWith         = __webpack_require__(33);
-	s.pred             = __webpack_require__(34);
-	s.succ             = __webpack_require__(35);
-	s.titleize         = __webpack_require__(37);
+	s.isBlank          = __webpack_require__(15);
+	s.stripTags        = __webpack_require__(17);
+	s.capitalize       = __webpack_require__(16);
+	s.decapitalize     = __webpack_require__(18);
+	s.chop             = __webpack_require__(19);
+	s.trim             = __webpack_require__(20);
+	s.clean            = __webpack_require__(21);
+	s.count            = __webpack_require__(23);
+	s.chars            = __webpack_require__(25);
+	s.swapCase         = __webpack_require__(24);
+	s.escapeHTML       = __webpack_require__(26);
+	s.unescapeHTML     = __webpack_require__(27);
+	s.splice           = __webpack_require__(28);
+	s.insert           = __webpack_require__(29);
+	s.replaceAll       = __webpack_require__(30);
+	s.include          = __webpack_require__(31);
+	s.join             = __webpack_require__(32);
+	s.lines            = __webpack_require__(33);
+	s.dedent           = __webpack_require__(34);
+	s.reverse          = __webpack_require__(35);
+	s.startsWith       = __webpack_require__(36);
+	s.endsWith         = __webpack_require__(38);
+	s.pred             = __webpack_require__(37);
+	s.succ             = __webpack_require__(39);
+	s.titleize         = __webpack_require__(40);
 	s.camelize         = __webpack_require__(1);
-	s.underscored      = __webpack_require__(38);
-	s.dasherize        = __webpack_require__(40);
-	s.classify         = __webpack_require__(41);
-	s.humanize         = __webpack_require__(44);
-	s.ltrim            = __webpack_require__(42);
-	s.rtrim            = __webpack_require__(43);
-	s.truncate         = __webpack_require__(45);
-	s.prune            = __webpack_require__(46);
-	s.words            = __webpack_require__(47);
-	s.pad              = __webpack_require__(48);
-	s.lpad             = __webpack_require__(49);
-	s.rpad             = __webpack_require__(51);
-	s.lrpad            = __webpack_require__(50);
-	s.sprintf          = __webpack_require__(52);
-	s.vsprintf         = __webpack_require__(53);
-	s.toNumber         = __webpack_require__(55);
-	s.numberFormat     = __webpack_require__(54);
-	s.strRight         = __webpack_require__(56);
-	s.strRightBack     = __webpack_require__(58);
-	s.strLeft          = __webpack_require__(57);
-	s.strLeftBack      = __webpack_require__(59);
-	s.toSentence       = __webpack_require__(60);
-	s.toSentenceSerial = __webpack_require__(61);
-	s.slugify          = __webpack_require__(62);
-	s.surround         = __webpack_require__(63);
-	s.quote            = __webpack_require__(64);
-	s.unquote          = __webpack_require__(65);
-	s.repeat           = __webpack_require__(66);
-	s.naturalCmp       = __webpack_require__(67);
-	s.levenshtein      = __webpack_require__(68);
-	s.toBoolean        = __webpack_require__(69);
-	s.exports          = __webpack_require__(70);
-	s.escapeRegExp     = __webpack_require__(71);
+	s.underscored      = __webpack_require__(42);
+	s.dasherize        = __webpack_require__(43);
+	s.classify         = __webpack_require__(44);
+	s.humanize         = __webpack_require__(45);
+	s.ltrim            = __webpack_require__(46);
+	s.rtrim            = __webpack_require__(47);
+	s.truncate         = __webpack_require__(48);
+	s.prune            = __webpack_require__(49);
+	s.words            = __webpack_require__(50);
+	s.pad              = __webpack_require__(51);
+	s.lpad             = __webpack_require__(52);
+	s.rpad             = __webpack_require__(53);
+	s.lrpad            = __webpack_require__(54);
+	s.sprintf          = __webpack_require__(55);
+	s.vsprintf         = __webpack_require__(56);
+	s.toNumber         = __webpack_require__(57);
+	s.numberFormat     = __webpack_require__(58);
+	s.strRight         = __webpack_require__(59);
+	s.strRightBack     = __webpack_require__(60);
+	s.strLeft          = __webpack_require__(61);
+	s.strLeftBack      = __webpack_require__(62);
+	s.toSentence       = __webpack_require__(63);
+	s.toSentenceSerial = __webpack_require__(64);
+	s.slugify          = __webpack_require__(65);
+	s.surround         = __webpack_require__(66);
+	s.quote            = __webpack_require__(67);
+	s.unquote          = __webpack_require__(68);
+	s.repeat           = __webpack_require__(69);
+	s.naturalCmp       = __webpack_require__(71);
+	s.levenshtein      = __webpack_require__(70);
+	s.toBoolean        = __webpack_require__(73);
+	s.exports          = __webpack_require__(74);
+	s.escapeRegExp     = __webpack_require__(72);
 	
 	// Aliases
 	s.strip     = s.trim;
@@ -355,21 +435,227 @@ module.exports =
 
 
 /***/ },
-/* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(6);
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(7);
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
 /* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
+	 * jQuery.scrollTo
+	 * Copyright (c) 2007-2015 Ariel Flesler - aflesler<a>gmail<d>com | http://flesler.blogspot.com
+	 * Licensed under MIT
+	 * http://flesler.blogspot.com/2007/10/jqueryscrollto.html
+	 * @projectDescription Easy element scrolling using jQuery.
+	 * @author Ariel Flesler
+	 * @version 2.1.0
+	 */
+	;(function(define) {
+		'use strict';
+	
+		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(8)], __WEBPACK_AMD_DEFINE_RESULT__ = function($) {
+			var $scrollTo = $.scrollTo = function(target, duration, settings) {
+				return $(window).scrollTo(target, duration, settings);
+			};
+	
+			$scrollTo.defaults = {
+				axis:'xy',
+				duration: 0,
+				limit:true
+			};
+	
+			function isWin(elem) {
+				return !elem.nodeName ||
+					$.inArray(elem.nodeName.toLowerCase(), ['iframe','#document','html','body']) !== -1;
+			}		
+	
+			$.fn.scrollTo = function(target, duration, settings) {
+				if (typeof duration === 'object') {
+					settings = duration;
+					duration = 0;
+				}
+				if (typeof settings === 'function') {
+					settings = { onAfter:settings };
+				}
+				if (target === 'max') {
+					target = 9e9;
+				}
+	
+				settings = $.extend({}, $scrollTo.defaults, settings);
+				// Speed is still recognized for backwards compatibility
+				duration = duration || settings.duration;
+				// Make sure the settings are given right
+				var queue = settings.queue && settings.axis.length > 1;
+				if (queue) {
+					// Let's keep the overall duration
+					duration /= 2;
+				}
+				settings.offset = both(settings.offset);
+				settings.over = both(settings.over);
+	
+				return this.each(function() {
+					// Null target yields nothing, just like jQuery does
+					if (target === null) return;
+	
+					var win = isWin(this),
+						elem = win ? this.contentWindow || window : this,
+						$elem = $(elem),
+						targ = target, 
+						attr = {},
+						toff;
+	
+					switch (typeof targ) {
+						// A number will pass the regex
+						case 'number':
+						case 'string':
+							if (/^([+-]=?)?\d+(\.\d+)?(px|%)?$/.test(targ)) {
+								targ = both(targ);
+								// We are done
+								break;
+							}
+							// Relative/Absolute selector
+							targ = win ? $(targ) : $(targ, elem);
+							if (!targ.length) return;
+							/* falls through */
+						case 'object':
+							// DOMElement / jQuery
+							if (targ.is || targ.style) {
+								// Get the real position of the target
+								toff = (targ = $(targ)).offset();
+							}
+					}
+	
+					var offset = $.isFunction(settings.offset) && settings.offset(elem, targ) || settings.offset;
+	
+					$.each(settings.axis.split(''), function(i, axis) {
+						var Pos	= axis === 'x' ? 'Left' : 'Top',
+							pos = Pos.toLowerCase(),
+							key = 'scroll' + Pos,
+							prev = $elem[key](),
+							max = $scrollTo.max(elem, axis);
+	
+						if (toff) {// jQuery / DOMElement
+							attr[key] = toff[pos] + (win ? 0 : prev - $elem.offset()[pos]);
+	
+							// If it's a dom element, reduce the margin
+							if (settings.margin) {
+								attr[key] -= parseInt(targ.css('margin'+Pos), 10) || 0;
+								attr[key] -= parseInt(targ.css('border'+Pos+'Width'), 10) || 0;
+							}
+	
+							attr[key] += offset[pos] || 0;
+	
+							if (settings.over[pos]) {
+								// Scroll to a fraction of its width/height
+								attr[key] += targ[axis === 'x'?'width':'height']() * settings.over[pos];
+							}
+						} else {
+							var val = targ[pos];
+							// Handle percentage values
+							attr[key] = val.slice && val.slice(-1) === '%' ?
+								parseFloat(val) / 100 * max
+								: val;
+						}
+	
+						// Number or 'number'
+						if (settings.limit && /^\d+$/.test(attr[key])) {
+							// Check the limits
+							attr[key] = attr[key] <= 0 ? 0 : Math.min(attr[key], max);
+						}
+	
+						// Don't waste time animating, if there's no need.
+						if (!i && settings.axis.length > 1) {
+							if (prev === attr[key]) {
+								// No animation needed
+								attr = {};
+							} else if (queue) {
+								// Intermediate animation
+								animate(settings.onAfterFirst);
+								// Don't animate this axis again in the next iteration.
+								attr = {};
+							}
+						}
+					});
+	
+					animate(settings.onAfter);
+	
+					function animate(callback) {
+						var opts = $.extend({}, settings, {
+							// The queue setting conflicts with animate()
+							// Force it to always be true
+							queue: true,
+							duration: duration,
+							complete: callback && function() {
+								callback.call(elem, targ, settings);
+							}
+						});
+						$elem.animate(attr, opts);
+					}
+				});
+			};
+	
+			// Max scrolling position, works on quirks mode
+			// It only fails (not too badly) on IE, quirks mode.
+			$scrollTo.max = function(elem, axis) {
+				var Dim = axis === 'x' ? 'Width' : 'Height',
+					scroll = 'scroll'+Dim;
+	
+				if (!isWin(elem))
+					return elem[scroll] - $(elem)[Dim.toLowerCase()]();
+	
+				var size = 'client' + Dim,
+					doc = elem.ownerDocument || elem.document,
+					html = doc.documentElement,
+					body = doc.body;
+	
+				return Math.max(html[scroll], body[scroll]) - Math.min(html[size], body[size]);
+			};
+	
+			function both(val) {
+				return $.isFunction(val) || $.isPlainObject(val) ? val : { top:val, left:val };
+			}
+	
+			// Add special hooks so that window scroll properties can be animated
+			$.Tween.propHooks.scrollLeft = 
+			$.Tween.propHooks.scrollTop = {
+				get: function(t) {
+					return $(t.elem)[t.prop]();
+				},
+				set: function(t) {
+					var curr = this.get(t);
+					// If interrupt is true and user scrolled, stop animating
+					if (t.options.interrupt && t._last && t._last !== curr) {
+						return $(t.elem).stop();
+					}
+					var next = Math.round(t.now);
+					// Don't waste CPU
+					// Browsers don't render floating point scroll
+					if (curr !== next) {
+						$(t.elem)[t.prop](next);
+						t._last = this.get(t);
+					}
+				}
+			};
+	
+			// AMD requirement
+			return $scrollTo;
+		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	}(__webpack_require__(77)));
+
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["$"] = __webpack_require__(9);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["jQuery"] = __webpack_require__(10);
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -9585,14 +9871,14 @@ module.exports =
 
 
 /***/ },
-/* 8 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["_"] = __webpack_require__(9);
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["_"] = __webpack_require__(12);
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 9 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscore.js 1.8.3
@@ -11146,14 +11432,14 @@ module.exports =
 
 
 /***/ },
-/* 10 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Backbone"] = __webpack_require__(11);
+	/* WEBPACK VAR INJECTION */(function(global) {module.exports = global["Backbone"] = __webpack_require__(14);
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 11 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Backbone.js 1.1.2
@@ -11167,7 +11453,7 @@ module.exports =
 	
 	  // Set up Backbone appropriately for the environment. Start with AMD.
 	  if (true) {
-	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(8), __webpack_require__(5), exports], __WEBPACK_AMD_DEFINE_RESULT__ = function(_, $, exports) {
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(11), __webpack_require__(8), exports], __WEBPACK_AMD_DEFINE_RESULT__ = function(_, $, exports) {
 	      // Export global even in AMD case in case this script is loaded with
 	      // others that may still expect a global Backbone.
 	      root.Backbone = factory(root, exports, _, $);
@@ -12767,216 +13053,10 @@ module.exports =
 
 
 /***/ },
-/* 12 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-	 * jQuery.scrollTo
-	 * Copyright (c) 2007-2015 Ariel Flesler - aflesler<a>gmail<d>com | http://flesler.blogspot.com
-	 * Licensed under MIT
-	 * http://flesler.blogspot.com/2007/10/jqueryscrollto.html
-	 * @projectDescription Easy element scrolling using jQuery.
-	 * @author Ariel Flesler
-	 * @version 2.1.0
-	 */
-	;(function(define) {
-		'use strict';
-	
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(5)], __WEBPACK_AMD_DEFINE_RESULT__ = function($) {
-			var $scrollTo = $.scrollTo = function(target, duration, settings) {
-				return $(window).scrollTo(target, duration, settings);
-			};
-	
-			$scrollTo.defaults = {
-				axis:'xy',
-				duration: 0,
-				limit:true
-			};
-	
-			function isWin(elem) {
-				return !elem.nodeName ||
-					$.inArray(elem.nodeName.toLowerCase(), ['iframe','#document','html','body']) !== -1;
-			}		
-	
-			$.fn.scrollTo = function(target, duration, settings) {
-				if (typeof duration === 'object') {
-					settings = duration;
-					duration = 0;
-				}
-				if (typeof settings === 'function') {
-					settings = { onAfter:settings };
-				}
-				if (target === 'max') {
-					target = 9e9;
-				}
-	
-				settings = $.extend({}, $scrollTo.defaults, settings);
-				// Speed is still recognized for backwards compatibility
-				duration = duration || settings.duration;
-				// Make sure the settings are given right
-				var queue = settings.queue && settings.axis.length > 1;
-				if (queue) {
-					// Let's keep the overall duration
-					duration /= 2;
-				}
-				settings.offset = both(settings.offset);
-				settings.over = both(settings.over);
-	
-				return this.each(function() {
-					// Null target yields nothing, just like jQuery does
-					if (target === null) return;
-	
-					var win = isWin(this),
-						elem = win ? this.contentWindow || window : this,
-						$elem = $(elem),
-						targ = target, 
-						attr = {},
-						toff;
-	
-					switch (typeof targ) {
-						// A number will pass the regex
-						case 'number':
-						case 'string':
-							if (/^([+-]=?)?\d+(\.\d+)?(px|%)?$/.test(targ)) {
-								targ = both(targ);
-								// We are done
-								break;
-							}
-							// Relative/Absolute selector
-							targ = win ? $(targ) : $(targ, elem);
-							if (!targ.length) return;
-							/* falls through */
-						case 'object':
-							// DOMElement / jQuery
-							if (targ.is || targ.style) {
-								// Get the real position of the target
-								toff = (targ = $(targ)).offset();
-							}
-					}
-	
-					var offset = $.isFunction(settings.offset) && settings.offset(elem, targ) || settings.offset;
-	
-					$.each(settings.axis.split(''), function(i, axis) {
-						var Pos	= axis === 'x' ? 'Left' : 'Top',
-							pos = Pos.toLowerCase(),
-							key = 'scroll' + Pos,
-							prev = $elem[key](),
-							max = $scrollTo.max(elem, axis);
-	
-						if (toff) {// jQuery / DOMElement
-							attr[key] = toff[pos] + (win ? 0 : prev - $elem.offset()[pos]);
-	
-							// If it's a dom element, reduce the margin
-							if (settings.margin) {
-								attr[key] -= parseInt(targ.css('margin'+Pos), 10) || 0;
-								attr[key] -= parseInt(targ.css('border'+Pos+'Width'), 10) || 0;
-							}
-	
-							attr[key] += offset[pos] || 0;
-	
-							if (settings.over[pos]) {
-								// Scroll to a fraction of its width/height
-								attr[key] += targ[axis === 'x'?'width':'height']() * settings.over[pos];
-							}
-						} else {
-							var val = targ[pos];
-							// Handle percentage values
-							attr[key] = val.slice && val.slice(-1) === '%' ?
-								parseFloat(val) / 100 * max
-								: val;
-						}
-	
-						// Number or 'number'
-						if (settings.limit && /^\d+$/.test(attr[key])) {
-							// Check the limits
-							attr[key] = attr[key] <= 0 ? 0 : Math.min(attr[key], max);
-						}
-	
-						// Don't waste time animating, if there's no need.
-						if (!i && settings.axis.length > 1) {
-							if (prev === attr[key]) {
-								// No animation needed
-								attr = {};
-							} else if (queue) {
-								// Intermediate animation
-								animate(settings.onAfterFirst);
-								// Don't animate this axis again in the next iteration.
-								attr = {};
-							}
-						}
-					});
-	
-					animate(settings.onAfter);
-	
-					function animate(callback) {
-						var opts = $.extend({}, settings, {
-							// The queue setting conflicts with animate()
-							// Force it to always be true
-							queue: true,
-							duration: duration,
-							complete: callback && function() {
-								callback.call(elem, targ, settings);
-							}
-						});
-						$elem.animate(attr, opts);
-					}
-				});
-			};
-	
-			// Max scrolling position, works on quirks mode
-			// It only fails (not too badly) on IE, quirks mode.
-			$scrollTo.max = function(elem, axis) {
-				var Dim = axis === 'x' ? 'Width' : 'Height',
-					scroll = 'scroll'+Dim;
-	
-				if (!isWin(elem))
-					return elem[scroll] - $(elem)[Dim.toLowerCase()]();
-	
-				var size = 'client' + Dim,
-					doc = elem.ownerDocument || elem.document,
-					html = doc.documentElement,
-					body = doc.body;
-	
-				return Math.max(html[scroll], body[scroll]) - Math.min(html[size], body[size]);
-			};
-	
-			function both(val) {
-				return $.isFunction(val) || $.isPlainObject(val) ? val : { top:val, left:val };
-			}
-	
-			// Add special hooks so that window scroll properties can be animated
-			$.Tween.propHooks.scrollLeft = 
-			$.Tween.propHooks.scrollTop = {
-				get: function(t) {
-					return $(t.elem)[t.prop]();
-				},
-				set: function(t) {
-					var curr = this.get(t);
-					// If interrupt is true and user scrolled, stop animating
-					if (t.options.interrupt && t._last && t._last !== curr) {
-						return $(t.elem).stop();
-					}
-					var next = Math.round(t.now);
-					// Don't waste CPU
-					// Browsers don't render floating point scroll
-					if (curr !== next) {
-						$(t.elem)[t.prop](next);
-						t._last = this.get(t);
-					}
-				}
-			};
-	
-			// AMD requirement
-			return $scrollTo;
-		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
-
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(72);
+	var makeString = __webpack_require__(75);
 	
 	module.exports = function isBlank(str) {
 	  return (/^\s*$/).test(makeString(str));
@@ -12984,21 +13064,10 @@ module.exports =
 
 
 /***/ },
-/* 14 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
-	
-	module.exports = function stripTags(str) {
-	  return makeString(str).replace(/<\/?[^>]+>/g, '');
-	};
-
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(72);
+	var makeString = __webpack_require__(75);
 	
 	module.exports = function capitalize(str) {
 	  str = makeString(str);
@@ -13007,10 +13076,21 @@ module.exports =
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
+	var makeString = __webpack_require__(75);
+	
+	module.exports = function stripTags(str) {
+	  return makeString(str).replace(/<\/?[^>]+>/g, '');
+	};
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(75);
 	
 	module.exports = function decapitalize(str) {
 	  str = makeString(str);
@@ -13019,7 +13099,7 @@ module.exports =
 
 
 /***/ },
-/* 17 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function chop(str, step) {
@@ -13031,11 +13111,11 @@ module.exports =
 
 
 /***/ },
-/* 18 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
-	var defaultToWhiteSpace = __webpack_require__(73);
+	var makeString = __webpack_require__(75);
+	var defaultToWhiteSpace = __webpack_require__(76);
 	var nativeTrim = String.prototype.trim;
 	
 	module.exports = function trim(str, characters) {
@@ -13047,10 +13127,10 @@ module.exports =
 
 
 /***/ },
-/* 19 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(18);
+	var trim = __webpack_require__(20);
 	
 	module.exports = function clean(str) {
 	  return trim(str).replace(/\s+/g, ' ');
@@ -13058,10 +13138,21 @@ module.exports =
 
 
 /***/ },
-/* 20 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
+	module.exports = Date.now || now
+	
+	function now() {
+	    return new Date().getTime()
+	}
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(75);
 	
 	module.exports = function(str, substr) {
 	  str = makeString(str);
@@ -13085,10 +13176,10 @@ module.exports =
 
 
 /***/ },
-/* 21 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
+	var makeString = __webpack_require__(75);
 	
 	module.exports = function swapCase(str) {
 	  return makeString(str).replace(/\S/g, function(c) {
@@ -13098,10 +13189,10 @@ module.exports =
 
 
 /***/ },
-/* 22 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
+	var makeString = __webpack_require__(75);
 	
 	module.exports = function chars(str) {
 	  return makeString(str).split('');
@@ -13109,11 +13200,11 @@ module.exports =
 
 
 /***/ },
-/* 23 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
-	var escapeChars = __webpack_require__(74);
+	var makeString = __webpack_require__(75);
+	var escapeChars = __webpack_require__(78);
 	var reversedEscapeChars = {};
 	
 	for(var key in escapeChars) reversedEscapeChars[escapeChars[key]] = key;
@@ -13127,11 +13218,11 @@ module.exports =
 
 
 /***/ },
-/* 24 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
-	var escapeChars = __webpack_require__(74);
+	var makeString = __webpack_require__(75);
+	var escapeChars = __webpack_require__(78);
 	
 	module.exports = function unescapeHTML(str) {
 	  return makeString(str).replace(/\&([^;]+);/g, function(entity, entityCode) {
@@ -13151,10 +13242,10 @@ module.exports =
 
 
 /***/ },
-/* 25 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var chars = __webpack_require__(22);
+	var chars = __webpack_require__(25);
 	
 	module.exports = function splice(str, i, howmany, substr) {
 	  var arr = chars(str);
@@ -13164,10 +13255,10 @@ module.exports =
 
 
 /***/ },
-/* 26 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var splice = __webpack_require__(25);
+	var splice = __webpack_require__(28);
 	
 	module.exports = function insert(str, i, substr) {
 	  return splice(str, i, 0, substr);
@@ -13175,10 +13266,10 @@ module.exports =
 
 
 /***/ },
-/* 27 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
+	var makeString = __webpack_require__(75);
 	
 	module.exports = function replaceAll(str, find, replace, ignorecase) {
 	  var flags = (ignorecase === true)?'gi':'g';
@@ -13189,10 +13280,22 @@ module.exports =
 
 
 /***/ },
-/* 28 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
+	var makeString = __webpack_require__(75);
+	
+	module.exports = function include(str, needle) {
+	  if (needle === '') return true;
+	  return makeString(str).indexOf(needle) !== -1;
+	};
+
+
+/***/ },
+/* 32 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(75);
 	var slice = [].slice;
 	
 	module.exports = function join() {
@@ -13204,7 +13307,7 @@ module.exports =
 
 
 /***/ },
-/* 29 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function lines(str) {
@@ -13214,10 +13317,10 @@ module.exports =
 
 
 /***/ },
-/* 30 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
+	var makeString = __webpack_require__(75);
 	
 	function getIndent(str) {
 	  var matches = str.match(/^[\s\\t]*/gm);
@@ -13248,10 +13351,10 @@ module.exports =
 
 
 /***/ },
-/* 31 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var chars = __webpack_require__(22);
+	var chars = __webpack_require__(25);
 	
 	module.exports = function reverse(str) {
 	  return chars(str).reverse().join('');
@@ -13259,11 +13362,11 @@ module.exports =
 
 
 /***/ },
-/* 32 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
-	var toPositive = __webpack_require__(75);
+	var makeString = __webpack_require__(75);
+	var toPositive = __webpack_require__(79);
 	
 	module.exports = function startsWith(str, starts, position) {
 	  str = makeString(str);
@@ -13274,11 +13377,22 @@ module.exports =
 
 
 /***/ },
-/* 33 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
-	var toPositive = __webpack_require__(75);
+	var adjacent = __webpack_require__(80);
+	
+	module.exports = function succ(str) {
+	  return adjacent(str, -1);
+	};
+
+
+/***/ },
+/* 38 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(75);
+	var toPositive = __webpack_require__(79);
 	
 	module.exports = function endsWith(str, ends, position) {
 	  str = makeString(str);
@@ -13293,21 +13407,10 @@ module.exports =
 
 
 /***/ },
-/* 34 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var adjacent = __webpack_require__(76);
-	
-	module.exports = function succ(str) {
-	  return adjacent(str, -1);
-	};
-
-
-/***/ },
-/* 35 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var adjacent = __webpack_require__(76);
+	var adjacent = __webpack_require__(80);
 	
 	module.exports = function succ(str) {
 	  return adjacent(str, 1);
@@ -13315,22 +13418,10 @@ module.exports =
 
 
 /***/ },
-/* 36 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
-	
-	module.exports = function include(str, needle) {
-	  if (needle === '') return true;
-	  return makeString(str).indexOf(needle) !== -1;
-	};
-
-
-/***/ },
-/* 37 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(72);
+	var makeString = __webpack_require__(75);
 	
 	module.exports = function titleize(str) {
 	  return makeString(str).toLowerCase().replace(/(?:^|\s|-)\S/g, function(c) {
@@ -13340,35 +13431,28 @@ module.exports =
 
 
 /***/ },
-/* 38 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(18);
-	
-	module.exports = function underscored(str) {
-	  return trim(str).replace(/([a-z\d])([A-Z]+)/g, '$1_$2').replace(/[-\s]+/g, '_').toLowerCase();
-	};
-
-
-/***/ },
-/* 39 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var $, Backbone, Base, SinglePageScrollingController, SinglePageScrollingView, _, _s,
+	var $, Array, Backbone, Base, SinglePageScrollingController, SinglePageScrollingView, _, _s, debounce,
 	  extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
 	  hasProp = {}.hasOwnProperty;
 	
-	$ = __webpack_require__(5);
+	$ = __webpack_require__(8);
 	
-	_ = __webpack_require__(8);
+	_ = __webpack_require__(11);
 	
-	_s = __webpack_require__(4);
+	_s = __webpack_require__(6);
 	
-	Backbone = __webpack_require__(10);
+	debounce = __webpack_require__(5);
 	
-	Base = __webpack_require__(3);
+	Array = __webpack_require__(3);
 	
-	__webpack_require__(12);
+	Backbone = __webpack_require__(13);
+	
+	Base = __webpack_require__(4);
+	
+	__webpack_require__(7);
 	
 	SinglePageScrollingView = __webpack_require__(2);
 	
@@ -13423,7 +13507,7 @@ module.exports =
 	  };
 	
 	  SinglePageScrollingController.prototype.initialize = function(options) {
-	    var method, name;
+	    var method, name, params, ref, ref1, ref2, ref3, results;
 	    this.options = _.extend({}, this.defaultOptions, options);
 	    for (name in Base) {
 	      method = Base[name];
@@ -13443,9 +13527,13 @@ module.exports =
 	    this.notifications.on('controller:resolutionChanged', this.onResolutionChanged, this);
 	    this.notifications.on('view:sectionReady', this.appLoaded, this);
 	    this.notifications.on('view:navigate', this.navigate, this);
-	    $(window).on('resize', _.bind(_.debounce(function() {
-	      return this.notify('windowResized');
-	    }, 500), this));
+	    $(window).on('resize', (function(_this) {
+	      return function() {
+	        return debounce((function() {
+	          return _this.notify('windowResized');
+	        }), 500);
+	      };
+	    })(this));
 	    $(window).on('orientationchange', function() {
 	      return $(window).trigger('resize');
 	    });
@@ -13454,22 +13542,29 @@ module.exports =
 	        return _this._resolutionChanged();
 	      };
 	    })(this));
-	    _.each(this.sections, function(params, name, sections) {
-	      if (_.has(params, 'route')) {
-	        return this.route(params.route, name, this.navigate);
+	    ref = this.sections;
+	    for (name in ref) {
+	      params = ref[name];
+	      if ((params.route != null) && ((ref1 = params.el) != null ? ref1.length : void 0)) {
+	        this.route(params.route, name, this.navigate);
 	      }
-	    }, this);
+	    }
 	    Backbone.history.start({
 	      pushState: true,
 	      silent: true
 	    });
-	    $('body').on('click', 'a[href^="/"]:not([data-nobind]), body a[href^="' + window.location.origin + '"]:not([data-nobind])', (function(_this) {
-	      return function(e) {
-	        _this.navigate($(e.currentTarget).attr('href'));
-	        return false;
-	      };
-	    })(this));
-	    return _.each(this.sections, this.loadSection, this);
+	    this.bindUrlsToRoutes();
+	    ref2 = this.sections;
+	    results = [];
+	    for (name in ref2) {
+	      params = ref2[name];
+	      if ((ref3 = params.el) != null ? ref3.length : void 0) {
+	        results.push(this.loadSection(params, name));
+	      } else {
+	        results.push(void 0);
+	      }
+	    }
+	    return results;
 	  };
 	
 	  SinglePageScrollingController.prototype.navigate = function(route, options) {
@@ -13483,7 +13578,7 @@ module.exports =
 	    }, options);
 	    SinglePageScrollingController.__super__.navigate.call(this, _s.ltrim(route, '/'), options);
 	    this.updatePageMeta(route);
-	    section = this._fragmentToSection(_.ltrim(route, '/'));
+	    section = this._fragmentToSection(route);
 	    this.currentSection = section;
 	    id = section.instance.options.pageName;
 	    if (options.scroll !== false) {
@@ -13532,7 +13627,7 @@ module.exports =
 	
 	  SinglePageScrollingController.prototype.loadSection = function(section, name, sections) {
 	    var view;
-	    if (!_.has(section, 'view')) {
+	    if (!section.view) {
 	      this.sections[name].view = SinglePageScrollingView;
 	    }
 	    view = this.sections[name].instance = new section.view({
@@ -13618,19 +13713,22 @@ module.exports =
 	  };
 	
 	  SinglePageScrollingController.prototype._fragmentToSection = function(fragment) {
-	    if (_.isUndefined(fragment)) {
+	    var name, ref, regex, section;
+	    if (fragment == null) {
 	      fragment = Backbone.history.fragment;
 	    }
-	    return _.find(this.sections, function(section, name) {
-	      var regex;
-	      if (_.isUndefined(section.route)) {
-	        return false;
+	    fragment = _.ltrim(fragment, '/');
+	    ref = this.sections;
+	    for (name in ref) {
+	      section = ref[name];
+	      if (section.route == null) {
+	        continue;
 	      }
 	      regex = this._routeToRegExp(section.route);
 	      if (regex.test(fragment)) {
-	        return true;
+	        return section;
 	      }
-	    }, this);
+	    }
 	  };
 	
 	  SinglePageScrollingController.prototype.notify = function() {
@@ -13642,10 +13740,7 @@ module.exports =
 	
 	  SinglePageScrollingController.prototype.navigateOnScroll = function(e) {
 	    var route, section;
-	    if (!this.options.navigateOnManualScroll) {
-	      return;
-	    }
-	    if (this.scrolling) {
+	    if (!this.options.navigateOnManualScroll || this.scrolling) {
 	      return;
 	    }
 	    section = _.max(this.sections, (function(_this) {
@@ -13689,6 +13784,9 @@ module.exports =
 	
 	  SinglePageScrollingController.prototype.inViewport = function(el) {
 	    var elBounds;
+	    if (!$(el).length) {
+	      return;
+	    }
 	    elBounds = $(el).get(0).getBoundingClientRect();
 	    if (elBounds.bottom <= 0 || elBounds.top >= window.innerHeight) {
 	      return 0;
@@ -13704,6 +13802,42 @@ module.exports =
 	    }
 	  };
 	
+	  SinglePageScrollingController.prototype.bindUrlsToRoutes = function(selectors) {
+	    var a, href, section;
+	    if (selectors == null) {
+	      selectors = null;
+	    }
+	    if (selectors === null) {
+	      selectors = ((function() {
+	        var i, len, ref, results;
+	        ref = $('a:not([data-nobind])');
+	        results = [];
+	        for (i = 0, len = ref.length; i < len; i++) {
+	          a = ref[i];
+	          href = $(a).attr('href');
+	          if (!href) {
+	            continue;
+	          }
+	          section = this._fragmentToSection(href);
+	          if (!section) {
+	            continue;
+	          }
+	          if (!section.el.length) {
+	            continue;
+	          }
+	          results.push("[href='" + href + "']");
+	        }
+	        return results;
+	      }).call(this)).unique().join(',');
+	    }
+	    return $('body').on('click', selectors, (function(_this) {
+	      return function(e) {
+	        _this.navigate($(e.currentTarget).attr('href'));
+	        return false;
+	      };
+	    })(this));
+	  };
+	
 	  return SinglePageScrollingController;
 	
 	})(Backbone.Router);
@@ -13712,10 +13846,21 @@ module.exports =
 
 
 /***/ },
-/* 40 */
+/* 42 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(18);
+	var trim = __webpack_require__(20);
+	
+	module.exports = function underscored(str) {
+	  return trim(str).replace(/([a-z\d])([A-Z]+)/g, '$1_$2').replace(/[-\s]+/g, '_').toLowerCase();
+	};
+
+
+/***/ },
+/* 43 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var trim = __webpack_require__(20);
 	
 	module.exports = function dasherize(str) {
 	  return trim(str).replace(/([A-Z])/g, '-$1').replace(/[-_\s]+/g, '-').toLowerCase();
@@ -13723,12 +13868,12 @@ module.exports =
 
 
 /***/ },
-/* 41 */
+/* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var capitalize = __webpack_require__(15);
+	var capitalize = __webpack_require__(16);
 	var camelize = __webpack_require__(1);
-	var makeString = __webpack_require__(72);
+	var makeString = __webpack_require__(75);
 	
 	module.exports = function classify(str) {
 	  str = makeString(str);
@@ -13737,11 +13882,24 @@ module.exports =
 
 
 /***/ },
-/* 42 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
-	var defaultToWhiteSpace = __webpack_require__(73);
+	var capitalize = __webpack_require__(16);
+	var underscored = __webpack_require__(42);
+	var trim = __webpack_require__(20);
+	
+	module.exports = function humanize(str) {
+	  return capitalize(trim(underscored(str).replace(/_id$/, '').replace(/_/g, ' ')));
+	};
+
+
+/***/ },
+/* 46 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(75);
+	var defaultToWhiteSpace = __webpack_require__(76);
 	var nativeTrimLeft = String.prototype.trimLeft;
 	
 	module.exports = function ltrim(str, characters) {
@@ -13753,11 +13911,11 @@ module.exports =
 
 
 /***/ },
-/* 43 */
+/* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
-	var defaultToWhiteSpace = __webpack_require__(73);
+	var makeString = __webpack_require__(75);
+	var defaultToWhiteSpace = __webpack_require__(76);
 	var nativeTrimRight = String.prototype.trimRight;
 	
 	module.exports = function rtrim(str, characters) {
@@ -13769,23 +13927,10 @@ module.exports =
 
 
 /***/ },
-/* 44 */
+/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var capitalize = __webpack_require__(15);
-	var underscored = __webpack_require__(38);
-	var trim = __webpack_require__(18);
-	
-	module.exports = function humanize(str) {
-	  return capitalize(trim(underscored(str).replace(/_id$/, '').replace(/_/g, ' ')));
-	};
-
-
-/***/ },
-/* 45 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(72);
+	var makeString = __webpack_require__(75);
 	
 	module.exports = function truncate(str, length, truncateStr) {
 	  str = makeString(str);
@@ -13796,7 +13941,7 @@ module.exports =
 
 
 /***/ },
-/* 46 */
+/* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -13804,8 +13949,8 @@ module.exports =
 	 * prune extra chars, never leaving a half-chopped word.
 	 * @author github.com/rwz
 	 */
-	var makeString = __webpack_require__(72);
-	var rtrim = __webpack_require__(43);
+	var makeString = __webpack_require__(75);
+	var rtrim = __webpack_require__(47);
 	
 	module.exports = function prune(str, length, pruneStr) {
 	  str = makeString(str);
@@ -13829,11 +13974,11 @@ module.exports =
 
 
 /***/ },
-/* 47 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isBlank = __webpack_require__(13);
-	var trim = __webpack_require__(18);
+	var isBlank = __webpack_require__(15);
+	var trim = __webpack_require__(20);
 	
 	module.exports = function words(str, delimiter) {
 	  if (isBlank(str)) return [];
@@ -13842,11 +13987,11 @@ module.exports =
 
 
 /***/ },
-/* 48 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
-	var strRepeat = __webpack_require__(77);
+	var makeString = __webpack_require__(75);
+	var strRepeat = __webpack_require__(81);
 	
 	module.exports = function pad(str, length, padStr, type) {
 	  str = makeString(str);
@@ -13874,10 +14019,10 @@ module.exports =
 
 
 /***/ },
-/* 49 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var pad = __webpack_require__(48);
+	var pad = __webpack_require__(51);
 	
 	module.exports = function lpad(str, length, padStr) {
 	  return pad(str, length, padStr);
@@ -13885,21 +14030,10 @@ module.exports =
 
 
 /***/ },
-/* 50 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var pad = __webpack_require__(48);
-	
-	module.exports = function lrpad(str, length, padStr) {
-	  return pad(str, length, padStr, 'both');
-	};
-
-
-/***/ },
-/* 51 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var pad = __webpack_require__(48);
+	var pad = __webpack_require__(51);
 	
 	module.exports = function rpad(str, length, padStr) {
 	  return pad(str, length, padStr, 'right');
@@ -13907,7 +14041,18 @@ module.exports =
 
 
 /***/ },
-/* 52 */
+/* 54 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var pad = __webpack_require__(51);
+	
+	module.exports = function lrpad(str, length, padStr) {
+	  return pad(str, length, padStr, 'both');
+	};
+
+
+/***/ },
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// sprintf() for JavaScript 0.7-beta1
@@ -13915,7 +14060,7 @@ module.exports =
 	//
 	// Copyright (c) Alexandru Marasteanu <alexaholic [at) gmail (dot] com>
 	// All rights reserved.
-	var strRepeat = __webpack_require__(77);
+	var strRepeat = __webpack_require__(81);
 	var toString = Object.prototype.toString;
 	var sprintf = (function() {
 	  function get_type(variable) {
@@ -14037,10 +14182,10 @@ module.exports =
 
 
 /***/ },
-/* 53 */
+/* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var sprintf = __webpack_require__(52);
+	var sprintf = __webpack_require__(55);
 	
 	module.exports = function vsprintf(fmt, argv) {
 	  argv.unshift(fmt);
@@ -14049,7 +14194,23 @@ module.exports =
 
 
 /***/ },
-/* 54 */
+/* 57 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var trim = __webpack_require__(20);
+	var parseNumber = function(source) {
+	  return source * 1 || 0;
+	};
+	
+	module.exports = function toNumber(num, precision) {
+	  if (num == null) return 0;
+	  var factor = Math.pow(10, isFinite(precision) ? precision : 0);
+	  return Math.round(num * factor) / factor;
+	};
+
+
+/***/ },
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function numberFormat(number, dec, dsep, tsep) {
@@ -14067,26 +14228,10 @@ module.exports =
 
 
 /***/ },
-/* 55 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(18);
-	var parseNumber = function(source) {
-	  return source * 1 || 0;
-	};
-	
-	module.exports = function toNumber(num, precision) {
-	  if (num == null) return 0;
-	  var factor = Math.pow(10, isFinite(precision) ? precision : 0);
-	  return Math.round(num * factor) / factor;
-	};
-
-
-/***/ },
-/* 56 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(72);
+	var makeString = __webpack_require__(75);
 	
 	module.exports = function strRight(str, sep) {
 	  str = makeString(str);
@@ -14097,24 +14242,10 @@ module.exports =
 
 
 /***/ },
-/* 57 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
-	
-	module.exports = function strLeft(str, sep) {
-	  str = makeString(str);
-	  sep = makeString(sep);
-	  var pos = !sep ? -1 : str.indexOf(sep);
-	  return~ pos ? str.slice(0, pos) : str;
-	};
-
-
-/***/ },
-/* 58 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(72);
+	var makeString = __webpack_require__(75);
 	
 	module.exports = function strRightBack(str, sep) {
 	  str = makeString(str);
@@ -14125,10 +14256,24 @@ module.exports =
 
 
 /***/ },
-/* 59 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
+	var makeString = __webpack_require__(75);
+	
+	module.exports = function strLeft(str, sep) {
+	  str = makeString(str);
+	  sep = makeString(sep);
+	  var pos = !sep ? -1 : str.indexOf(sep);
+	  return~ pos ? str.slice(0, pos) : str;
+	};
+
+
+/***/ },
+/* 62 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(75);
 	
 	module.exports = function strLeftBack(str, sep) {
 	  str = makeString(str);
@@ -14139,10 +14284,10 @@ module.exports =
 
 
 /***/ },
-/* 60 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var rtrim = __webpack_require__(43);
+	var rtrim = __webpack_require__(47);
 	
 	module.exports = function toSentence(array, separator, lastSeparator, serial) {
 	  separator = separator || ', ';
@@ -14157,10 +14302,10 @@ module.exports =
 
 
 /***/ },
-/* 61 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var toSentence = __webpack_require__(60);
+	var toSentence = __webpack_require__(63);
 	
 	module.exports = function toSentenceSerial(array, sep, lastSep) {
 	  return toSentence(array, sep, lastSep, true);
@@ -14168,13 +14313,13 @@ module.exports =
 
 
 /***/ },
-/* 62 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
-	var defaultToWhiteSpace = __webpack_require__(73);
-	var trim = __webpack_require__(18);
-	var dasherize = __webpack_require__(40);
+	var makeString = __webpack_require__(75);
+	var defaultToWhiteSpace = __webpack_require__(76);
+	var trim = __webpack_require__(20);
+	var dasherize = __webpack_require__(43);
 	
 	module.exports = function slugify(str) {
 	  var from  = "ąàáäâãåæăćčĉęèéëêĝĥìíïîĵłľńňòóöőôõðøśșšŝťțŭùúüűûñÿýçżźž",
@@ -14191,7 +14336,7 @@ module.exports =
 
 
 /***/ },
-/* 63 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function surround(str, wrapper) {
@@ -14200,10 +14345,10 @@ module.exports =
 
 
 /***/ },
-/* 64 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var surround = __webpack_require__(63);
+	var surround = __webpack_require__(66);
 	
 	module.exports = function quote(str, quoteChar) {
 	  return surround(str, quoteChar || '"');
@@ -14211,7 +14356,7 @@ module.exports =
 
 
 /***/ },
-/* 65 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function unquote(str, quoteChar) {
@@ -14223,11 +14368,11 @@ module.exports =
 
 
 /***/ },
-/* 66 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
-	var strRepeat = __webpack_require__(77);
+	var makeString = __webpack_require__(75);
+	var strRepeat = __webpack_require__(81);
 	
 	module.exports = function repeat(str, qty, separator) {
 	  str = makeString(str);
@@ -14244,7 +14389,38 @@ module.exports =
 
 
 /***/ },
-/* 67 */
+/* 70 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(75);
+	
+	module.exports = function levenshtein(str1, str2) {
+	  str1 = makeString(str1);
+	  str2 = makeString(str2);
+	
+	  var current = [],
+	    prev, value;
+	
+	  for (var i = 0; i <= str2.length; i++)
+	    for (var j = 0; j <= str1.length; j++) {
+	      if (i && j)
+	        if (str1.charAt(j - 1) === str2.charAt(i - 1))
+	          value = prev;
+	        else
+	          value = Math.min(current[j], current[j - 1], prev) + 1;
+	        else
+	          value = i + j;
+	
+	      prev = current[j];
+	      current[j] = value;
+	    }
+	
+	  return current.pop();
+	};
+
+
+/***/ },
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function naturalCmp(str1, str2) {
@@ -14279,41 +14455,21 @@ module.exports =
 
 
 /***/ },
-/* 68 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
+	var makeString = __webpack_require__(75);
 	
-	module.exports = function levenshtein(str1, str2) {
-	  str1 = makeString(str1);
-	  str2 = makeString(str2);
-	
-	  var current = [],
-	    prev, value;
-	
-	  for (var i = 0; i <= str2.length; i++)
-	    for (var j = 0; j <= str1.length; j++) {
-	      if (i && j)
-	        if (str1.charAt(j - 1) === str2.charAt(i - 1))
-	          value = prev;
-	        else
-	          value = Math.min(current[j], current[j - 1], prev) + 1;
-	        else
-	          value = i + j;
-	
-	      prev = current[j];
-	      current[j] = value;
-	    }
-	
-	  return current.pop();
+	module.exports = function escapeRegExp(str) {
+	  return makeString(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
 	};
 
 
 /***/ },
-/* 69 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(18);
+	var trim = __webpack_require__(20);
 	
 	function boolMatch(s, matchers) {
 	  var i, matcher, down = s.toLowerCase();
@@ -14336,7 +14492,7 @@ module.exports =
 
 
 /***/ },
-/* 70 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function() {
@@ -14352,18 +14508,7 @@ module.exports =
 
 
 /***/ },
-/* 71 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(72);
-	
-	module.exports = function escapeRegExp(str) {
-	  return makeString(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
-	};
-
-
-/***/ },
-/* 72 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -14376,10 +14521,10 @@ module.exports =
 
 
 /***/ },
-/* 73 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var escapeRegExp = __webpack_require__(71);
+	var escapeRegExp = __webpack_require__(72);
 	
 	module.exports = function defaultToWhiteSpace(characters) {
 	  if (characters == null)
@@ -14392,7 +14537,14 @@ module.exports =
 
 
 /***/ },
-/* 74 */
+/* 77 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function() { throw new Error("define cannot be used indirect"); };
+
+
+/***/ },
+/* 78 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var escapeChars = {
@@ -14407,7 +14559,7 @@ module.exports =
 
 
 /***/ },
-/* 75 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function toPositive(number) {
@@ -14416,10 +14568,10 @@ module.exports =
 
 
 /***/ },
-/* 76 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(72);
+	var makeString = __webpack_require__(75);
 	
 	module.exports = function adjacent(str, direction) {
 	  str = makeString(str);
@@ -14431,7 +14583,7 @@ module.exports =
 
 
 /***/ },
-/* 77 */
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function strRepeat(str, qty){
@@ -14443,13 +14595,6 @@ module.exports =
 	  }
 	  return result;
 	};
-
-
-/***/ },
-/* 78 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function() { throw new Error("define cannot be used indirect"); };
 
 
 /***/ }
