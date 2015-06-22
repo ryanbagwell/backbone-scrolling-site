@@ -103,13 +103,19 @@ Merge our options with the defaultOptions
 
         super(options)
 
-        #
-        # Dynamically create our routes
-        #
-        _.each @sections, (section, name) ->
-          return if _.isUndefined section.route
-          @route section.route, -> null
-        , @
+
+Dynamically create our routes and generate a callback function that calls the
+"receiveNavigation" method on the section's view
+
+        for name, section of @sections
+          continue if _.isUndefined section.route
+
+          @route section.route, section.name, (() ->
+                                                args = Array.prototype.slice.call(arguments)
+                                                section = args.shift()
+                                                section.instance.receiveNavigation.apply(section.instance, args)
+                                              ).bind(null, section)
+
 
         #
         # Set the initial browser resolution
@@ -156,19 +162,15 @@ a responsive breakpoint threshold is crossed
 Dynamically create a route function for each specified section, but only if
 a route has been specified and the section exists
 
-        for name, params of @sections
-          if params.route? and params.el?.length
-            @route params.route, name, @navigate
+        # for name, params of @sections
+        #   if params.route? and params.el?.length
+        #     @route params.route, name, @navigate
 
 Start Backbone.history
 
         Backbone.history.start
           pushState: true
           silent: true
-
-Bind click handlers to 'a' tags with routes that exist in a section
-
-        @bindUrlsToRoutes()
 
 Initialize any section views.
 
@@ -182,8 +184,8 @@ The navigate function is bound to all clicks on local urls.
 
         return if not @ready
 
-        options = _.extend {},
-            trigger: false
+        options = xtend
+            trigger: true
             scroll: true
         , options
 
@@ -195,13 +197,9 @@ The navigate function is bound to all clicks on local urls.
 
         @currentSection = section
 
-        console.log section
-
         id = section.instance.options.pageName
 
         @scrollToSection(id) unless options.scroll is false
-
-        @notify "#{id}:navigate", route
 
 
 Scrolls the page to the target section.
@@ -239,6 +237,8 @@ which checks to see if all views are 'ready'.
 
         return if @_appLoaded
 
+        @bindUrlsToRoutes()
+
         @ready = true
 
         @navigate Backbone.history.fragment
@@ -275,6 +275,7 @@ Checks if all of the sections have reached the
       _allSectionsReady: ->
 
           sectionNotReady = _.find this.sections, (section) ->
+              return false if section.el.length is 0
               return true if _.isUndefined section.instance
               return if _.isUndefined section.route
               return true if not section.instance.ready
