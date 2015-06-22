@@ -10,6 +10,7 @@ It has a number of dependencies.
     Backbone = require 'backbone'
     Base = require './base'
     require 'jquery.scrollto'
+    xtend = require 'xtend'
     SinglePageScrollingView = require './view'
 
 The sections object represents all sections/pages of the site. Each item should
@@ -194,6 +195,8 @@ The navigate function is bound to all clicks on local urls.
 
         @currentSection = section
 
+        console.log section
+
         id = section.instance.options.pageName
 
         @scrollToSection(id) unless options.scroll is false
@@ -255,11 +258,13 @@ Mock a view instance object if a view function wasn't specified.
         if not section.view
           @sections[name].view = SinglePageScrollingView
 
-        view = @sections[name].instance = new section.view
-          notifications: @notifications
-          pageName: name
-          currentResolution: @_getResolution().name
-          el: section.el
+        opts = xtend @options,
+                notifications: @notifications
+                pageName: name
+                currentResolution: @_getResolution().name
+                el: section.el
+
+        view = @sections[name].instance = new section.view(opts)
 
         view.render()
 
