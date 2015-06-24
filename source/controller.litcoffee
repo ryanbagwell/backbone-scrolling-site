@@ -110,11 +110,12 @@ Dynamically create our routes and generate a callback function that calls the
         for name, section of @sections
           continue if _.isUndefined section.route
 
-          @route section.route, section.name, (() ->
-                                                args = Array.prototype.slice.call(arguments)
-                                                section = args.shift()
-                                                section.instance.receiveNavigation.apply(section.instance, args)
-                                              ).bind(null, section)
+          @route section.route, section.name, (->
+                                                [section, name, args...] = arguments
+                                                if section.instance?
+                                                  section.instance.receiveNavigation.apply(section.instance, args)
+                                                @notify "#{name}:navigate"
+                                              ).bind(@, section, name)
 
 
         #
@@ -158,25 +159,18 @@ a responsive breakpoint threshold is crossed
 
         $(window).on 'resize', => @_resolutionChanged()
 
-
-Dynamically create a route function for each specified section, but only if
-a route has been specified and the section exists
-
-        # for name, params of @sections
-        #   if params.route? and params.el?.length
-        #     @route params.route, name, @navigate
-
-Start Backbone.history
-
-        Backbone.history.start
-          pushState: true
-          silent: true
-
 Initialize any section views.
 
         for name, params of @sections
           if params.el?.length
             @loadSection params, name
+
+Start Backbone.history
+
+        Backbone.history.start
+          pushState: true
+          silent: false
+
 
 The navigate function is bound to all clicks on local urls.
 
@@ -189,7 +183,9 @@ The navigate function is bound to all clicks on local urls.
             scroll: true
         , options
 
-        super _s.ltrim(route, '/'), options
+        route = _s.ltrim route, '/'
+
+        super route, options
 
         @updatePageMeta route
 
@@ -197,9 +193,14 @@ The navigate function is bound to all clicks on local urls.
 
         @currentSection = section
 
+        return unless section
+
+        return unless section.instance?
+
         id = section.instance.options.pageName
 
-        @scrollToSection(id) unless options.scroll is false
+        if options.scroll
+          @scrollToSection(id)
 
 
 Scrolls the page to the target section.
@@ -209,9 +210,9 @@ Scrolls the page to the target section.
         @scrolling = true
 
         defaultOptions =
-            onAfter: _.bind @afterScroll, @
+          onAfter: @afterScroll.bind(@)
 
-        options = _.extend defaultOptions, @options.scrollToOptions
+        options = xtend defaultOptions, @options.scrollToOptions
 
         $.scrollTo '#'+section, @options.scrollTime, options
 
@@ -240,8 +241,6 @@ which checks to see if all views are 'ready'.
         @bindUrlsToRoutes()
 
         @ready = true
-
-        @navigate Backbone.history.fragment
 
         @_appLoaded = true
 
@@ -364,22 +363,27 @@ and the most visible section has changed.
 
       navigateOnScroll: (e) ->
 
-          if not @options.navigateOnManualScroll or @scrolling
-            return
+        return unless @options.navigateOnManualScroll
+        return if @scrolling
 
-          section = _.max @sections, (section) =>
-              @inViewport(section.el)
+        for name, section of @sections
+          console.log name, @inViewport(section.el)
 
-          return if section == @currentSection
+        section = _.max @sections, (section) =>
+          @inViewport(section.el)
 
-          try
-              route = section.instance.getRoute()
-          catch e
-              route = section.route
+        console.log section
 
-          @navigate route, scroll:false
+        return if section == @currentSection
 
-          @currentSection = section
+        try
+          route = section.instance.getRoute()
+        catch e
+          route = section.route
+
+        @navigate route, scroll:false
+
+        @currentSection = section
 
 Updates the page meta data
 
@@ -404,7 +408,7 @@ viewport. Returns the height of visible portion of the element.
 
       inViewport: (el) ->
 
-        return unless $(el).length
+        return 0 unless $(el).length
 
         elBounds = $(el).get(0).getBoundingClientRect()
 
@@ -421,6 +425,10 @@ viewport. Returns the height of visible portion of the element.
         #if the el's bottom is visible but not the top
         if elBounds.bottom < window.innerHeight and elBounds.top < 0
             return $(el).height() - (elBounds.top * -1)
+
+        #the el is filling the entire window
+        return $(el).height() if elBounds.top <= 0 and elBounds.bottom >= window.innerHeight
+
 
 Bind all 'a' tags whose href attributes match a section's route
 

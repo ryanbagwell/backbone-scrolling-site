@@ -63,7 +63,6 @@ from the controller, as well as navigation events for this view
           @notifications.on
               "controller:appLoaded": @onAppLoaded
               "controller:resolutionChanged": @onResolutionChanged
-              "controller:#{if @options.pageName? then @options.pageName else 'foo'}:navigate": @receiveNavigation
           , @
 
         catch e
