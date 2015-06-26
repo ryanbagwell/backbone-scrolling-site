@@ -91,6 +91,10 @@ Enable/Disable navigation on manual scroll
 
         navigateOnManualScroll: true
 
+By default, the root url of our app is '/'
+
+        appRoot: '/'
+
 Initialize the controller.
 
       initialize: (options) ->
@@ -170,6 +174,7 @@ Start Backbone.history
         Backbone.history.start
           pushState: true
           silent: false
+          root: @options.appRoot
 
 
 The navigate function is bound to all clicks on local urls.
@@ -445,8 +450,8 @@ Bind all 'a' tags whose href attributes match a section's route
                       ).unique().join(',')
 
         $('body').on 'click', selectors, (e) =>
+          e.preventDefault()
           @navigate $(e.currentTarget).attr('href')
-          false
 
 Export the class
 
