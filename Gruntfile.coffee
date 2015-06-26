@@ -1,4 +1,5 @@
 path = require 'path'
+webpack = require 'webpack'
 
 module.exports = (grunt) ->
   _ = grunt.util._
@@ -25,13 +26,6 @@ module.exports = (grunt) ->
       options:
         cache: true
         devtool: 'sourcemap'
-        entry:
-          "backbone-scrolling-site":"main"
-        output:
-          path: "dist/"
-          filename: "[name].js"
-          chunkFilename: "[id].js"
-          libraryTarget: "commonjs2"
         resolve:
           extensions: ['.coffee', '.litcoffee', '.js', '']
           modulesDirectories: [
@@ -55,6 +49,25 @@ module.exports = (grunt) ->
       production:
         watch: false
         keepalive: false
+        entry:
+          "backbone-scrolling-site":"main"
+        output:
+          path: "dist/"
+          filename: "[name].js"
+          library: 'ScrollingSite'
+          libraryTarget: "var"
+
+      testOne:
+        output:
+          path: "tests/js"
+          filename: "testOne.js"
+          library: 'TestOne'
+          libraryTarget: 'var'
+        entry: 'tests/basic'
+        module:
+          loaders: [
+            {test: /\.js$/, loader: 'expose?ScrollingSite'}
+          ]
 
       dev:
         watch: true
@@ -82,4 +95,5 @@ module.exports = (grunt) ->
 
     # Define tasks.
     grunt.registerTask 'build', ['webpack:production', 'docco']
+    grunt.registerTask 'test', ['webpack:production', 'webpack:testOne']
     grunt.registerTask 'default', ['build']
