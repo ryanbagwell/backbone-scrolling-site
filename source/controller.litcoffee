@@ -371,13 +371,8 @@ and the most visible section has changed.
         return unless @options.navigateOnManualScroll
         return if @scrolling
 
-        for name, section of @sections
-          console.log name, @inViewport(section.el)
-
         section = _.max @sections, (section) =>
           @inViewport(section.el)
-
-        console.log section
 
         return if section == @currentSection
 
