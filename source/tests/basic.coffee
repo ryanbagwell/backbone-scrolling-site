@@ -30,7 +30,11 @@ class Controller extends ScrollingSite.Controller
             route: 'page-4/'
             el: $('#four')
             view: Page
-
+        #
+        # We're adding a fifth page in here to ensure that
+        # if you define a route without a matching section, it will not
+        # err out
+        #
         five:
             route: 'page-5/'
             el: $('#five')
