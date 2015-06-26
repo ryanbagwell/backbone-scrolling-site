@@ -222,7 +222,6 @@ from the controller, as well as navigation events for this view</p>
             <div class="content"><div class='highlight'><pre>      <span class="hljs-property">@notifications</span>.<span class="hljs-literal">on</span>
           <span class="hljs-string">"controller:appLoaded"</span>: <span class="hljs-property">@onAppLoaded</span>
           <span class="hljs-string">"controller:resolutionChanged"</span>: <span class="hljs-property">@onResolutionChanged</span>
-          <span class="hljs-string">"controller:<span class="hljs-subst">#{<span class="hljs-keyword">if</span> <span class="hljs-property">@options</span>.pageName? <span class="hljs-keyword">then</span> <span class="hljs-property">@options</span>.pageName <span class="hljs-keyword">else</span> <span class="hljs-string">'foo'</span>}</span>:navigate"</span>: <span class="hljs-property">@receiveNavigation</span>
       , @
 
     <span class="hljs-keyword">catch</span> e
