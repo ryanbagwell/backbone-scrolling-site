@@ -73,6 +73,7 @@ _.str = <span class="hljs-built_in">require</span> <span class="hljs-string">'un
 _.mixin _.str.exports()
 Base = <span class="hljs-built_in">require</span> <span class="hljs-string">'./base'</span>
 Backbone = <span class="hljs-built_in">require</span> <span class="hljs-string">"backbone"</span>
+Q = <span class="hljs-built_in">require</span> <span class="hljs-string">'q'</span>
 
 <span class="hljs-built_in">module</span>.exports = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SinglePageScrollingView</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Backbone</span>.<span class="hljs-title">View</span></span></pre></div></div>
             
@@ -156,7 +157,9 @@ the view is notifified of a change in resolution</p>
 
     @[name] = _.bind(method, @) <span class="hljs-keyword">for</span> name, method <span class="hljs-keyword">of</span> Base
 
-    <span class="hljs-keyword">super</span>(options)</pre></div></div>
+    <span class="hljs-keyword">super</span>(options)
+
+    <span class="hljs-keyword">try</span></pre></div></div>
             
         </li>
         
@@ -167,13 +170,11 @@ the view is notifified of a change in resolution</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
-              <p>Call ‘afterRender()’ when the rendered event is triggered</p>
+              <p>Set the initial value of currentResolution</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    @.<span class="hljs-literal">on</span> <span class="hljs-string">'rendered'</span>, _.bind(<span class="hljs-property">@afterRender</span>, @)
-
-    <span class="hljs-keyword">try</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>      <span class="hljs-property">@currentResolution</span> = <span class="hljs-property">@options</span>.currentResolution</pre></div></div>
             
         </li>
         
@@ -184,21 +185,6 @@ the view is notifified of a change in resolution</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
-              <p>Set the initial value of currentResolution</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>      <span class="hljs-property">@currentResolution</span> = <span class="hljs-property">@options</span>.currentResolution</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-9">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
-              </div>
               <p>Set the value of the event dispatcher</p>
 
             </div>
@@ -208,11 +194,11 @@ the view is notifified of a change in resolution</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>Bind some event handlers to the appLoaded and resolutionChaged events
 from the controller, as well as navigation events for this view</p>
@@ -225,7 +211,42 @@ from the controller, as well as navigation events for this view</p>
       , @
 
     <span class="hljs-keyword">catch</span> e
-      <span class="hljs-built_in">console</span>.warn <span class="hljs-string">"backbone-scrolling-site: Couldn't bind events to view named <span class="hljs-subst">#{<span class="hljs-property">@options</span>.pageName}</span>"</span></pre></div></div>
+      <span class="hljs-built_in">console</span>.warn <span class="hljs-string">"backbone-scrolling-site: Couldn't bind events to view named <span class="hljs-subst">#{<span class="hljs-property">@options</span>.pageName}</span>"</span>
+
+    Q.fcall( <span class="hljs-function">=&gt;</span>
+      deferred = Q.defer()
+      <span class="hljs-property">@render</span>(deferred.resolve)
+      deferred
+    ).<span class="hljs-keyword">then</span>( <span class="hljs-function">=&gt;</span>
+      deferred = Q.defer()
+      <span class="hljs-property">@afterRender</span>(deferred.resolve)
+      deferred
+    ).<span class="hljs-keyword">then</span>( <span class="hljs-function">=&gt;</span>
+      deferred = Q.defer()
+      <span class="hljs-property">@afterReady</span>(deferred.resolve)
+      deferred
+    ).<span class="hljs-keyword">then</span>( <span class="hljs-function">=&gt;</span>
+      deferred = Q.defer()
+      <span class="hljs-property">@cleanup</span>(deferred.resolve)
+      deferred
+    )</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>Render the HTML, and triggers the “rendered” event</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">render</span>: <span class="hljs-function"><span class="hljs-params">(done)</span> -&gt;</span>
+    <span class="hljs-property">@rendered</span> = <span class="hljs-literal">true</span>
+    done()</pre></div></div>
             
         </li>
         
@@ -236,13 +257,15 @@ from the controller, as well as navigation events for this view</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-11">&#182;</a>
               </div>
-              <p>Render the HTML, and triggers the “rendered” event</p>
+              <p>Called when the HTML has been redered,
+and when the section is ready to be displayed</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">render</span>: <span class="hljs-function">-&gt;</span>
-    <span class="hljs-property">@rendered</span> = <span class="hljs-literal">true</span>
-    <span class="hljs-property">@trigger</span> <span class="hljs-string">"rendered"</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">afterRender</span>: <span class="hljs-function"><span class="hljs-params">(done)</span> -&gt;</span>
+    <span class="hljs-property">@ready</span> = <span class="hljs-literal">true</span>
+    <span class="hljs-property">@sendNotification</span> <span class="hljs-string">"sectionReady"</span>, <span class="hljs-property">@options</span>.pageName
+    done()</pre></div></div>
             
         </li>
         
@@ -253,15 +276,12 @@ from the controller, as well as navigation events for this view</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-12">&#182;</a>
               </div>
-              <p>Called when the HTML has been redered,
-and when the section is ready to be displayed</p>
+              <p>Called when the section is ready to be displayed</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">afterRender</span>: <span class="hljs-function">-&gt;</span>
-    <span class="hljs-property">@ready</span> = <span class="hljs-literal">true</span>
-    <span class="hljs-property">@sendNotification</span> <span class="hljs-string">"sectionReady"</span>, <span class="hljs-property">@options</span>.pageName
-    <span class="hljs-property">@afterReady</span>()</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">afterReady</span>: <span class="hljs-function"><span class="hljs-params">(done)</span> -&gt;</span>
+    done()</pre></div></div>
             
         </li>
         
@@ -272,12 +292,14 @@ and when the section is ready to be displayed</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>Called when the section is ready to be displayed</p>
+              <p>Removes event handlers that are only used in the initialization process</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">afterReady</span>: <span class="hljs-function">-&gt;</span>
-    <span class="hljs-property">@cleanup</span>()</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">cleanup</span>: <span class="hljs-function"><span class="hljs-params">(done)</span> -&gt;</span>
+    <span class="hljs-property">@off</span> <span class="hljs-string">"rendered"</span>
+    <span class="hljs-property">@off</span> <span class="hljs-string">"sectionReady"</span>
+    done()</pre></div></div>
             
         </li>
         
@@ -288,23 +310,6 @@ and when the section is ready to be displayed</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-14">&#182;</a>
               </div>
-              <p>Removes event handlers that are only used in the initialization process</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">cleanup</span>: <span class="hljs-function">-&gt;</span>
-    <span class="hljs-property">@off</span> <span class="hljs-string">"rendered"</span>
-    <span class="hljs-property">@off</span> <span class="hljs-string">"sectionReady"</span></pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-15">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-15">&#182;</a>
-              </div>
               <p>Called when the appLoaded event is received.</p>
 
             </div>
@@ -314,11 +319,11 @@ and when the section is ready to be displayed</p>
         </li>
         
         
-        <li id="section-16">
+        <li id="section-15">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-16">&#182;</a>
+                <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
               <p>Dispatches a namespaced event notification to the controller.</p>
 
@@ -332,11 +337,11 @@ and when the section is ready to be displayed</p>
         </li>
         
         
-        <li id="section-17">
+        <li id="section-16">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-17">&#182;</a>
+                <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
               <p>Sends the navigate event to the global notifier.</p>
 
@@ -348,11 +353,11 @@ and when the section is ready to be displayed</p>
         </li>
         
         
-        <li id="section-18">
+        <li id="section-17">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-18">&#182;</a>
+                <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
               <p>Receives the global navigation event.</p>
 
@@ -364,11 +369,11 @@ and when the section is ready to be displayed</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-18">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-18">&#182;</a>
               </div>
               <p>Parses a requested url and returns its parts</p>
 
