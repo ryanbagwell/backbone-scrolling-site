@@ -13,6 +13,7 @@ First, declare the dependencies
     _.mixin _.str.exports()
     Base = require './base'
     Backbone = require "backbone"
+    Q = require 'q'
 
     module.exports = class SinglePageScrollingView extends Backbone.View
 
@@ -43,10 +44,6 @@ Initialize the view.
 
         super(options)
 
-Call 'afterRender()' when the rendered event is triggered
-
-        @.on 'rendered', _.bind(@afterRender, @)
-
         try
 
 Set the initial value of currentResolution
@@ -68,31 +65,50 @@ from the controller, as well as navigation events for this view
         catch e
           console.warn "backbone-scrolling-site: Couldn't bind events to view named #{@options.pageName}"
 
+        Q.fcall( =>
+          deferred = Q.defer()
+          @render(deferred.resolve)
+          deferred
+        ).then( =>
+          deferred = Q.defer()
+          @afterRender(deferred.resolve)
+          deferred
+        ).then( =>
+          deferred = Q.defer()
+          @afterReady(deferred.resolve)
+          deferred
+        ).then( =>
+          deferred = Q.defer()
+          @cleanup(deferred.resolve)
+          deferred
+        )
+
 Render the HTML, and triggers the "rendered" event
 
-      render: ->
+      render: (done) ->
         @rendered = true
-        @trigger "rendered"
+        done()
 
 
 Called when the HTML has been redered,
 and when the section is ready to be displayed
 
-      afterRender: ->
+      afterRender: (done) ->
         @ready = true
         @sendNotification "sectionReady", @options.pageName
-        @afterReady()
+        done()
 
 Called when the section is ready to be displayed
 
-      afterReady: ->
-        @cleanup()
+      afterReady: (done) ->
+        done()
 
 Removes event handlers that are only used in the initialization process
 
-      cleanup: ->
+      cleanup: (done) ->
         @off "rendered"
         @off "sectionReady"
+        done()
 
 Called when the appLoaded event is received.
 

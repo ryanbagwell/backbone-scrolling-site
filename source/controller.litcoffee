@@ -103,7 +103,7 @@ Merge our options with the defaultOptions
 
         @options = _.extend {}, @defaultOptions, options
 
-        @[name] = _.bind(method, @) for name, method of Base
+        @[name] = method.bind(@) for name, method of Base
 
         super(options)
 
@@ -269,9 +269,6 @@ Mock a view instance object if a view function wasn't specified.
                 el: section.el
 
         view = @sections[name].instance = new section.view(opts)
-
-        view.render()
-
 
 Checks if all of the sections have reached the
 'ready' phase of the loading process
