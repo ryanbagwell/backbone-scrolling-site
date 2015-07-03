@@ -78,7 +78,7 @@ var ScrollingSite =
 	
 	_.mixin(_.str.exports());
 	
-	Base = __webpack_require__(3);
+	Base = __webpack_require__(4);
 	
 	Backbone = __webpack_require__(10);
 	
@@ -214,6 +214,27 @@ var ScrollingSite =
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
+	Array.prototype.unique = function() {
+	  var i, key, output, ref, results, value;
+	  output = {};
+	  for (key = i = 0, ref = this.length; 0 <= ref ? i < ref : i > ref; key = 0 <= ref ? ++i : --i) {
+	    output[this[key]] = this[key];
+	  }
+	  results = [];
+	  for (key in output) {
+	    value = output[key];
+	    results.push(value);
+	  }
+	  return results;
+	};
+	
+	module.exports = Array;
+
+
+/***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var _s;
 	
 	_s = __webpack_require__(7);
@@ -253,87 +274,7 @@ var ScrollingSite =
 
 
 /***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
-	Array.prototype.unique = function() {
-	  var i, key, output, ref, results, value;
-	  output = {};
-	  for (key = i = 0, ref = this.length; 0 <= ref ? i < ref : i > ref; key = 0 <= ref ? ++i : --i) {
-	    output[this[key]] = this[key];
-	  }
-	  results = [];
-	  for (key in output) {
-	    value = output[key];
-	    results.push(value);
-	  }
-	  return results;
-	};
-	
-	module.exports = Array;
-
-
-/***/ },
 /* 5 */
-/***/ function(module, exports, __webpack_require__) {
-
-	
-	/**
-	 * Module dependencies.
-	 */
-	
-	var now = __webpack_require__(77);
-	
-	/**
-	 * Returns a function, that, as long as it continues to be invoked, will not
-	 * be triggered. The function will be called after it stops being called for
-	 * N milliseconds. If `immediate` is passed, trigger the function on the
-	 * leading edge, instead of the trailing.
-	 *
-	 * @source underscore.js
-	 * @see http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
-	 * @param {Function} function to wrap
-	 * @param {Number} timeout in ms (`100`)
-	 * @param {Boolean} whether to execute at the beginning (`false`)
-	 * @api public
-	 */
-	
-	module.exports = function debounce(func, wait, immediate){
-	  var timeout, args, context, timestamp, result;
-	  if (null == wait) wait = 100;
-	
-	  function later() {
-	    var last = now() - timestamp;
-	
-	    if (last < wait && last > 0) {
-	      timeout = setTimeout(later, wait - last);
-	    } else {
-	      timeout = null;
-	      if (!immediate) {
-	        result = func.apply(context, args);
-	        if (!timeout) context = args = null;
-	      }
-	    }
-	  };
-	
-	  return function debounced() {
-	    context = this;
-	    args = arguments;
-	    timestamp = now();
-	    var callNow = immediate && !timeout;
-	    if (!timeout) timeout = setTimeout(later, wait);
-	    if (callNow) {
-	      result = func.apply(context, args);
-	      context = args = null;
-	    }
-	
-	    return result;
-	  };
-	};
-
-
-/***/ },
-/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -535,7 +476,66 @@ var ScrollingSite =
 			// AMD requirement
 			return $scrollTo;
 		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(76)));
+	}(__webpack_require__(78)));
+
+
+/***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/**
+	 * Module dependencies.
+	 */
+	
+	var now = __webpack_require__(79);
+	
+	/**
+	 * Returns a function, that, as long as it continues to be invoked, will not
+	 * be triggered. The function will be called after it stops being called for
+	 * N milliseconds. If `immediate` is passed, trigger the function on the
+	 * leading edge, instead of the trailing.
+	 *
+	 * @source underscore.js
+	 * @see http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
+	 * @param {Function} function to wrap
+	 * @param {Number} timeout in ms (`100`)
+	 * @param {Boolean} whether to execute at the beginning (`false`)
+	 * @api public
+	 */
+	
+	module.exports = function debounce(func, wait, immediate){
+	  var timeout, args, context, timestamp, result;
+	  if (null == wait) wait = 100;
+	
+	  function later() {
+	    var last = now() - timestamp;
+	
+	    if (last < wait && last > 0) {
+	      timeout = setTimeout(later, wait - last);
+	    } else {
+	      timeout = null;
+	      if (!immediate) {
+	        result = func.apply(context, args);
+	        if (!timeout) context = args = null;
+	      }
+	    }
+	  };
+	
+	  return function debounced() {
+	    context = this;
+	    args = arguments;
+	    timestamp = now();
+	    var callNow = immediate && !timeout;
+	    if (!timeout) timeout = setTimeout(later, wait);
+	    if (callNow) {
+	      result = func.apply(context, args);
+	      context = args = null;
+	    }
+	
+	    return result;
+	  };
+	};
 
 
 /***/ },
@@ -569,16 +569,16 @@ var ScrollingSite =
 	s.count            = __webpack_require__(24);
 	s.chars            = __webpack_require__(25);
 	s.swapCase         = __webpack_require__(26);
-	s.escapeHTML       = __webpack_require__(36);
-	s.unescapeHTML     = __webpack_require__(27);
-	s.splice           = __webpack_require__(28);
-	s.insert           = __webpack_require__(29);
-	s.replaceAll       = __webpack_require__(30);
-	s.include          = __webpack_require__(31);
-	s.join             = __webpack_require__(32);
-	s.lines            = __webpack_require__(33);
-	s.dedent           = __webpack_require__(34);
-	s.reverse          = __webpack_require__(35);
+	s.escapeHTML       = __webpack_require__(27);
+	s.unescapeHTML     = __webpack_require__(28);
+	s.splice           = __webpack_require__(29);
+	s.insert           = __webpack_require__(30);
+	s.replaceAll       = __webpack_require__(31);
+	s.include          = __webpack_require__(32);
+	s.join             = __webpack_require__(33);
+	s.lines            = __webpack_require__(34);
+	s.dedent           = __webpack_require__(35);
+	s.reverse          = __webpack_require__(36);
 	s.startsWith       = __webpack_require__(37);
 	s.endsWith         = __webpack_require__(38);
 	s.pred             = __webpack_require__(39);
@@ -592,29 +592,29 @@ var ScrollingSite =
 	s.ltrim            = __webpack_require__(47);
 	s.rtrim            = __webpack_require__(48);
 	s.truncate         = __webpack_require__(49);
-	s.prune            = __webpack_require__(51);
-	s.words            = __webpack_require__(50);
+	s.prune            = __webpack_require__(50);
+	s.words            = __webpack_require__(51);
 	s.pad              = __webpack_require__(52);
 	s.lpad             = __webpack_require__(53);
 	s.rpad             = __webpack_require__(54);
 	s.lrpad            = __webpack_require__(55);
-	s.sprintf          = __webpack_require__(64);
-	s.vsprintf         = __webpack_require__(56);
-	s.toNumber         = __webpack_require__(57);
-	s.numberFormat     = __webpack_require__(58);
-	s.strRight         = __webpack_require__(59);
-	s.strRightBack     = __webpack_require__(60);
-	s.strLeft          = __webpack_require__(61);
-	s.strLeftBack      = __webpack_require__(62);
-	s.toSentence       = __webpack_require__(63);
+	s.sprintf          = __webpack_require__(56);
+	s.vsprintf         = __webpack_require__(57);
+	s.toNumber         = __webpack_require__(58);
+	s.numberFormat     = __webpack_require__(59);
+	s.strRight         = __webpack_require__(60);
+	s.strRightBack     = __webpack_require__(61);
+	s.strLeft          = __webpack_require__(62);
+	s.strLeftBack      = __webpack_require__(63);
+	s.toSentence       = __webpack_require__(64);
 	s.toSentenceSerial = __webpack_require__(65);
 	s.slugify          = __webpack_require__(66);
 	s.surround         = __webpack_require__(67);
 	s.quote            = __webpack_require__(68);
 	s.unquote          = __webpack_require__(69);
 	s.repeat           = __webpack_require__(70);
-	s.naturalCmp       = __webpack_require__(72);
-	s.levenshtein      = __webpack_require__(71);
+	s.naturalCmp       = __webpack_require__(71);
+	s.levenshtein      = __webpack_require__(72);
 	s.toBoolean        = __webpack_require__(73);
 	s.exports          = __webpack_require__(74);
 	s.escapeRegExp     = __webpack_require__(75);
@@ -2756,7 +2756,7 @@ var ScrollingSite =
 	
 	});
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(85), __webpack_require__(84).setImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(77), __webpack_require__(76).setImmediate))
 
 /***/ },
 /* 10 */
@@ -15174,7 +15174,7 @@ var ScrollingSite =
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
+	var makeString = __webpack_require__(80);
 	
 	module.exports = function isBlank(str) {
 	  return (/^\s*$/).test(makeString(str));
@@ -15185,7 +15185,7 @@ var ScrollingSite =
 /* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
+	var makeString = __webpack_require__(80);
 	
 	module.exports = function stripTags(str) {
 	  return makeString(str).replace(/<\/?[^>]+>/g, '');
@@ -15196,7 +15196,7 @@ var ScrollingSite =
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
+	var makeString = __webpack_require__(80);
 	
 	module.exports = function capitalize(str) {
 	  str = makeString(str);
@@ -15208,7 +15208,7 @@ var ScrollingSite =
 /* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
+	var makeString = __webpack_require__(80);
 	
 	module.exports = function decapitalize(str) {
 	  str = makeString(str);
@@ -15232,8 +15232,8 @@ var ScrollingSite =
 /* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
-	var defaultToWhiteSpace = __webpack_require__(79);
+	var makeString = __webpack_require__(80);
+	var defaultToWhiteSpace = __webpack_require__(81);
 	var nativeTrim = String.prototype.trim;
 	
 	module.exports = function trim(str, characters) {
@@ -15259,7 +15259,7 @@ var ScrollingSite =
 /* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
+	var makeString = __webpack_require__(80);
 	
 	module.exports = function(str, substr) {
 	  str = makeString(str);
@@ -15286,7 +15286,7 @@ var ScrollingSite =
 /* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
+	var makeString = __webpack_require__(80);
 	
 	module.exports = function chars(str) {
 	  return makeString(str).split('');
@@ -15297,7 +15297,7 @@ var ScrollingSite =
 /* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
+	var makeString = __webpack_require__(80);
 	
 	module.exports = function swapCase(str) {
 	  return makeString(str).replace(/\S/g, function(c) {
@@ -15310,8 +15310,26 @@ var ScrollingSite =
 /* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
-	var escapeChars = __webpack_require__(80);
+	var makeString = __webpack_require__(80);
+	var escapeChars = __webpack_require__(82);
+	var reversedEscapeChars = {};
+	
+	for(var key in escapeChars) reversedEscapeChars[escapeChars[key]] = key;
+	reversedEscapeChars["'"] = '#39';
+	
+	module.exports = function escapeHTML(str) {
+	  return makeString(str).replace(/[&<>"']/g, function(m) {
+	    return '&' + reversedEscapeChars[m] + ';';
+	  });
+	};
+
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(80);
+	var escapeChars = __webpack_require__(82);
 	
 	module.exports = function unescapeHTML(str) {
 	  return makeString(str).replace(/\&([^;]+);/g, function(entity, entityCode) {
@@ -15331,7 +15349,7 @@ var ScrollingSite =
 
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var chars = __webpack_require__(25);
@@ -15344,10 +15362,10 @@ var ScrollingSite =
 
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var splice = __webpack_require__(28);
+	var splice = __webpack_require__(29);
 	
 	module.exports = function insert(str, i, substr) {
 	  return splice(str, i, 0, substr);
@@ -15355,10 +15373,10 @@ var ScrollingSite =
 
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
+	var makeString = __webpack_require__(80);
 	
 	module.exports = function replaceAll(str, find, replace, ignorecase) {
 	  var flags = (ignorecase === true)?'gi':'g';
@@ -15369,10 +15387,10 @@ var ScrollingSite =
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
+	var makeString = __webpack_require__(80);
 	
 	module.exports = function include(str, needle) {
 	  if (needle === '') return true;
@@ -15381,10 +15399,10 @@ var ScrollingSite =
 
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
+	var makeString = __webpack_require__(80);
 	var slice = [].slice;
 	
 	module.exports = function join() {
@@ -15396,7 +15414,7 @@ var ScrollingSite =
 
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function lines(str) {
@@ -15406,10 +15424,10 @@ var ScrollingSite =
 
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
+	var makeString = __webpack_require__(80);
 	
 	function getIndent(str) {
 	  var matches = str.match(/^[\s\\t]*/gm);
@@ -15440,7 +15458,7 @@ var ScrollingSite =
 
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var chars = __webpack_require__(25);
@@ -15451,29 +15469,11 @@ var ScrollingSite =
 
 
 /***/ },
-/* 36 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(78);
-	var escapeChars = __webpack_require__(80);
-	var reversedEscapeChars = {};
-	
-	for(var key in escapeChars) reversedEscapeChars[escapeChars[key]] = key;
-	reversedEscapeChars["'"] = '#39';
-	
-	module.exports = function escapeHTML(str) {
-	  return makeString(str).replace(/[&<>"']/g, function(m) {
-	    return '&' + reversedEscapeChars[m] + ';';
-	  });
-	};
-
-
-/***/ },
 /* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
-	var toPositive = __webpack_require__(81);
+	var makeString = __webpack_require__(80);
+	var toPositive = __webpack_require__(83);
 	
 	module.exports = function startsWith(str, starts, position) {
 	  str = makeString(str);
@@ -15487,8 +15487,8 @@ var ScrollingSite =
 /* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
-	var toPositive = __webpack_require__(81);
+	var makeString = __webpack_require__(80);
+	var toPositive = __webpack_require__(83);
 	
 	module.exports = function endsWith(str, ends, position) {
 	  str = makeString(str);
@@ -15506,7 +15506,7 @@ var ScrollingSite =
 /* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var adjacent = __webpack_require__(82);
+	var adjacent = __webpack_require__(84);
 	
 	module.exports = function succ(str) {
 	  return adjacent(str, -1);
@@ -15517,7 +15517,7 @@ var ScrollingSite =
 /* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var adjacent = __webpack_require__(82);
+	var adjacent = __webpack_require__(84);
 	
 	module.exports = function succ(str) {
 	  return adjacent(str, 1);
@@ -15528,7 +15528,7 @@ var ScrollingSite =
 /* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
+	var makeString = __webpack_require__(80);
 	
 	module.exports = function titleize(str) {
 	  return makeString(str).toLowerCase().replace(/(?:^|\s|-)\S/g, function(c) {
@@ -15572,15 +15572,15 @@ var ScrollingSite =
 	
 	_s = __webpack_require__(7);
 	
-	debounce = __webpack_require__(5);
+	debounce = __webpack_require__(6);
 	
-	Array = __webpack_require__(4);
+	Array = __webpack_require__(3);
 	
 	Backbone = __webpack_require__(10);
 	
-	Base = __webpack_require__(3);
+	Base = __webpack_require__(4);
 	
-	__webpack_require__(6);
+	__webpack_require__(5);
 	
 	xtend = __webpack_require__(8);
 	
@@ -15704,6 +15704,7 @@ var ScrollingSite =
 	      scroll: true
 	    }, options);
 	    route = _s.ltrim(route, '/');
+	    console.log(route);
 	    SinglePageScrollingController.__super__.navigate.call(this, route, options);
 	    this.updatePageMeta(route);
 	    section = this._fragmentToSection(route);
@@ -15723,6 +15724,7 @@ var ScrollingSite =
 	
 	  SinglePageScrollingController.prototype.scrollToSection = function(section) {
 	    var defaultOptions, options;
+	    console.log('scrollToSection');
 	    this.scrolling = true;
 	    defaultOptions = {
 	      onAfter: this.afterScroll.bind(this)
@@ -15923,10 +15925,11 @@ var ScrollingSite =
 	  };
 	
 	  SinglePageScrollingController.prototype.bindUrlsToRoutes = function(selectors) {
-	    var a, href, section;
+	    var a, handler, href, section;
 	    if (selectors == null) {
 	      selectors = null;
 	    }
+	    console.log('bindUrlsToRoutes');
 	    if (selectors === null) {
 	      selectors = ((function() {
 	        var i, len, ref, results;
@@ -15950,12 +15953,14 @@ var ScrollingSite =
 	        return results;
 	      }).call(this)).unique().join(',');
 	    }
-	    return $('body').on('click', selectors, (function(_this) {
+	    handler = (function(_this) {
 	      return function(e) {
 	        e.preventDefault();
 	        return _this.navigate($(e.currentTarget).attr('href'));
 	      };
-	    })(this));
+	    })(this);
+	    $('body').off('click', selectors);
+	    return $('body').on('click', selectors, handler);
 	  };
 	
 	  return SinglePageScrollingController;
@@ -15982,7 +15987,7 @@ var ScrollingSite =
 
 	var capitalize = __webpack_require__(19);
 	var camelize = __webpack_require__(42);
-	var makeString = __webpack_require__(78);
+	var makeString = __webpack_require__(80);
 	
 	module.exports = function classify(str) {
 	  str = makeString(str);
@@ -16007,8 +16012,8 @@ var ScrollingSite =
 /* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
-	var defaultToWhiteSpace = __webpack_require__(79);
+	var makeString = __webpack_require__(80);
+	var defaultToWhiteSpace = __webpack_require__(81);
 	var nativeTrimLeft = String.prototype.trimLeft;
 	
 	module.exports = function ltrim(str, characters) {
@@ -16023,8 +16028,8 @@ var ScrollingSite =
 /* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
-	var defaultToWhiteSpace = __webpack_require__(79);
+	var makeString = __webpack_require__(80);
+	var defaultToWhiteSpace = __webpack_require__(81);
 	var nativeTrimRight = String.prototype.trimRight;
 	
 	module.exports = function rtrim(str, characters) {
@@ -16039,7 +16044,7 @@ var ScrollingSite =
 /* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
+	var makeString = __webpack_require__(80);
 	
 	module.exports = function truncate(str, length, truncateStr) {
 	  str = makeString(str);
@@ -16053,25 +16058,12 @@ var ScrollingSite =
 /* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isBlank = __webpack_require__(17);
-	var trim = __webpack_require__(22);
-	
-	module.exports = function words(str, delimiter) {
-	  if (isBlank(str)) return [];
-	  return trim(str, delimiter).split(delimiter || /\s+/);
-	};
-
-
-/***/ },
-/* 51 */
-/***/ function(module, exports, __webpack_require__) {
-
 	/**
 	 * _s.prune: a more elegant version of truncate
 	 * prune extra chars, never leaving a half-chopped word.
 	 * @author github.com/rwz
 	 */
-	var makeString = __webpack_require__(78);
+	var makeString = __webpack_require__(80);
 	var rtrim = __webpack_require__(48);
 	
 	module.exports = function prune(str, length, pruneStr) {
@@ -16096,11 +16088,24 @@ var ScrollingSite =
 
 
 /***/ },
+/* 51 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var isBlank = __webpack_require__(17);
+	var trim = __webpack_require__(22);
+	
+	module.exports = function words(str, delimiter) {
+	  if (isBlank(str)) return [];
+	  return trim(str, delimiter).split(delimiter || /\s+/);
+	};
+
+
+/***/ },
 /* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
-	var strRepeat = __webpack_require__(83);
+	var makeString = __webpack_require__(80);
+	var strRepeat = __webpack_require__(85);
 	
 	module.exports = function pad(str, length, padStr, type) {
 	  str = makeString(str);
@@ -16164,132 +16169,12 @@ var ScrollingSite =
 /* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var sprintf = __webpack_require__(64);
-	
-	module.exports = function vsprintf(fmt, argv) {
-	  argv.unshift(fmt);
-	  return sprintf.apply(null, argv);
-	};
-
-
-/***/ },
-/* 57 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var trim = __webpack_require__(22);
-	var parseNumber = function(source) {
-	  return source * 1 || 0;
-	};
-	
-	module.exports = function toNumber(num, precision) {
-	  if (num == null) return 0;
-	  var factor = Math.pow(10, isFinite(precision) ? precision : 0);
-	  return Math.round(num * factor) / factor;
-	};
-
-
-/***/ },
-/* 58 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function numberFormat(number, dec, dsep, tsep) {
-	  if (isNaN(number) || number == null) return '';
-	
-	  number = number.toFixed(~~dec);
-	  tsep = typeof tsep == 'string' ? tsep : ',';
-	
-	  var parts = number.split('.'),
-	    fnums = parts[0],
-	    decimals = parts[1] ? (dsep || '.') + parts[1] : '';
-	
-	  return fnums.replace(/(\d)(?=(?:\d{3})+$)/g, '$1' + tsep) + decimals;
-	};
-
-
-/***/ },
-/* 59 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(78);
-	
-	module.exports = function strRight(str, sep) {
-	  str = makeString(str);
-	  sep = makeString(sep);
-	  var pos = !sep ? -1 : str.indexOf(sep);
-	  return~ pos ? str.slice(pos + sep.length, str.length) : str;
-	};
-
-
-/***/ },
-/* 60 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(78);
-	
-	module.exports = function strRightBack(str, sep) {
-	  str = makeString(str);
-	  sep = makeString(sep);
-	  var pos = !sep ? -1 : str.lastIndexOf(sep);
-	  return~ pos ? str.slice(pos + sep.length, str.length) : str;
-	};
-
-
-/***/ },
-/* 61 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(78);
-	
-	module.exports = function strLeft(str, sep) {
-	  str = makeString(str);
-	  sep = makeString(sep);
-	  var pos = !sep ? -1 : str.indexOf(sep);
-	  return~ pos ? str.slice(0, pos) : str;
-	};
-
-
-/***/ },
-/* 62 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(78);
-	
-	module.exports = function strLeftBack(str, sep) {
-	  str = makeString(str);
-	  sep = makeString(sep);
-	  var pos = str.lastIndexOf(sep);
-	  return~ pos ? str.slice(0, pos) : str;
-	};
-
-
-/***/ },
-/* 63 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var rtrim = __webpack_require__(48);
-	
-	module.exports = function toSentence(array, separator, lastSeparator, serial) {
-	  separator = separator || ', ';
-	  lastSeparator = lastSeparator || ' and ';
-	  var a = array.slice(),
-	    lastMember = a.pop();
-	
-	  if (array.length > 2 && serial) lastSeparator = rtrim(separator) + lastSeparator;
-	
-	  return a.length ? a.join(separator) + lastSeparator + lastMember : lastMember;
-	};
-
-
-/***/ },
-/* 64 */
-/***/ function(module, exports, __webpack_require__) {
-
 	// sprintf() for JavaScript 0.7-beta1
 	// http://www.diveintojavascript.com/projects/javascript-sprintf
 	//
 	// Copyright (c) Alexandru Marasteanu <alexaholic [at) gmail (dot] com>
 	// All rights reserved.
-	var strRepeat = __webpack_require__(83);
+	var strRepeat = __webpack_require__(85);
 	var toString = Object.prototype.toString;
 	var sprintf = (function() {
 	  function get_type(variable) {
@@ -16411,10 +16296,130 @@ var ScrollingSite =
 
 
 /***/ },
+/* 57 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var sprintf = __webpack_require__(56);
+	
+	module.exports = function vsprintf(fmt, argv) {
+	  argv.unshift(fmt);
+	  return sprintf.apply(null, argv);
+	};
+
+
+/***/ },
+/* 58 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var trim = __webpack_require__(22);
+	var parseNumber = function(source) {
+	  return source * 1 || 0;
+	};
+	
+	module.exports = function toNumber(num, precision) {
+	  if (num == null) return 0;
+	  var factor = Math.pow(10, isFinite(precision) ? precision : 0);
+	  return Math.round(num * factor) / factor;
+	};
+
+
+/***/ },
+/* 59 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function numberFormat(number, dec, dsep, tsep) {
+	  if (isNaN(number) || number == null) return '';
+	
+	  number = number.toFixed(~~dec);
+	  tsep = typeof tsep == 'string' ? tsep : ',';
+	
+	  var parts = number.split('.'),
+	    fnums = parts[0],
+	    decimals = parts[1] ? (dsep || '.') + parts[1] : '';
+	
+	  return fnums.replace(/(\d)(?=(?:\d{3})+$)/g, '$1' + tsep) + decimals;
+	};
+
+
+/***/ },
+/* 60 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(80);
+	
+	module.exports = function strRight(str, sep) {
+	  str = makeString(str);
+	  sep = makeString(sep);
+	  var pos = !sep ? -1 : str.indexOf(sep);
+	  return~ pos ? str.slice(pos + sep.length, str.length) : str;
+	};
+
+
+/***/ },
+/* 61 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(80);
+	
+	module.exports = function strRightBack(str, sep) {
+	  str = makeString(str);
+	  sep = makeString(sep);
+	  var pos = !sep ? -1 : str.lastIndexOf(sep);
+	  return~ pos ? str.slice(pos + sep.length, str.length) : str;
+	};
+
+
+/***/ },
+/* 62 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(80);
+	
+	module.exports = function strLeft(str, sep) {
+	  str = makeString(str);
+	  sep = makeString(sep);
+	  var pos = !sep ? -1 : str.indexOf(sep);
+	  return~ pos ? str.slice(0, pos) : str;
+	};
+
+
+/***/ },
+/* 63 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(80);
+	
+	module.exports = function strLeftBack(str, sep) {
+	  str = makeString(str);
+	  sep = makeString(sep);
+	  var pos = str.lastIndexOf(sep);
+	  return~ pos ? str.slice(0, pos) : str;
+	};
+
+
+/***/ },
+/* 64 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var rtrim = __webpack_require__(48);
+	
+	module.exports = function toSentence(array, separator, lastSeparator, serial) {
+	  separator = separator || ', ';
+	  lastSeparator = lastSeparator || ' and ';
+	  var a = array.slice(),
+	    lastMember = a.pop();
+	
+	  if (array.length > 2 && serial) lastSeparator = rtrim(separator) + lastSeparator;
+	
+	  return a.length ? a.join(separator) + lastSeparator + lastMember : lastMember;
+	};
+
+
+/***/ },
 /* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var toSentence = __webpack_require__(63);
+	var toSentence = __webpack_require__(64);
 	
 	module.exports = function toSentenceSerial(array, sep, lastSep) {
 	  return toSentence(array, sep, lastSep, true);
@@ -16425,8 +16430,8 @@ var ScrollingSite =
 /* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
-	var defaultToWhiteSpace = __webpack_require__(79);
+	var makeString = __webpack_require__(80);
+	var defaultToWhiteSpace = __webpack_require__(81);
 	var trim = __webpack_require__(22);
 	var dasherize = __webpack_require__(44);
 	
@@ -16480,8 +16485,8 @@ var ScrollingSite =
 /* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
-	var strRepeat = __webpack_require__(83);
+	var makeString = __webpack_require__(80);
+	var strRepeat = __webpack_require__(85);
 	
 	module.exports = function repeat(str, qty, separator) {
 	  str = makeString(str);
@@ -16499,37 +16504,6 @@ var ScrollingSite =
 
 /***/ },
 /* 71 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(78);
-	
-	module.exports = function levenshtein(str1, str2) {
-	  str1 = makeString(str1);
-	  str2 = makeString(str2);
-	
-	  var current = [],
-	    prev, value;
-	
-	  for (var i = 0; i <= str2.length; i++)
-	    for (var j = 0; j <= str1.length; j++) {
-	      if (i && j)
-	        if (str1.charAt(j - 1) === str2.charAt(i - 1))
-	          value = prev;
-	        else
-	          value = Math.min(current[j], current[j - 1], prev) + 1;
-	        else
-	          value = i + j;
-	
-	      prev = current[j];
-	      current[j] = value;
-	    }
-	
-	  return current.pop();
-	};
-
-
-/***/ },
-/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function naturalCmp(str1, str2) {
@@ -16560,6 +16534,37 @@ var ScrollingSite =
 	    return tokens1.length - tokens2.length;
 	
 	  return str1 < str2 ? -1 : 1;
+	};
+
+
+/***/ },
+/* 72 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(80);
+	
+	module.exports = function levenshtein(str1, str2) {
+	  str1 = makeString(str1);
+	  str2 = makeString(str2);
+	
+	  var current = [],
+	    prev, value;
+	
+	  for (var i = 0; i <= str2.length; i++)
+	    for (var j = 0; j <= str1.length; j++) {
+	      if (i && j)
+	        if (str1.charAt(j - 1) === str2.charAt(i - 1))
+	          value = prev;
+	        else
+	          value = Math.min(current[j], current[j - 1], prev) + 1;
+	        else
+	          value = i + j;
+	
+	      prev = current[j];
+	      current[j] = value;
+	    }
+	
+	  return current.pop();
 	};
 
 
@@ -16609,7 +16614,7 @@ var ScrollingSite =
 /* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(78);
+	var makeString = __webpack_require__(80);
 	
 	module.exports = function escapeRegExp(str) {
 	  return makeString(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
@@ -16620,108 +16625,7 @@ var ScrollingSite =
 /* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = function() { throw new Error("define cannot be used indirect"); };
-
-
-/***/ },
-/* 77 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = Date.now || now
-	
-	function now() {
-	    return new Date().getTime()
-	}
-
-
-/***/ },
-/* 78 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Ensure some object is a coerced to a string
-	 **/
-	module.exports = function makeString(object) {
-	  if (object == null) return '';
-	  return '' + object;
-	};
-
-
-/***/ },
-/* 79 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var escapeRegExp = __webpack_require__(75);
-	
-	module.exports = function defaultToWhiteSpace(characters) {
-	  if (characters == null)
-	    return '\\s';
-	  else if (characters.source)
-	    return characters.source;
-	  else
-	    return '[' + escapeRegExp(characters) + ']';
-	};
-
-
-/***/ },
-/* 80 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var escapeChars = {
-	  lt: '<',
-	  gt: '>',
-	  quot: '"',
-	  amp: '&',
-	  apos: "'"
-	};
-	
-	module.exports = escapeChars;
-
-
-/***/ },
-/* 81 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function toPositive(number) {
-	  return number < 0 ? 0 : (+number || 0);
-	};
-
-
-/***/ },
-/* 82 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(78);
-	
-	module.exports = function adjacent(str, direction) {
-	  str = makeString(str);
-	  if (str.length === 0) {
-	    return '';
-	  }
-	  return str.slice(0, -1) + String.fromCharCode(str.charCodeAt(str.length - 1) + direction);
-	};
-
-
-/***/ },
-/* 83 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function strRepeat(str, qty){
-	  if (qty < 1) return '';
-	  var result = '';
-	  while (qty > 0) {
-	    if (qty & 1) result += str;
-	    qty >>= 1, str += str;
-	  }
-	  return result;
-	};
-
-
-/***/ },
-/* 84 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {var nextTick = __webpack_require__(85).nextTick;
+	/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {var nextTick = __webpack_require__(77).nextTick;
 	var apply = Function.prototype.apply;
 	var slice = Array.prototype.slice;
 	var immediateIds = {};
@@ -16797,10 +16701,10 @@ var ScrollingSite =
 	exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate : function(id) {
 	  delete immediateIds[id];
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(84).setImmediate, __webpack_require__(84).clearImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(76).setImmediate, __webpack_require__(76).clearImmediate))
 
 /***/ },
-/* 85 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// shim for using process in browser
@@ -16893,6 +16797,107 @@ var ScrollingSite =
 	    throw new Error('process.chdir is not supported');
 	};
 	process.umask = function() { return 0; };
+
+
+/***/ },
+/* 78 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function() { throw new Error("define cannot be used indirect"); };
+
+
+/***/ },
+/* 79 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = Date.now || now
+	
+	function now() {
+	    return new Date().getTime()
+	}
+
+
+/***/ },
+/* 80 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Ensure some object is a coerced to a string
+	 **/
+	module.exports = function makeString(object) {
+	  if (object == null) return '';
+	  return '' + object;
+	};
+
+
+/***/ },
+/* 81 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var escapeRegExp = __webpack_require__(75);
+	
+	module.exports = function defaultToWhiteSpace(characters) {
+	  if (characters == null)
+	    return '\\s';
+	  else if (characters.source)
+	    return characters.source;
+	  else
+	    return '[' + escapeRegExp(characters) + ']';
+	};
+
+
+/***/ },
+/* 82 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var escapeChars = {
+	  lt: '<',
+	  gt: '>',
+	  quot: '"',
+	  amp: '&',
+	  apos: "'"
+	};
+	
+	module.exports = escapeChars;
+
+
+/***/ },
+/* 83 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function toPositive(number) {
+	  return number < 0 ? 0 : (+number || 0);
+	};
+
+
+/***/ },
+/* 84 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(80);
+	
+	module.exports = function adjacent(str, direction) {
+	  str = makeString(str);
+	  if (str.length === 0) {
+	    return '';
+	  }
+	  return str.slice(0, -1) + String.fromCharCode(str.charCodeAt(str.length - 1) + direction);
+	};
+
+
+/***/ },
+/* 85 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function strRepeat(str, qty){
+	  if (qty < 1) return '';
+	  var result = '';
+	  while (qty > 0) {
+	    if (qty & 1) result += str;
+	    qty >>= 1, str += str;
+	  }
+	  return result;
+	};
 
 
 /***/ }

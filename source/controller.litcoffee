@@ -213,7 +213,6 @@ The navigate function is bound to all clicks on local urls.
 Scrolls the page to the target section.
 
       scrollToSection: (section) ->
-
         @scrolling = true
 
         defaultOptions =
@@ -405,7 +404,6 @@ Updates the page meta data
 Bind all 'a' tags whose href attributes match a section's route
 
       bindUrlsToRoutes: (selectors = null)->
-
         if selectors is null
           selectors = (for a in $('a:not([data-nobind])')
                         href = $(a).attr('href')
@@ -416,9 +414,12 @@ Bind all 'a' tags whose href attributes match a section's route
                         "[href='#{href}']"
                       ).unique().join(',')
 
-        $('body').on 'click', selectors, (e) =>
+        handler = (e) =>
           e.preventDefault()
           @navigate $(e.currentTarget).attr('href')
+
+        $('body').off 'click', selectors
+        $('body').on 'click', selectors, handler
 
 Export the class
 
