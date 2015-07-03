@@ -552,8 +552,6 @@ a responsive breakpoint threshold is crossed</p>
 
     route = _s.ltrim route, <span class="hljs-string">'/'</span>
 
-    <span class="hljs-built_in">console</span>.log route
-
     <span class="hljs-keyword">super</span> route, options
 
     <span class="hljs-property">@updatePageMeta</span> route
@@ -587,7 +585,6 @@ a responsive breakpoint threshold is crossed</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">scrollToSection</span>: <span class="hljs-function"><span class="hljs-params">(section)</span> -&gt;</span>
-    <span class="hljs-built_in">console</span>.log <span class="hljs-string">'scrollToSection'</span>
     <span class="hljs-property">@scrolling</span> = <span class="hljs-literal">true</span>
 
     defaultOptions =
@@ -940,7 +937,6 @@ and the most visible section has changed.</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">bindUrlsToRoutes</span>: <span class="hljs-function"><span class="hljs-params">(selectors = <span class="hljs-literal">null</span>)</span>-&gt;</span>
-    <span class="hljs-built_in">console</span>.log <span class="hljs-string">'bindUrlsToRoutes'</span>
     <span class="hljs-keyword">if</span> selectors <span class="hljs-keyword">is</span> <span class="hljs-literal">null</span>
       selectors = (<span class="hljs-keyword">for</span> a <span class="hljs-keyword">in</span> $(<span class="hljs-string">'a:not([data-nobind])'</span>)
                     href = $(a).attr(<span class="hljs-string">'href'</span>)

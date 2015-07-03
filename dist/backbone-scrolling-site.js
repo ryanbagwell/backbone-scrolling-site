@@ -55,7 +55,7 @@ var ScrollingSite =
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(22);
+	var trim = __webpack_require__(23);
 	
 	module.exports = function underscored(str) {
 	  return trim(str).replace(/([a-z\d])([A-Z]+)/g, '$1_$2').replace(/[-\s]+/g, '_').toLowerCase();
@@ -78,7 +78,7 @@ var ScrollingSite =
 	
 	_.mixin(_.str.exports());
 	
-	Base = __webpack_require__(4);
+	Base = __webpack_require__(3);
 	
 	Backbone = __webpack_require__(10);
 	
@@ -214,27 +214,6 @@ var ScrollingSite =
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	Array.prototype.unique = function() {
-	  var i, key, output, ref, results, value;
-	  output = {};
-	  for (key = i = 0, ref = this.length; 0 <= ref ? i < ref : i > ref; key = 0 <= ref ? ++i : --i) {
-	    output[this[key]] = this[key];
-	  }
-	  results = [];
-	  for (key in output) {
-	    value = output[key];
-	    results.push(value);
-	  }
-	  return results;
-	};
-	
-	module.exports = Array;
-
-
-/***/ },
-/* 4 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var _s;
 	
 	_s = __webpack_require__(7);
@@ -274,7 +253,87 @@ var ScrollingSite =
 
 
 /***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	Array.prototype.unique = function() {
+	  var i, key, output, ref, results, value;
+	  output = {};
+	  for (key = i = 0, ref = this.length; 0 <= ref ? i < ref : i > ref; key = 0 <= ref ? ++i : --i) {
+	    output[this[key]] = this[key];
+	  }
+	  results = [];
+	  for (key in output) {
+	    value = output[key];
+	    results.push(value);
+	  }
+	  return results;
+	};
+	
+	module.exports = Array;
+
+
+/***/ },
 /* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	
+	/**
+	 * Module dependencies.
+	 */
+	
+	var now = __webpack_require__(76);
+	
+	/**
+	 * Returns a function, that, as long as it continues to be invoked, will not
+	 * be triggered. The function will be called after it stops being called for
+	 * N milliseconds. If `immediate` is passed, trigger the function on the
+	 * leading edge, instead of the trailing.
+	 *
+	 * @source underscore.js
+	 * @see http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
+	 * @param {Function} function to wrap
+	 * @param {Number} timeout in ms (`100`)
+	 * @param {Boolean} whether to execute at the beginning (`false`)
+	 * @api public
+	 */
+	
+	module.exports = function debounce(func, wait, immediate){
+	  var timeout, args, context, timestamp, result;
+	  if (null == wait) wait = 100;
+	
+	  function later() {
+	    var last = now() - timestamp;
+	
+	    if (last < wait && last > 0) {
+	      timeout = setTimeout(later, wait - last);
+	    } else {
+	      timeout = null;
+	      if (!immediate) {
+	        result = func.apply(context, args);
+	        if (!timeout) context = args = null;
+	      }
+	    }
+	  };
+	
+	  return function debounced() {
+	    context = this;
+	    args = arguments;
+	    timestamp = now();
+	    var callNow = immediate && !timeout;
+	    if (!timeout) timeout = setTimeout(later, wait);
+	    if (callNow) {
+	      result = func.apply(context, args);
+	      context = args = null;
+	    }
+	
+	    return result;
+	  };
+	};
+
+
+/***/ },
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -476,66 +535,7 @@ var ScrollingSite =
 			// AMD requirement
 			return $scrollTo;
 		}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	}(__webpack_require__(78)));
-
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	
-	/**
-	 * Module dependencies.
-	 */
-	
-	var now = __webpack_require__(79);
-	
-	/**
-	 * Returns a function, that, as long as it continues to be invoked, will not
-	 * be triggered. The function will be called after it stops being called for
-	 * N milliseconds. If `immediate` is passed, trigger the function on the
-	 * leading edge, instead of the trailing.
-	 *
-	 * @source underscore.js
-	 * @see http://unscriptable.com/2009/03/20/debouncing-javascript-methods/
-	 * @param {Function} function to wrap
-	 * @param {Number} timeout in ms (`100`)
-	 * @param {Boolean} whether to execute at the beginning (`false`)
-	 * @api public
-	 */
-	
-	module.exports = function debounce(func, wait, immediate){
-	  var timeout, args, context, timestamp, result;
-	  if (null == wait) wait = 100;
-	
-	  function later() {
-	    var last = now() - timestamp;
-	
-	    if (last < wait && last > 0) {
-	      timeout = setTimeout(later, wait - last);
-	    } else {
-	      timeout = null;
-	      if (!immediate) {
-	        result = func.apply(context, args);
-	        if (!timeout) context = args = null;
-	      }
-	    }
-	  };
-	
-	  return function debounced() {
-	    context = this;
-	    args = arguments;
-	    timestamp = now();
-	    var callNow = immediate && !timeout;
-	    if (!timeout) timeout = setTimeout(later, wait);
-	    if (callNow) {
-	      result = func.apply(context, args);
-	      context = args = null;
-	    }
-	
-	    return result;
-	  };
-	};
+	}(__webpack_require__(77)));
 
 
 /***/ },
@@ -564,8 +564,8 @@ var ScrollingSite =
 	s.capitalize       = __webpack_require__(19);
 	s.decapitalize     = __webpack_require__(20);
 	s.chop             = __webpack_require__(21);
-	s.trim             = __webpack_require__(22);
-	s.clean            = __webpack_require__(23);
+	s.trim             = __webpack_require__(23);
+	s.clean            = __webpack_require__(22);
 	s.count            = __webpack_require__(24);
 	s.chars            = __webpack_require__(25);
 	s.swapCase         = __webpack_require__(26);
@@ -580,11 +580,11 @@ var ScrollingSite =
 	s.dedent           = __webpack_require__(35);
 	s.reverse          = __webpack_require__(36);
 	s.startsWith       = __webpack_require__(37);
-	s.endsWith         = __webpack_require__(38);
-	s.pred             = __webpack_require__(39);
-	s.succ             = __webpack_require__(40);
-	s.titleize         = __webpack_require__(41);
-	s.camelize         = __webpack_require__(42);
+	s.endsWith         = __webpack_require__(40);
+	s.pred             = __webpack_require__(38);
+	s.succ             = __webpack_require__(39);
+	s.titleize         = __webpack_require__(42);
+	s.camelize         = __webpack_require__(41);
 	s.underscored      = __webpack_require__(1);
 	s.dasherize        = __webpack_require__(44);
 	s.classify         = __webpack_require__(45);
@@ -608,14 +608,14 @@ var ScrollingSite =
 	s.strLeftBack      = __webpack_require__(63);
 	s.toSentence       = __webpack_require__(64);
 	s.toSentenceSerial = __webpack_require__(65);
-	s.slugify          = __webpack_require__(66);
-	s.surround         = __webpack_require__(67);
-	s.quote            = __webpack_require__(68);
-	s.unquote          = __webpack_require__(69);
-	s.repeat           = __webpack_require__(70);
-	s.naturalCmp       = __webpack_require__(71);
-	s.levenshtein      = __webpack_require__(72);
-	s.toBoolean        = __webpack_require__(73);
+	s.slugify          = __webpack_require__(73);
+	s.surround         = __webpack_require__(66);
+	s.quote            = __webpack_require__(67);
+	s.unquote          = __webpack_require__(68);
+	s.repeat           = __webpack_require__(69);
+	s.naturalCmp       = __webpack_require__(70);
+	s.levenshtein      = __webpack_require__(71);
+	s.toBoolean        = __webpack_require__(72);
 	s.exports          = __webpack_require__(74);
 	s.escapeRegExp     = __webpack_require__(75);
 	
@@ -2756,7 +2756,7 @@ var ScrollingSite =
 	
 	});
 	
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(77), __webpack_require__(76).setImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(85), __webpack_require__(84).setImmediate))
 
 /***/ },
 /* 10 */
@@ -15174,7 +15174,7 @@ var ScrollingSite =
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function isBlank(str) {
 	  return (/^\s*$/).test(makeString(str));
@@ -15185,7 +15185,7 @@ var ScrollingSite =
 /* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function stripTags(str) {
 	  return makeString(str).replace(/<\/?[^>]+>/g, '');
@@ -15196,7 +15196,7 @@ var ScrollingSite =
 /* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function capitalize(str) {
 	  str = makeString(str);
@@ -15208,7 +15208,7 @@ var ScrollingSite =
 /* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function decapitalize(str) {
 	  str = makeString(str);
@@ -15232,8 +15232,19 @@ var ScrollingSite =
 /* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
-	var defaultToWhiteSpace = __webpack_require__(81);
+	var trim = __webpack_require__(23);
+	
+	module.exports = function clean(str) {
+	  return trim(str).replace(/\s+/g, ' ');
+	};
+
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(78);
+	var defaultToWhiteSpace = __webpack_require__(79);
 	var nativeTrim = String.prototype.trim;
 	
 	module.exports = function trim(str, characters) {
@@ -15245,21 +15256,10 @@ var ScrollingSite =
 
 
 /***/ },
-/* 23 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var trim = __webpack_require__(22);
-	
-	module.exports = function clean(str) {
-	  return trim(str).replace(/\s+/g, ' ');
-	};
-
-
-/***/ },
 /* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function(str, substr) {
 	  str = makeString(str);
@@ -15286,7 +15286,7 @@ var ScrollingSite =
 /* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function chars(str) {
 	  return makeString(str).split('');
@@ -15297,7 +15297,7 @@ var ScrollingSite =
 /* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function swapCase(str) {
 	  return makeString(str).replace(/\S/g, function(c) {
@@ -15310,8 +15310,8 @@ var ScrollingSite =
 /* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
-	var escapeChars = __webpack_require__(82);
+	var makeString = __webpack_require__(78);
+	var escapeChars = __webpack_require__(80);
 	var reversedEscapeChars = {};
 	
 	for(var key in escapeChars) reversedEscapeChars[escapeChars[key]] = key;
@@ -15328,8 +15328,8 @@ var ScrollingSite =
 /* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
-	var escapeChars = __webpack_require__(82);
+	var makeString = __webpack_require__(78);
+	var escapeChars = __webpack_require__(80);
 	
 	module.exports = function unescapeHTML(str) {
 	  return makeString(str).replace(/\&([^;]+);/g, function(entity, entityCode) {
@@ -15376,7 +15376,7 @@ var ScrollingSite =
 /* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function replaceAll(str, find, replace, ignorecase) {
 	  var flags = (ignorecase === true)?'gi':'g';
@@ -15390,7 +15390,7 @@ var ScrollingSite =
 /* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function include(str, needle) {
 	  if (needle === '') return true;
@@ -15402,7 +15402,7 @@ var ScrollingSite =
 /* 33 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	var slice = [].slice;
 	
 	module.exports = function join() {
@@ -15427,7 +15427,7 @@ var ScrollingSite =
 /* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	function getIndent(str) {
 	  var matches = str.match(/^[\s\\t]*/gm);
@@ -15472,8 +15472,8 @@ var ScrollingSite =
 /* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
-	var toPositive = __webpack_require__(83);
+	var makeString = __webpack_require__(78);
+	var toPositive = __webpack_require__(81);
 	
 	module.exports = function startsWith(str, starts, position) {
 	  str = makeString(str);
@@ -15487,8 +15487,30 @@ var ScrollingSite =
 /* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
-	var toPositive = __webpack_require__(83);
+	var adjacent = __webpack_require__(82);
+	
+	module.exports = function succ(str) {
+	  return adjacent(str, -1);
+	};
+
+
+/***/ },
+/* 39 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var adjacent = __webpack_require__(82);
+	
+	module.exports = function succ(str) {
+	  return adjacent(str, 1);
+	};
+
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(78);
+	var toPositive = __webpack_require__(81);
 	
 	module.exports = function endsWith(str, ends, position) {
 	  str = makeString(str);
@@ -15503,45 +15525,10 @@ var ScrollingSite =
 
 
 /***/ },
-/* 39 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var adjacent = __webpack_require__(84);
-	
-	module.exports = function succ(str) {
-	  return adjacent(str, -1);
-	};
-
-
-/***/ },
-/* 40 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var adjacent = __webpack_require__(84);
-	
-	module.exports = function succ(str) {
-	  return adjacent(str, 1);
-	};
-
-
-/***/ },
 /* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
-	
-	module.exports = function titleize(str) {
-	  return makeString(str).toLowerCase().replace(/(?:^|\s|-)\S/g, function(c) {
-	    return c.toUpperCase();
-	  });
-	};
-
-
-/***/ },
-/* 42 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var trim = __webpack_require__(22);
+	var trim = __webpack_require__(23);
 	var decap = __webpack_require__(20);
 	
 	module.exports = function camelize(str, decapitalize) {
@@ -15554,6 +15541,19 @@ var ScrollingSite =
 	  } else {
 	    return str;
 	  }
+	};
+
+
+/***/ },
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(78);
+	
+	module.exports = function titleize(str) {
+	  return makeString(str).toLowerCase().replace(/(?:^|\s|-)\S/g, function(c) {
+	    return c.toUpperCase();
+	  });
 	};
 
 
@@ -15572,15 +15572,15 @@ var ScrollingSite =
 	
 	_s = __webpack_require__(7);
 	
-	debounce = __webpack_require__(6);
+	debounce = __webpack_require__(5);
 	
-	Array = __webpack_require__(3);
+	Array = __webpack_require__(4);
 	
 	Backbone = __webpack_require__(10);
 	
-	Base = __webpack_require__(4);
+	Base = __webpack_require__(3);
 	
-	__webpack_require__(5);
+	__webpack_require__(6);
 	
 	xtend = __webpack_require__(8);
 	
@@ -15704,7 +15704,6 @@ var ScrollingSite =
 	      scroll: true
 	    }, options);
 	    route = _s.ltrim(route, '/');
-	    console.log(route);
 	    SinglePageScrollingController.__super__.navigate.call(this, route, options);
 	    this.updatePageMeta(route);
 	    section = this._fragmentToSection(route);
@@ -15724,7 +15723,6 @@ var ScrollingSite =
 	
 	  SinglePageScrollingController.prototype.scrollToSection = function(section) {
 	    var defaultOptions, options;
-	    console.log('scrollToSection');
 	    this.scrolling = true;
 	    defaultOptions = {
 	      onAfter: this.afterScroll.bind(this)
@@ -15929,7 +15927,6 @@ var ScrollingSite =
 	    if (selectors == null) {
 	      selectors = null;
 	    }
-	    console.log('bindUrlsToRoutes');
 	    if (selectors === null) {
 	      selectors = ((function() {
 	        var i, len, ref, results;
@@ -15974,7 +15971,7 @@ var ScrollingSite =
 /* 44 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(22);
+	var trim = __webpack_require__(23);
 	
 	module.exports = function dasherize(str) {
 	  return trim(str).replace(/([A-Z])/g, '-$1').replace(/[-_\s]+/g, '-').toLowerCase();
@@ -15986,8 +15983,8 @@ var ScrollingSite =
 /***/ function(module, exports, __webpack_require__) {
 
 	var capitalize = __webpack_require__(19);
-	var camelize = __webpack_require__(42);
-	var makeString = __webpack_require__(80);
+	var camelize = __webpack_require__(41);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function classify(str) {
 	  str = makeString(str);
@@ -16001,7 +15998,7 @@ var ScrollingSite =
 
 	var capitalize = __webpack_require__(19);
 	var underscored = __webpack_require__(1);
-	var trim = __webpack_require__(22);
+	var trim = __webpack_require__(23);
 	
 	module.exports = function humanize(str) {
 	  return capitalize(trim(underscored(str).replace(/_id$/, '').replace(/_/g, ' ')));
@@ -16012,8 +16009,8 @@ var ScrollingSite =
 /* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
-	var defaultToWhiteSpace = __webpack_require__(81);
+	var makeString = __webpack_require__(78);
+	var defaultToWhiteSpace = __webpack_require__(79);
 	var nativeTrimLeft = String.prototype.trimLeft;
 	
 	module.exports = function ltrim(str, characters) {
@@ -16028,8 +16025,8 @@ var ScrollingSite =
 /* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
-	var defaultToWhiteSpace = __webpack_require__(81);
+	var makeString = __webpack_require__(78);
+	var defaultToWhiteSpace = __webpack_require__(79);
 	var nativeTrimRight = String.prototype.trimRight;
 	
 	module.exports = function rtrim(str, characters) {
@@ -16044,7 +16041,7 @@ var ScrollingSite =
 /* 49 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function truncate(str, length, truncateStr) {
 	  str = makeString(str);
@@ -16063,7 +16060,7 @@ var ScrollingSite =
 	 * prune extra chars, never leaving a half-chopped word.
 	 * @author github.com/rwz
 	 */
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	var rtrim = __webpack_require__(48);
 	
 	module.exports = function prune(str, length, pruneStr) {
@@ -16092,7 +16089,7 @@ var ScrollingSite =
 /***/ function(module, exports, __webpack_require__) {
 
 	var isBlank = __webpack_require__(17);
-	var trim = __webpack_require__(22);
+	var trim = __webpack_require__(23);
 	
 	module.exports = function words(str, delimiter) {
 	  if (isBlank(str)) return [];
@@ -16104,8 +16101,8 @@ var ScrollingSite =
 /* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
-	var strRepeat = __webpack_require__(85);
+	var makeString = __webpack_require__(78);
+	var strRepeat = __webpack_require__(83);
 	
 	module.exports = function pad(str, length, padStr, type) {
 	  str = makeString(str);
@@ -16174,7 +16171,7 @@ var ScrollingSite =
 	//
 	// Copyright (c) Alexandru Marasteanu <alexaholic [at) gmail (dot] com>
 	// All rights reserved.
-	var strRepeat = __webpack_require__(85);
+	var strRepeat = __webpack_require__(83);
 	var toString = Object.prototype.toString;
 	var sprintf = (function() {
 	  function get_type(variable) {
@@ -16311,7 +16308,7 @@ var ScrollingSite =
 /* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(22);
+	var trim = __webpack_require__(23);
 	var parseNumber = function(source) {
 	  return source * 1 || 0;
 	};
@@ -16345,7 +16342,7 @@ var ScrollingSite =
 /* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function strRight(str, sep) {
 	  str = makeString(str);
@@ -16359,7 +16356,7 @@ var ScrollingSite =
 /* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function strRightBack(str, sep) {
 	  str = makeString(str);
@@ -16373,7 +16370,7 @@ var ScrollingSite =
 /* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function strLeft(str, sep) {
 	  str = makeString(str);
@@ -16387,7 +16384,7 @@ var ScrollingSite =
 /* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function strLeftBack(str, sep) {
 	  str = makeString(str);
@@ -16430,22 +16427,8 @@ var ScrollingSite =
 /* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
-	var defaultToWhiteSpace = __webpack_require__(81);
-	var trim = __webpack_require__(22);
-	var dasherize = __webpack_require__(44);
-	
-	module.exports = function slugify(str) {
-	  var from  = "ąàáäâãåæăćčĉęèéëêĝĥìíïîĵłľńňòóöőôõðøśșšŝťțŭùúüűûñÿýçżźž",
-	      to    = "aaaaaaaaaccceeeeeghiiiijllnnoooooooossssttuuuuuunyyczzz",
-	      regex = new RegExp(defaultToWhiteSpace(from), 'g');
-	
-	  str = makeString(str).toLowerCase().replace(regex, function(c){
-	    var index = from.indexOf(c);
-	    return to.charAt(index) || '-';
-	  });
-	
-	  return trim(dasherize(str.replace(/[^\w\s-]/g, '-')), '-');
+	module.exports = function surround(str, wrapper) {
+	  return [wrapper, str, wrapper].join('');
 	};
 
 
@@ -16453,16 +16436,7 @@ var ScrollingSite =
 /* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = function surround(str, wrapper) {
-	  return [wrapper, str, wrapper].join('');
-	};
-
-
-/***/ },
-/* 68 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var surround = __webpack_require__(67);
+	var surround = __webpack_require__(66);
 	
 	module.exports = function quote(str, quoteChar) {
 	  return surround(str, quoteChar || '"');
@@ -16470,7 +16444,7 @@ var ScrollingSite =
 
 
 /***/ },
-/* 69 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function unquote(str, quoteChar) {
@@ -16482,11 +16456,11 @@ var ScrollingSite =
 
 
 /***/ },
-/* 70 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
-	var strRepeat = __webpack_require__(85);
+	var makeString = __webpack_require__(78);
+	var strRepeat = __webpack_require__(83);
 	
 	module.exports = function repeat(str, qty, separator) {
 	  str = makeString(str);
@@ -16503,7 +16477,7 @@ var ScrollingSite =
 
 
 /***/ },
-/* 71 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = function naturalCmp(str1, str2) {
@@ -16538,10 +16512,10 @@ var ScrollingSite =
 
 
 /***/ },
-/* 72 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function levenshtein(str1, str2) {
 	  str1 = makeString(str1);
@@ -16569,10 +16543,10 @@ var ScrollingSite =
 
 
 /***/ },
-/* 73 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(22);
+	var trim = __webpack_require__(23);
 	
 	function boolMatch(s, matchers) {
 	  var i, matcher, down = s.toLowerCase();
@@ -16591,6 +16565,29 @@ var ScrollingSite =
 	  str = trim(str);
 	  if (boolMatch(str, trueValues || ["true", "1"])) return true;
 	  if (boolMatch(str, falseValues || ["false", "0"])) return false;
+	};
+
+
+/***/ },
+/* 73 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(78);
+	var defaultToWhiteSpace = __webpack_require__(79);
+	var trim = __webpack_require__(23);
+	var dasherize = __webpack_require__(44);
+	
+	module.exports = function slugify(str) {
+	  var from  = "ąàáäâãåæăćčĉęèéëêĝĥìíïîĵłľńňòóöőôõðøśșšŝťțŭùúüűûñÿýçżźž",
+	      to    = "aaaaaaaaaccceeeeeghiiiijllnnoooooooossssttuuuuuunyyczzz",
+	      regex = new RegExp(defaultToWhiteSpace(from), 'g');
+	
+	  str = makeString(str).toLowerCase().replace(regex, function(c){
+	    var index = from.indexOf(c);
+	    return to.charAt(index) || '-';
+	  });
+	
+	  return trim(dasherize(str.replace(/[^\w\s-]/g, '-')), '-');
 	};
 
 
@@ -16614,7 +16611,7 @@ var ScrollingSite =
 /* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var makeString = __webpack_require__(80);
+	var makeString = __webpack_require__(78);
 	
 	module.exports = function escapeRegExp(str) {
 	  return makeString(str).replace(/([.*+?^=!:${}()|[\]\/\\])/g, '\\$1');
@@ -16625,7 +16622,108 @@ var ScrollingSite =
 /* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {var nextTick = __webpack_require__(77).nextTick;
+	module.exports = Date.now || now
+	
+	function now() {
+	    return new Date().getTime()
+	}
+
+
+/***/ },
+/* 77 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function() { throw new Error("define cannot be used indirect"); };
+
+
+/***/ },
+/* 78 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/**
+	 * Ensure some object is a coerced to a string
+	 **/
+	module.exports = function makeString(object) {
+	  if (object == null) return '';
+	  return '' + object;
+	};
+
+
+/***/ },
+/* 79 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var escapeRegExp = __webpack_require__(75);
+	
+	module.exports = function defaultToWhiteSpace(characters) {
+	  if (characters == null)
+	    return '\\s';
+	  else if (characters.source)
+	    return characters.source;
+	  else
+	    return '[' + escapeRegExp(characters) + ']';
+	};
+
+
+/***/ },
+/* 80 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var escapeChars = {
+	  lt: '<',
+	  gt: '>',
+	  quot: '"',
+	  amp: '&',
+	  apos: "'"
+	};
+	
+	module.exports = escapeChars;
+
+
+/***/ },
+/* 81 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function toPositive(number) {
+	  return number < 0 ? 0 : (+number || 0);
+	};
+
+
+/***/ },
+/* 82 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var makeString = __webpack_require__(78);
+	
+	module.exports = function adjacent(str, direction) {
+	  str = makeString(str);
+	  if (str.length === 0) {
+	    return '';
+	  }
+	  return str.slice(0, -1) + String.fromCharCode(str.charCodeAt(str.length - 1) + direction);
+	};
+
+
+/***/ },
+/* 83 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = function strRepeat(str, qty){
+	  if (qty < 1) return '';
+	  var result = '';
+	  while (qty > 0) {
+	    if (qty & 1) result += str;
+	    qty >>= 1, str += str;
+	  }
+	  return result;
+	};
+
+
+/***/ },
+/* 84 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {var nextTick = __webpack_require__(85).nextTick;
 	var apply = Function.prototype.apply;
 	var slice = Array.prototype.slice;
 	var immediateIds = {};
@@ -16701,10 +16799,10 @@ var ScrollingSite =
 	exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate : function(id) {
 	  delete immediateIds[id];
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(76).setImmediate, __webpack_require__(76).clearImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(84).setImmediate, __webpack_require__(84).clearImmediate))
 
 /***/ },
-/* 77 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// shim for using process in browser
@@ -16797,107 +16895,6 @@ var ScrollingSite =
 	    throw new Error('process.chdir is not supported');
 	};
 	process.umask = function() { return 0; };
-
-
-/***/ },
-/* 78 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function() { throw new Error("define cannot be used indirect"); };
-
-
-/***/ },
-/* 79 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = Date.now || now
-	
-	function now() {
-	    return new Date().getTime()
-	}
-
-
-/***/ },
-/* 80 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/**
-	 * Ensure some object is a coerced to a string
-	 **/
-	module.exports = function makeString(object) {
-	  if (object == null) return '';
-	  return '' + object;
-	};
-
-
-/***/ },
-/* 81 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var escapeRegExp = __webpack_require__(75);
-	
-	module.exports = function defaultToWhiteSpace(characters) {
-	  if (characters == null)
-	    return '\\s';
-	  else if (characters.source)
-	    return characters.source;
-	  else
-	    return '[' + escapeRegExp(characters) + ']';
-	};
-
-
-/***/ },
-/* 82 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var escapeChars = {
-	  lt: '<',
-	  gt: '>',
-	  quot: '"',
-	  amp: '&',
-	  apos: "'"
-	};
-	
-	module.exports = escapeChars;
-
-
-/***/ },
-/* 83 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function toPositive(number) {
-	  return number < 0 ? 0 : (+number || 0);
-	};
-
-
-/***/ },
-/* 84 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var makeString = __webpack_require__(80);
-	
-	module.exports = function adjacent(str, direction) {
-	  str = makeString(str);
-	  if (str.length === 0) {
-	    return '';
-	  }
-	  return str.slice(0, -1) + String.fromCharCode(str.charCodeAt(str.length - 1) + direction);
-	};
-
-
-/***/ },
-/* 85 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function strRepeat(str, qty){
-	  if (qty < 1) return '';
-	  var result = '';
-	  while (qty > 0) {
-	    if (qty & 1) result += str;
-	    qty >>= 1, str += str;
-	  }
-	  return result;
-	};
 
 
 /***/ }
