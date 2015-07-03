@@ -196,6 +196,8 @@ The navigate function is bound to all clicks on local urls.
 
         section = @_fragmentToSection route
 
+        @currentRoute = route
+
         @currentSection = section
 
         return unless section
@@ -371,12 +373,12 @@ and the most visible section has changed.
         section = _.max @sections, (section) =>
           @inViewport(section.el)
 
-        return if section == @currentSection
-
         try
           route = section.instance.getRoute()
         catch e
           route = section.route
+
+        return if route == @currentRoute
 
         @navigate route, scroll:false
 
@@ -399,33 +401,6 @@ Updates the page meta data
         $('title').text pageMeta.get('title')
         $('meta[name="description"]').text pageMeta.get('description')
         $('title[name="keywords"]').text pageMeta.get('keywords')
-
-Checks to see if the given element is substantially in the
-viewport. Returns the height of visible portion of the element.
-
-      inViewport: (el) ->
-
-        return 0 unless $(el).length
-
-        elBounds = $(el).get(0).getBoundingClientRect()
-
-        # the el is not visible
-        return 0 if elBounds.bottom <= 0 or elBounds.top >= window.innerHeight
-
-        #the el is entirely visible
-        return $(el).height() if elBounds.top >= 0 and elBounds.bottom <= window.innerHeight
-
-        #if the el's top is visible but not the bottom
-        if elBounds.top >= 0 and elBounds.bottom >= window.innerHeight
-            return $(el).height() - (elBounds.bottom - window.innerHeight)
-
-        #if the el's bottom is visible but not the top
-        if elBounds.bottom < window.innerHeight and elBounds.top < 0
-            return $(el).height() - (elBounds.top * -1)
-
-        #the el is filling the entire window
-        return $(el).height() if elBounds.top <= 0 and elBounds.bottom >= window.innerHeight
-
 
 Bind all 'a' tags whose href attributes match a section's route
 

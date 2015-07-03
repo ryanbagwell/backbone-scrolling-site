@@ -558,6 +558,8 @@ a responsive breakpoint threshold is crossed</p>
 
     section = <span class="hljs-property">@_fragmentToSection</span> route
 
+    <span class="hljs-property">@currentRoute</span> = route
+
     <span class="hljs-property">@currentSection</span> = section
 
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">unless</span> section
@@ -882,12 +884,12 @@ and the most visible section has changed.</p>
     section = _.max <span class="hljs-property">@sections</span>, <span class="hljs-function"><span class="hljs-params">(section)</span> =&gt;</span>
       <span class="hljs-property">@inViewport</span>(section.el)
 
-    <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> section == <span class="hljs-property">@currentSection</span>
-
     <span class="hljs-keyword">try</span>
       route = section.instance.getRoute()
     <span class="hljs-keyword">catch</span> e
       route = section.route
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> route == <span class="hljs-property">@currentRoute</span>
 
     <span class="hljs-property">@navigate</span> route, <span class="hljs-attribute">scroll</span>:<span class="hljs-literal">false</span>
 
@@ -931,103 +933,6 @@ and the most visible section has changed.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-45">&#182;</a>
               </div>
-              <p>Checks to see if the given element is substantially in the
-viewport. Returns the height of visible portion of the element.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">inViewport</span>: <span class="hljs-function"><span class="hljs-params">(el)</span> -&gt;</span>
-
-    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> <span class="hljs-keyword">unless</span> $(el).length
-
-    elBounds = $(el).get(<span class="hljs-number">0</span>).getBoundingClientRect()</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-46">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-46">&#182;</a>
-              </div>
-              <p>the el is not visible</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> <span class="hljs-keyword">if</span> elBounds.bottom &lt;= <span class="hljs-number">0</span> <span class="hljs-keyword">or</span> elBounds.top &gt;= <span class="hljs-built_in">window</span>.innerHeight</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-47">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-47">&#182;</a>
-              </div>
-              <p>the el is entirely visible</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> $(el).height() <span class="hljs-keyword">if</span> elBounds.top &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> elBounds.bottom &lt;= <span class="hljs-built_in">window</span>.innerHeight</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-48">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-48">&#182;</a>
-              </div>
-              <p>if the el’s top is visible but not the bottom</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> elBounds.top &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> elBounds.bottom &gt;= <span class="hljs-built_in">window</span>.innerHeight
-        <span class="hljs-keyword">return</span> $(el).height() - (elBounds.bottom - <span class="hljs-built_in">window</span>.innerHeight)</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-49">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-49">&#182;</a>
-              </div>
-              <p>if the el’s bottom is visible but not the top</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> elBounds.bottom &lt; <span class="hljs-built_in">window</span>.innerHeight <span class="hljs-keyword">and</span> elBounds.top &lt; <span class="hljs-number">0</span>
-        <span class="hljs-keyword">return</span> $(el).height() - (elBounds.top * -<span class="hljs-number">1</span>)</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-50">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-50">&#182;</a>
-              </div>
-              <p>the el is filling the entire window</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> $(el).height() <span class="hljs-keyword">if</span> elBounds.top &lt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> elBounds.bottom &gt;= <span class="hljs-built_in">window</span>.innerHeight</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-51">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-51">&#182;</a>
-              </div>
               <p>Bind all ‘a’ tags whose href attributes match a section’s route</p>
 
             </div>
@@ -1051,11 +956,11 @@ viewport. Returns the height of visible portion of the element.</p>
         </li>
         
         
-        <li id="section-52">
+        <li id="section-46">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-52">&#182;</a>
+                <a class="pilcrow" href="#section-46">&#182;</a>
               </div>
               <p>Export the class</p>
 

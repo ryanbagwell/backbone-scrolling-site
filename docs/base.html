@@ -94,6 +94,103 @@ to handle responsive events, i.e. onChangeFromLargeToSmall</p>
             
         </li>
         
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>Checks to see if the given element is substantially in the
+viewport. Returns the height of visible portion of the element.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">inViewport</span>: <span class="hljs-function"><span class="hljs-params">(el)</span> -&gt;</span>
+
+    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> <span class="hljs-keyword">unless</span> $(el).length
+
+    elBounds = $(el).get(<span class="hljs-number">0</span>).getBoundingClientRect()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>the el is not visible</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span> <span class="hljs-keyword">if</span> elBounds.bottom &lt;= <span class="hljs-number">0</span> <span class="hljs-keyword">or</span> elBounds.top &gt;= <span class="hljs-built_in">window</span>.innerHeight</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>the el is entirely visible</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> $(el).height() <span class="hljs-keyword">if</span> elBounds.top &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> elBounds.bottom &lt;= <span class="hljs-built_in">window</span>.innerHeight</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>if the el’s top is visible but not the bottom</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> elBounds.top &gt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> elBounds.bottom &gt;= <span class="hljs-built_in">window</span>.innerHeight
+        <span class="hljs-keyword">return</span> $(el).height() - (elBounds.bottom - <span class="hljs-built_in">window</span>.innerHeight)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>if the el’s bottom is visible but not the top</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> elBounds.bottom &lt; <span class="hljs-built_in">window</span>.innerHeight <span class="hljs-keyword">and</span> elBounds.top &lt; <span class="hljs-number">0</span>
+        <span class="hljs-keyword">return</span> $(el).height() - (elBounds.top * -<span class="hljs-number">1</span>)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>the el is filling the entire window</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> $(el).height() <span class="hljs-keyword">if</span> elBounds.top &lt;= <span class="hljs-number">0</span> <span class="hljs-keyword">and</span> elBounds.bottom &gt;= <span class="hljs-built_in">window</span>.innerHeight</pre></div></div>
+            
+        </li>
+        
     </ul>
   </div>
 </body>
