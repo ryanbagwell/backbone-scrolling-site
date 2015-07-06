@@ -45,3 +45,12 @@ viewport. Returns the height of visible portion of the element.
 
         #the el is filling the entire window
         return $(el).height() if elBounds.top <= 0 and elBounds.bottom >= window.innerHeight
+
+      makeRouteFunction: ->
+
+        return ->
+            [section, name, args...] = arguments
+            if section.instance?
+              section.instance.receiveNavigation.apply(section.instance, args)
+            @_logMessage 'Route triggered'
+            @notify "#{name}:navigate"

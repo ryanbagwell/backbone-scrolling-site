@@ -134,6 +134,11 @@ Receives the global navigation event.
       receiveNavigation: (route) ->
         @currentRoute = route
 
+Specifies the element that the controller will scroll the page to
+when navigate is called.
+
+      getScrollToElement: ->
+        return "##{@options.pageName}"
 
 Parses a requested url and returns its parts
 

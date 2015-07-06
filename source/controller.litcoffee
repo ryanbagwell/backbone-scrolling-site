@@ -113,15 +113,7 @@ Dynamically create our routes and generate a callback function that calls the
 
         for name, section of @sections
           continue if _.isUndefined section.route
-
-          @route section.route, section.name, (->
-                                                [section, name, args...] = arguments
-                                                if section.instance?
-                                                  section.instance.receiveNavigation.apply(section.instance, args)
-                                                @_logMessage 'Route triggered'
-                                                @notify "#{name}:navigate"
-                                              ).bind(@, section, name)
-
+          @route section.route, section.name, @makeRouteFunction().bind(@, section, name)
 
         #
         # Set the initial browser resolution
@@ -197,15 +189,13 @@ The navigate function is bound to all clicks on local urls.
 
         return unless section.instance?
 
-        id = section.instance.options.pageName
-
         if options.scroll
-          @scrollToSection(id)
+          @scrollToSection section.instance.getScrollToElement()
 
 
 Scrolls the page to the target section.
 
-      scrollToSection: (section) ->
+      scrollToSection: (el) ->
         @scrolling = true
 
         defaultOptions =
@@ -213,7 +203,7 @@ Scrolls the page to the target section.
 
         options = xtend defaultOptions, @options.scrollToOptions
 
-        $.scrollTo '#'+section, @options.scrollTime, options
+        $.scrollTo el, @options.scrollTime, options
 
 
 A method to call after the page has stopped scrolling.

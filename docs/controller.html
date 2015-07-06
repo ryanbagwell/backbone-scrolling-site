@@ -359,13 +359,7 @@ for it to be considered the active section?</p>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">for</span> name, section <span class="hljs-keyword">of</span> <span class="hljs-property">@sections</span>
       <span class="hljs-keyword">continue</span> <span class="hljs-keyword">if</span> _.isUndefined section.route
-
-      <span class="hljs-property">@route</span> section.route, section.name, (<span class="hljs-function">-&gt;</span>
-                                            [section, name, args...] = arguments
-                                            <span class="hljs-keyword">if</span> section.instance?
-                                              section.instance.receiveNavigation.apply(section.instance, args)
-                                            <span class="hljs-property">@notify</span> <span class="hljs-string">"<span class="hljs-subst">#{name}</span>:navigate"</span>
-                                          ).bind(@, section, name)</pre></div></div>
+      <span class="hljs-property">@route</span> section.route, section.name, <span class="hljs-property">@makeRouteFunction</span>().bind(@, section, name)</pre></div></div>
             
         </li>
         
@@ -548,10 +542,8 @@ a responsive breakpoint threshold is crossed</p>
 
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">unless</span> section.instance?
 
-    id = section.instance.options.pageName
-
     <span class="hljs-keyword">if</span> options.scroll
-      <span class="hljs-property">@scrollToSection</span>(id)</pre></div></div>
+      <span class="hljs-property">@scrollToSection</span> section.instance.getScrollToElement()</pre></div></div>
             
         </li>
         
@@ -566,7 +558,7 @@ a responsive breakpoint threshold is crossed</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">scrollToSection</span>: <span class="hljs-function"><span class="hljs-params">(section)</span> -&gt;</span>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">scrollToSection</span>: <span class="hljs-function"><span class="hljs-params">(el)</span> -&gt;</span>
     <span class="hljs-property">@scrolling</span> = <span class="hljs-literal">true</span>
 
     defaultOptions =
@@ -574,7 +566,7 @@ a responsive breakpoint threshold is crossed</p>
 
     options = xtend defaultOptions, <span class="hljs-property">@options</span>.scrollToOptions
 
-    $.scrollTo <span class="hljs-string">'#'</span>+section, <span class="hljs-property">@options</span>.scrollTime, options</pre></div></div>
+    $.scrollTo el, <span class="hljs-property">@options</span>.scrollTime, options</pre></div></div>
             
         </li>
         
@@ -946,17 +938,13 @@ and the most visible section has changed.</p>
 
     <span class="hljs-property">@_logMessage</span> <span class="hljs-string">'Starting Backbone.history'</span>
 
-    opts =
+    Backbone.history.start
       <span class="hljs-attribute">pushState</span>: pushState
-      <span class="hljs-attribute">silent</span>: slient
+      <span class="hljs-attribute">silent</span>: silent
       <span class="hljs-attribute">root</span>: root
 
-    alert <span class="hljs-string">'ahhhh'</span>
-    <span class="hljs-built_in">console</span>.log opts
-
-    result = Backbone.history.start(opts)
-
-    <span class="hljs-built_in">console</span>.log <span class="hljs-string">'ahhhhh'</span>, result</pre></div></div>
+    <span class="hljs-keyword">if</span> silent <span class="hljs-keyword">isnt</span> <span class="hljs-literal">true</span>
+      <span class="hljs-property">@navigate</span> <span class="hljs-built_in">window</span>.location.pathname</pre></div></div>
             
         </li>
         
