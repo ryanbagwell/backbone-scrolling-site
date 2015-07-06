@@ -118,6 +118,7 @@ Dynamically create our routes and generate a callback function that calls the
                                                 [section, name, args...] = arguments
                                                 if section.instance?
                                                   section.instance.receiveNavigation.apply(section.instance, args)
+                                                @_logMessage 'Route triggered'
                                                 @notify "#{name}:navigate"
                                               ).bind(@, section, name)
 
@@ -169,14 +170,6 @@ Initialize any section views.
           if params.el?.length
             @loadSection params, name
 
-Start Backbone.history
-
-        Backbone.history.start
-          pushState: true
-          silent: false
-          root: @options.appRoot
-
-
 The navigate function is bound to all clicks on local urls.
 
       navigate: (route, options) ->
@@ -184,8 +177,8 @@ The navigate function is bound to all clicks on local urls.
         return if not @ready
 
         options = xtend
-            trigger: true
-            scroll: true
+          trigger: true
+          scroll: true
         , options
 
         route = _s.ltrim route, '/'
@@ -249,6 +242,10 @@ which checks to see if all views are 'ready'.
         @ready = true
 
         @_appLoaded = true
+
+        @_logMessage 'App is loaded'
+
+        @startHistory()
 
 Start listening for scroll events to call the navigation method
 
@@ -420,6 +417,20 @@ Bind all 'a' tags whose href attributes match a section's route
 
         $('body').off 'click', selectors
         $('body').on 'click', selectors, handler
+
+      startHistory: (pushState = true, silent = false, root = '/') ->
+
+        return if Backbone.History.started
+
+        @_logMessage 'Starting Backbone.history'
+
+        Backbone.history.start
+          pushState: pushState
+          silent: silent
+          root: root
+
+        if silent isnt true
+          @navigate window.location.pathname
 
 Export the class
 

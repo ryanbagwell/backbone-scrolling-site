@@ -72,6 +72,13 @@ module.exports = (grunt) ->
       dev:
         watch: true
         keepalive: true
+        entry:
+          "backbone-scrolling-site":"main"
+        output:
+          path: "dist/"
+          filename: "[name].js"
+          library: 'ScrollingSite'
+          libraryTarget: "var"
 
     docco:
       src: ['source/**/*.litcoffee']
