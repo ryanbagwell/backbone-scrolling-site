@@ -328,7 +328,7 @@ Retrieves the name of the current resolution
       _getResolution: ->
 
           for bp in @resolutionBreakPoints
-            return bp if bp.min <= window.outerWidth <= bp.max
+            return bp if window.matchMedia("(min-width: #{bp.min}px) and (max-width: #{bp.max}px)").matches
 
       _logMessage: (message, trace) ->
 

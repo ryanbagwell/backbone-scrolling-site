@@ -808,7 +808,8 @@ resolution breakpoints object</p>
             <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">_getResolution</span>: <span class="hljs-function">-&gt;</span>
 
       <span class="hljs-keyword">for</span> bp <span class="hljs-keyword">in</span> <span class="hljs-property">@resolutionBreakPoints</span>
-        <span class="hljs-keyword">return</span> bp <span class="hljs-keyword">if</span> bp.min &lt;= <span class="hljs-built_in">window</span>.outerWidth &lt;= bp.max
+        <span class="hljs-built_in">console</span>.log <span class="hljs-string">"(min-width: <span class="hljs-subst">#{bp.min}</span>px) and (max-width: <span class="hljs-subst">#{bp.max}</span>px)"</span>
+        <span class="hljs-keyword">return</span> bp <span class="hljs-keyword">if</span> <span class="hljs-built_in">window</span>.matchMedia(<span class="hljs-string">"(min-width: <span class="hljs-subst">#{bp.min}</span>px) and (max-width: <span class="hljs-subst">#{bp.max}</span>px)"</span>).matches
 
   <span class="hljs-attribute">_logMessage</span>: <span class="hljs-function"><span class="hljs-params">(message, trace)</span> -&gt;</span>
 
