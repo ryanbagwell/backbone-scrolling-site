@@ -66,7 +66,7 @@ to the contoller and view</p>
             
             <div class="content"><div class='highlight'><pre>_s = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore.string'</span>
 
-<span class="hljs-built_in">module</span>.exports =</pre></div></div>
+methods =</pre></div></div>
             
         </li>
         
@@ -196,7 +196,9 @@ viewport. Returns the height of visible portion of the element.</p>
         <span class="hljs-keyword">if</span> section.instance?
           section.instance.receiveNavigation.apply(section.instance, args)
         <span class="hljs-property">@_logMessage</span> <span class="hljs-string">'Route triggered'</span>
-        <span class="hljs-property">@notify</span> <span class="hljs-string">"<span class="hljs-subst">#{name}</span>:navigate"</span></pre></div></div>
+        <span class="hljs-property">@notify</span> <span class="hljs-string">"<span class="hljs-subst">#{name}</span>:navigate"</span>
+
+<span class="hljs-built_in">module</span>.exports = methods</pre></div></div>
             
         </li>
         

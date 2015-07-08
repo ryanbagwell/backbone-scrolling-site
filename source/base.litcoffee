@@ -5,7 +5,7 @@ It has some dependencies:
 
     _s = require 'underscore.string'
 
-    module.exports =
+    methods =
 
 Attempts to call the method 'onChangeFromPreviousSizeToNewSize'
 to handle responsive events, i.e. onChangeFromLargeToSmall
@@ -54,3 +54,5 @@ viewport. Returns the height of visible portion of the element.
               section.instance.receiveNavigation.apply(section.instance, args)
             @_logMessage 'Route triggered'
             @notify "#{name}:navigate"
+
+    module.exports = methods

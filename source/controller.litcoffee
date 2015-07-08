@@ -8,7 +8,7 @@ It has a number of dependencies.
     debounce = require 'debounce'
     Array = require './lib/array.unique'
     Backbone = require 'backbone'
-    Base = require './base'
+    mixins = require './base'
     require 'jquery.scrollto'
     xtend = require 'xtend'
     SinglePageScrollingView = require './view'
@@ -20,7 +20,7 @@ route: the route that will trigger a scrolling navigation event to that section
 el: the html element that will attach to the view
 view: an uninitialized view that is a subclasee of SinglePageScrollingView
 
-    module.exports = class SinglePageScrollingController extends Backbone.Router
+    class SinglePageScrollingController extends Backbone.Router
 
       sections: {}
 
@@ -95,6 +95,23 @@ By default, the root url of our app is '/'
 
         appRoot: '/'
 
+Some methods to assist with mixins
+
+      @extend: (obj) ->
+        for key, value of obj
+          @[key] = value
+
+        obj.extended?.apply(@)
+        this
+
+      @include: (obj) ->
+        for key, value of obj
+          # Assign properties to the prototype
+          @::[key] = value
+
+        obj.included?.apply(@)
+        this
+
 Initialize the controller.
 
       initialize: (options) ->
@@ -103,7 +120,7 @@ Merge our options with the defaultOptions
 
         @options = _.extend {}, @defaultOptions, options
 
-        @[name] = method.bind(@) for name, method of Base
+        # @[name] = method.bind(@) for name, method of Base
 
         super(options)
 
@@ -424,4 +441,7 @@ Bind all 'a' tags whose href attributes match a section's route
 
 Export the class
 
-    module.exports = SinglePageScrollingController
+    class MixedIn extends SinglePageScrollingController
+      @include mixins
+
+    module.exports = MixedIn

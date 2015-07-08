@@ -11,11 +11,11 @@ First, declare the dependencies
     _ = require "underscore"
     _.str = require 'underscore.string'
     _.mixin _.str.exports()
-    Base = require './base'
+    mixins = require './base'
     Backbone = require "backbone"
     Q = require 'q'
 
-    module.exports = class SinglePageScrollingView extends Backbone.View
+    class SinglePageScrollingView extends Backbone.View
 
 By default, the HTML tag will be a section
 
@@ -35,12 +35,27 @@ Initially, the view isn't ready
 
       ready: false
 
+Some methods to assist with mixins
+
+      @extend: (obj) ->
+        for key, value of obj
+          @[key] = value
+
+        obj.extended?.apply(@)
+        this
+
+      @include: (obj) ->
+        for key, value of obj
+          # Assign properties to the prototype
+          @::[key] = value
+
+        obj.included?.apply(@)
+        this
+
 Initialize the view.
 
       initialize: (options={}) ->
         @options = options
-
-        @[name] = _.bind(method, @) for name, method of Base
 
         super(options)
 
@@ -149,3 +164,8 @@ Parses a requested url and returns its parts
         catch error
             return []
         return
+
+    class MixedIn extends SinglePageScrollingView
+      @include mixins
+
+    module.exports = MixedIn

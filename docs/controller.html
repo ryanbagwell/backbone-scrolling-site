@@ -69,7 +69,7 @@ _s = <span class="hljs-built_in">require</span> <span class="hljs-string">'under
 debounce = <span class="hljs-built_in">require</span> <span class="hljs-string">'debounce'</span>
 Array = <span class="hljs-built_in">require</span> <span class="hljs-string">'./lib/array.unique'</span>
 Backbone = <span class="hljs-built_in">require</span> <span class="hljs-string">'backbone'</span>
-Base = <span class="hljs-built_in">require</span> <span class="hljs-string">'./base'</span>
+mixins = <span class="hljs-built_in">require</span> <span class="hljs-string">'./base'</span>
 <span class="hljs-built_in">require</span> <span class="hljs-string">'jquery.scrollto'</span>
 xtend = <span class="hljs-built_in">require</span> <span class="hljs-string">'xtend'</span>
 SinglePageScrollingView = <span class="hljs-built_in">require</span> <span class="hljs-string">'./view'</span></pre></div></div>
@@ -91,7 +91,7 @@ view: an uninitialized view that is a subclasee of SinglePageScrollingView</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">module</span>.exports = <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SinglePageScrollingController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Backbone</span>.<span class="hljs-title">Router</span></span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SinglePageScrollingController</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Backbone</span>.<span class="hljs-title">Router</span></span>
 
   <span class="hljs-attribute">sections</span>: {}
 
@@ -318,11 +318,19 @@ for it to be considered the active section?</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <p>Initialize the controller.</p>
+              <p>Some methods to assist with mixins</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">initialize</span>: <span class="hljs-function"><span class="hljs-params">(options)</span> -&gt;</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-property">@extend</span>: <span class="hljs-function"><span class="hljs-params">(obj)</span> -&gt;</span>
+    <span class="hljs-keyword">for</span> key, value <span class="hljs-keyword">of</span> obj
+      @[key] = value
+
+    obj.extended?.apply(@)
+    <span class="hljs-keyword">this</span>
+
+  <span class="hljs-property">@include</span>: <span class="hljs-function"><span class="hljs-params">(obj)</span> -&gt;</span>
+    <span class="hljs-keyword">for</span> key, value <span class="hljs-keyword">of</span> obj</pre></div></div>
             
         </li>
         
@@ -333,15 +341,14 @@ for it to be considered the active section?</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
-              <p>Merge our options with the defaultOptions</p>
+              <p>Assign properties to the prototype</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@options</span> = _.extend {}, <span class="hljs-property">@defaultOptions</span>, options
+            <div class="content"><div class='highlight'><pre>      @::[key] = value
 
-    @[name] = method.bind(@) <span class="hljs-keyword">for</span> name, method <span class="hljs-keyword">of</span> Base
-
-    <span class="hljs-keyword">super</span>(options)</pre></div></div>
+    obj.included?.apply(@)
+    <span class="hljs-keyword">this</span></pre></div></div>
             
         </li>
         
@@ -351,6 +358,52 @@ for it to be considered the active section?</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Initialize the controller.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">initialize</span>: <span class="hljs-function"><span class="hljs-params">(options)</span> -&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>Merge our options with the defaultOptions</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-property">@options</span> = _.extend {}, <span class="hljs-property">@defaultOptions</span>, options</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>@[name] = method.bind(@) for name, method of Base</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+    <span class="hljs-keyword">super</span>(options)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
               <p>Dynamically create our routes and generate a callback function that calls the
 “receiveNavigation” method on the section’s view</p>
@@ -364,11 +417,11 @@ for it to be considered the active section?</p>
         </li>
         
         
-        <li id="section-19">
+        <li id="section-22">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
+                <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
               <p>Set the initial browser resolution</p>
 
@@ -379,11 +432,11 @@ for it to be considered the active section?</p>
         </li>
         
         
-        <li id="section-20">
+        <li id="section-23">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-20">&#182;</a>
+                <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
               <p>Turn our page meta json
 into a backbone collection</p>
@@ -395,11 +448,11 @@ into a backbone collection</p>
         </li>
         
         
-        <li id="section-21">
+        <li id="section-24">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-21">&#182;</a>
+                <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
               <p>Call the onResolutionChanged method upon notification</p>
 
@@ -410,11 +463,11 @@ into a backbone collection</p>
         </li>
         
         
-        <li id="section-22">
+        <li id="section-25">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-22">&#182;</a>
+                <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
               <p>Listen for “sectionReady” event notifcations that come from child views.</p>
 
@@ -425,11 +478,11 @@ into a backbone collection</p>
         </li>
         
         
-        <li id="section-23">
+        <li id="section-26">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-23">&#182;</a>
+                <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
               <p>Listen for “navigate” notifications that originate from child views.</p>
 
@@ -440,11 +493,11 @@ into a backbone collection</p>
         </li>
         
         
-        <li id="section-24">
+        <li id="section-27">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-24">&#182;</a>
+                <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
               <p>dispatch the windowResized event globally
 to notify all views that the window has been resized</p>
@@ -457,11 +510,11 @@ to notify all views that the window has been resized</p>
         </li>
         
         
-        <li id="section-25">
+        <li id="section-28">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-25">&#182;</a>
+                <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
               <p>Trigger the window resize event when the orientation
 is changed</p>
@@ -474,11 +527,11 @@ is changed</p>
         </li>
         
         
-        <li id="section-26">
+        <li id="section-29">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-26">&#182;</a>
+                <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
               <p>When the window is resized, send a notification to child views if
 a responsive breakpoint threshold is crossed</p>
@@ -490,11 +543,11 @@ a responsive breakpoint threshold is crossed</p>
         </li>
         
         
-        <li id="section-27">
+        <li id="section-30">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-27">&#182;</a>
+                <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
               <p>Initialize any section views.</p>
 
@@ -507,11 +560,11 @@ a responsive breakpoint threshold is crossed</p>
         </li>
         
         
-        <li id="section-28">
+        <li id="section-31">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-28">&#182;</a>
+                <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
               <p>The navigate function is bound to all clicks on local urls.</p>
 
@@ -548,11 +601,11 @@ a responsive breakpoint threshold is crossed</p>
         </li>
         
         
-        <li id="section-29">
+        <li id="section-32">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-29">&#182;</a>
+                <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
               <p>Scrolls the page to the target section.</p>
 
@@ -571,11 +624,11 @@ a responsive breakpoint threshold is crossed</p>
         </li>
         
         
-        <li id="section-30">
+        <li id="section-33">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-30">&#182;</a>
+                <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
               <p>A method to call after the page has stopped scrolling.</p>
 
@@ -587,11 +640,11 @@ a responsive breakpoint threshold is crossed</p>
         </li>
         
         
-        <li id="section-31">
+        <li id="section-34">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-31">&#182;</a>
+                <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
               <p>Each time a view is ready, it triggers a call to the appLoaded method,
 which checks to see if all views are ‘ready’.</p>
@@ -624,11 +677,11 @@ which checks to see if all views are ‘ready’.</p>
         </li>
         
         
-        <li id="section-32">
+        <li id="section-35">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-32">&#182;</a>
+                <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
               <p>Start listening for scroll events to call the navigation method</p>
 
@@ -639,11 +692,11 @@ which checks to see if all views are ‘ready’.</p>
         </li>
         
         
-        <li id="section-33">
+        <li id="section-36">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-33">&#182;</a>
+                <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
               <p>Load a section view function.</p>
 
@@ -654,11 +707,11 @@ which checks to see if all views are ‘ready’.</p>
         </li>
         
         
-        <li id="section-34">
+        <li id="section-37">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-34">&#182;</a>
+                <a class="pilcrow" href="#section-37">&#182;</a>
               </div>
               <p>Mock a view instance object if a view function wasn’t specified.</p>
 
@@ -678,11 +731,11 @@ which checks to see if all views are ‘ready’.</p>
         </li>
         
         
-        <li id="section-35">
+        <li id="section-38">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-35">&#182;</a>
+                <a class="pilcrow" href="#section-38">&#182;</a>
               </div>
               <p>Checks if all of the sections have reached the
 ‘ready’ phase of the loading process</p>
@@ -702,11 +755,11 @@ which checks to see if all views are ‘ready’.</p>
         </li>
         
         
-        <li id="section-36">
+        <li id="section-39">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-36">&#182;</a>
+                <a class="pilcrow" href="#section-39">&#182;</a>
               </div>
               <p>Returns true if the given section is ready. Otherwise, false</p>
 
@@ -722,11 +775,11 @@ which checks to see if all views are ‘ready’.</p>
         </li>
         
         
-        <li id="section-37">
+        <li id="section-40">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
+                <a class="pilcrow" href="#section-40">&#182;</a>
               </div>
               <p>Watches the width of the browser,
 and sends a notification if the width
@@ -756,11 +809,11 @@ listed in resolutionBreakPoints object</p>
         </li>
         
         
-        <li id="section-38">
+        <li id="section-41">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-38">&#182;</a>
+                <a class="pilcrow" href="#section-41">&#182;</a>
               </div>
               <p>Sets the current browser width based on the
 resolution breakpoints object</p>
@@ -773,11 +826,11 @@ resolution breakpoints object</p>
         </li>
         
         
-        <li id="section-39">
+        <li id="section-42">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-39">&#182;</a>
+                <a class="pilcrow" href="#section-42">&#182;</a>
               </div>
               <p>Retrieves the name of the current resolution</p>
 
@@ -800,11 +853,11 @@ resolution breakpoints object</p>
         </li>
         
         
-        <li id="section-40">
+        <li id="section-43">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-40">&#182;</a>
+                <a class="pilcrow" href="#section-43">&#182;</a>
               </div>
               <p>Checks to see if the current URL fragment corresponds to
 one of our sections, and returns the section object</p>
@@ -823,11 +876,11 @@ one of our sections, and returns the section object</p>
         </li>
         
         
-        <li id="section-41">
+        <li id="section-44">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-41">&#182;</a>
+                <a class="pilcrow" href="#section-44">&#182;</a>
               </div>
               <p>Dispatches a namespaced event notification</p>
 
@@ -842,11 +895,11 @@ one of our sections, and returns the section object</p>
         </li>
         
         
-        <li id="section-42">
+        <li id="section-45">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-42">&#182;</a>
+                <a class="pilcrow" href="#section-45">&#182;</a>
               </div>
               <p>Call the navigate method when the user is manually scrolling
 and the most visible section has changed.</p>
@@ -875,11 +928,11 @@ and the most visible section has changed.</p>
         </li>
         
         
-        <li id="section-43">
+        <li id="section-46">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-43">&#182;</a>
+                <a class="pilcrow" href="#section-46">&#182;</a>
               </div>
               <p>Updates the page meta data</p>
 
@@ -904,11 +957,11 @@ and the most visible section has changed.</p>
         </li>
         
         
-        <li id="section-44">
+        <li id="section-47">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-44">&#182;</a>
+                <a class="pilcrow" href="#section-47">&#182;</a>
               </div>
               <p>Bind all ‘a’ tags whose href attributes match a section’s route</p>
 
@@ -949,17 +1002,20 @@ and the most visible section has changed.</p>
         </li>
         
         
-        <li id="section-45">
+        <li id="section-48">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-45">&#182;</a>
+                <a class="pilcrow" href="#section-48">&#182;</a>
               </div>
               <p>Export the class</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">module</span>.exports = SinglePageScrollingController</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MixedIn</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">SinglePageScrollingController</span></span>
+  <span class="hljs-property">@include</span> mixins
+
+<span class="hljs-built_in">module</span>.exports = MixedIn</pre></div></div>
             
         </li>
         
