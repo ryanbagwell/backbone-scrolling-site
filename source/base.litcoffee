@@ -3,7 +3,7 @@ to the contoller and view
 
 It has some dependencies:
 
-    _s = require 'underscore.string'
+    capitalize = require 'underscore.string/capitalize'
 
     methods =
 
@@ -14,7 +14,7 @@ to handle responsive events, i.e. onChangeFromLargeToSmall
 
         @currentResolution = resolution.newSize
 
-        methodName = "onChangeFrom#{_s.capitalize(resolution.prevSize)}To#{_s.capitalize(resolution.newSize)}"
+        methodName = "onChangeFrom#{capitalize(resolution.prevSize)}To#{capitalize(resolution.newSize)}"
 
         try
             this[methodName]()

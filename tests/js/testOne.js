@@ -67,6 +67,8 @@ var TestOne =
 	    return Controller.__super__.constructor.apply(this, arguments);
 	  }
 	
+	  Controller.prototype.appRoot = 'backbone-scrolling-site/tests';
+	
 	  Controller.prototype.sections = {
 	    home: {
 	      route: '/',

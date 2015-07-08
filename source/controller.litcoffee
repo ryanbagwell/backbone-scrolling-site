@@ -4,13 +4,12 @@ It has a number of dependencies.
 
     $ = require 'jquery'
     _ = require 'underscore'
-    _s = require 'underscore.string'
-    debounce = require 'debounce'
-    Array = require './lib/array.unique'
     Backbone = require 'backbone'
-    mixins = require './base'
+    ltrim = require 'underscore.string/ltrim'
+    trim = require 'underscore.string/trim'
+    Array = require './lib/array.unique'
     require 'jquery.scrollto'
-    xtend = require 'xtend'
+    mixins = require './base'
     SinglePageScrollingView = require './view'
 
 The sections object represents all sections/pages of the site. Each item should
@@ -160,7 +159,7 @@ Listen for "navigate" notifications that originate from child views.
         # to notify all views that the window has been resized
         #
         $(window).on 'resize', =>
-          debounce (=> @notify 'windowResized'), 500
+          _.debounce (=> @notify 'windowResized'), 500
 
 Trigger the window resize event when the orientation
 is changed
@@ -185,12 +184,12 @@ The navigate function is bound to all clicks on local urls.
 
         return if not @ready
 
-        options = xtend
+        options = _.extend {},
           trigger: true
           scroll: true
         , options
 
-        route = _s.ltrim route, '/'
+        route = ltrim route, '/'
 
         super route, options
 
@@ -218,7 +217,7 @@ Scrolls the page to the target section.
         defaultOptions =
           onAfter: @afterScroll.bind(@)
 
-        options = xtend defaultOptions, @options.scrollToOptions
+        options = _.extend {}, defaultOptions, @options.scrollToOptions
 
         $.scrollTo el, @options.scrollTime, options
 
@@ -267,7 +266,7 @@ Mock a view instance object if a view function wasn't specified.
         if not section.view
           @sections[name].view = SinglePageScrollingView
 
-        opts = xtend @options,
+        opts = _.extend {}, @options,
                 notifications: @notifications
                 pageName: name
                 currentResolution: @_getResolution().name
@@ -349,7 +348,7 @@ one of our sections, and returns the section object
 
       _fragmentToSection: (fragment = Backbone.history.fragment) ->
 
-          fragment = _.ltrim fragment, '/'
+          fragment = ltrim fragment, '/'
 
           for name, section of @sections
               continue unless section.route?
@@ -394,7 +393,7 @@ Updates the page meta data
         if _.isEmpty route
             route = ''
         else:
-            route = ['/', _.trim(route, '/'), '/'].join('')
+            route = ['/', trim(route, '/'), '/'].join('')
 
         pageMeta = @pageMetaCollection.findWhere
             url: route

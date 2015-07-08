@@ -9,8 +9,6 @@ First, declare the dependencies
 
     $ = require "jquery"
     _ = require "underscore"
-    _.str = require 'underscore.string'
-    _.mixin _.str.exports()
     mixins = require './base'
     Backbone = require "backbone"
     Q = require 'q'

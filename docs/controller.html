@@ -65,13 +65,14 @@
             
             <div class="content"><div class='highlight'><pre>$ = <span class="hljs-built_in">require</span> <span class="hljs-string">'jquery'</span>
 _ = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore'</span>
-_s = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore.string'</span>
+Backbone = <span class="hljs-built_in">require</span> <span class="hljs-string">'backbone'</span>
+ltrim = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore.string/ltrim'</span>
+trim = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore.string/trim'</span>
 debounce = <span class="hljs-built_in">require</span> <span class="hljs-string">'debounce'</span>
 Array = <span class="hljs-built_in">require</span> <span class="hljs-string">'./lib/array.unique'</span>
-Backbone = <span class="hljs-built_in">require</span> <span class="hljs-string">'backbone'</span>
-mixins = <span class="hljs-built_in">require</span> <span class="hljs-string">'./base'</span>
 <span class="hljs-built_in">require</span> <span class="hljs-string">'jquery.scrollto'</span>
 xtend = <span class="hljs-built_in">require</span> <span class="hljs-string">'xtend'</span>
+mixins = <span class="hljs-built_in">require</span> <span class="hljs-string">'./base'</span>
 SinglePageScrollingView = <span class="hljs-built_in">require</span> <span class="hljs-string">'./view'</span></pre></div></div>
             
         </li>
@@ -579,7 +580,7 @@ a responsive breakpoint threshold is crossed</p>
       <span class="hljs-attribute">scroll</span>: <span class="hljs-literal">true</span>
     , options
 
-    route = _s.ltrim route, <span class="hljs-string">'/'</span>
+    route = ltrim route, <span class="hljs-string">'/'</span>
 
     <span class="hljs-keyword">super</span> route, options
 
@@ -866,7 +867,7 @@ one of our sections, and returns the section object</p>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">_fragmentToSection</span>: <span class="hljs-function"><span class="hljs-params">(fragment = Backbone.history.fragment)</span> -&gt;</span>
 
-      fragment = _.ltrim fragment, <span class="hljs-string">'/'</span>
+      fragment = ltrim fragment, <span class="hljs-string">'/'</span>
 
       <span class="hljs-keyword">for</span> name, section <span class="hljs-keyword">of</span> <span class="hljs-property">@sections</span>
           <span class="hljs-keyword">continue</span> <span class="hljs-keyword">unless</span> section.route?
@@ -943,7 +944,7 @@ and the most visible section has changed.</p>
     <span class="hljs-keyword">if</span> _.isEmpty route
         route = <span class="hljs-string">''</span>
     <span class="hljs-attribute">else</span>:
-        route = [<span class="hljs-string">'/'</span>, _.trim(route, <span class="hljs-string">'/'</span>), <span class="hljs-string">'/'</span>].join(<span class="hljs-string">''</span>)
+        route = [<span class="hljs-string">'/'</span>, trim(route, <span class="hljs-string">'/'</span>), <span class="hljs-string">'/'</span>].join(<span class="hljs-string">''</span>)
 
     pageMeta = <span class="hljs-property">@pageMetaCollection</span>.findWhere
         <span class="hljs-attribute">url</span>: route

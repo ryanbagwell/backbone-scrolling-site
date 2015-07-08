@@ -11,20 +11,15 @@ module.exports = (grunt) ->
 
     uglify:
       options:
-          mangle: true
-      files: {
-        expand: true
-        flatten: false
-        cwd: './dist'
-        dest: './dist'
-        src: [
-          '**/*.js'
-        ]
-      }
+        mangle: true
+        screwIE8: true
+      all:
+        files:
+          'dist/backbone-scrolling-site.min.js': ['dist/backbone-scrolling-site.js']
 
     webpack:
       options:
-        cache: true
+        cache: false
         devtool: 'sourcemap'
         resolve:
           extensions: ['.coffee', '.litcoffee', '.js', '']
@@ -50,7 +45,7 @@ module.exports = (grunt) ->
         watch: false
         keepalive: false
         entry:
-          "backbone-scrolling-site":"main"
+          "backbone-scrolling-site": "main"
         output:
           path: "dist/"
           filename: "[name].js"
@@ -101,6 +96,6 @@ module.exports = (grunt) ->
     grunt.loadNpmTasks 'grunt-webpack'
 
     # Define tasks.
-    grunt.registerTask 'build', ['webpack:production', 'docco']
+    grunt.registerTask 'build', ['webpack:production', 'docco', 'uglify']
     grunt.registerTask 'test', ['webpack:production', 'webpack:testOne']
     grunt.registerTask 'default', ['build']

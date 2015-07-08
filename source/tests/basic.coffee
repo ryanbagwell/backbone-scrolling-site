@@ -4,6 +4,8 @@ class Page extends ScrollingSite.View
 
 class Controller extends ScrollingSite.Controller
 
+    appRoot: 'backbone-scrolling-site/tests'
+
     sections:
 
         home:
