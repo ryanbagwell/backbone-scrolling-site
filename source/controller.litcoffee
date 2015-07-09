@@ -53,6 +53,10 @@ A placeholder for the previous resolution
 
       previousResolution: 0
 
+By default, our iniital route is root
+
+      currentRoute: '/'
+
 A placeholder for our notifications object
 
       notifications: _.clone Backbone.Events
@@ -200,7 +204,7 @@ The navigate function is bound to all clicks on local urls.
 
         @updatePageMeta route
 
-        @currentRoute = route
+        @setCurrentRoute route
 
         @currentSection = section
 
@@ -336,13 +340,17 @@ Retrieves the name of the current resolution
           for bp in @resolutionBreakPoints
             return bp if window.matchMedia("(min-width: #{bp.min}px) and (max-width: #{bp.max}px)").matches
 
-      _logMessage: (message, trace) ->
+      _logMessage: (message, trace=true) ->
 
           return if not this.options.debug
 
+          message = "BackboneScrollingSite: #{message}"
+
           try
-              console.log(message);
-              console.trace() if trace
+              if trace
+                console.trace(message)
+              else
+                console.info(message)
           catch error
 
 
@@ -389,6 +397,10 @@ and the most visible section has changed.
 
         @currentSection = section
 
+      setCurrentRoute: (route) ->
+        @_logMessage "Setting currentRoute to #{route}", true
+        @currentRoute = route
+
 Updates the page meta data
 
       updatePageMeta: (route) ->
@@ -410,6 +422,11 @@ Updates the page meta data
 Bind all 'a' tags whose href attributes match a section's route
 
       bindUrlsToRoutes: (selectors = null)->
+
+        @_logMessage 'Binding routes to links'
+
+        $('body').off 'click.scrollingSite.route'
+
         if selectors is null
           selectors = (for a in $('a:not([data-nobind])')
                         href = $(a).attr('href')
@@ -422,10 +439,9 @@ Bind all 'a' tags whose href attributes match a section's route
 
         handler = (e) =>
           e.preventDefault()
-          @navigate $(e.currentTarget).attr('href')
+          @navigate $(e.currentTarget).attr 'href'
 
-        $('body').off 'click', selectors
-        $('body').on 'click', selectors, handler
+        $('body').on 'click.scrollingSite.route', selectors, handler
 
       startHistory: (pushState = true, silent = false, root = '/') ->
 
