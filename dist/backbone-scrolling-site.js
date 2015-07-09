@@ -2691,6 +2691,8 @@ var ScrollingSite =
 	
 	  SinglePageScrollingController.prototype.previousResolution = 0;
 	
+	  SinglePageScrollingController.prototype.currentRoute = '/';
+	
 	  SinglePageScrollingController.prototype.notifications = _.clone(Backbone.Events);
 	
 	  SinglePageScrollingController.prototype.ready = false;
@@ -2792,7 +2794,7 @@ var ScrollingSite =
 	    } catch (_error) {}
 	    SinglePageScrollingController.__super__.navigate.call(this, route, options);
 	    this.updatePageMeta(route);
-	    this.currentRoute = route;
+	    this.setCurrentRoute(route);
 	    this.currentSection = section;
 	    if (!section) {
 	      return;
@@ -2922,13 +2924,18 @@ var ScrollingSite =
 	
 	  SinglePageScrollingController.prototype._logMessage = function(message, trace) {
 	    var error;
+	    if (trace == null) {
+	      trace = true;
+	    }
 	    if (!this.options.debug) {
 	      return;
 	    }
+	    message = "BackboneScrollingSite: " + message;
 	    try {
-	      console.log(message);
 	      if (trace) {
-	        return console.trace();
+	        return console.trace(message);
+	      } else {
+	        return console.info(message);
 	      }
 	    } catch (_error) {
 	      error = _error;
@@ -2989,6 +2996,11 @@ var ScrollingSite =
 	    return this.currentSection = section;
 	  };
 	
+	  SinglePageScrollingController.prototype.setCurrentRoute = function(route) {
+	    this._logMessage("Setting currentRoute to " + route, true);
+	    return this.currentRoute = route;
+	  };
+	
 	  SinglePageScrollingController.prototype.updatePageMeta = function(route) {
 	    var pageMeta;
 	    if (_.isEmpty(route)) {
@@ -3013,6 +3025,8 @@ var ScrollingSite =
 	    if (selectors == null) {
 	      selectors = null;
 	    }
+	    this._logMessage('Binding routes to links');
+	    $('body').off('click.scrollingSite.route');
 	    if (selectors === null) {
 	      selectors = ((function() {
 	        var i, len, ref, results;
@@ -3042,8 +3056,7 @@ var ScrollingSite =
 	        return _this.navigate($(e.currentTarget).attr('href'));
 	      };
 	    })(this);
-	    $('body').off('click', selectors);
-	    return $('body').on('click', selectors, handler);
+	    return $('body').on('click.scrollingSite.route', selectors, handler);
 	  };
 	
 	  SinglePageScrollingController.prototype.startHistory = function(pushState, silent, root) {
