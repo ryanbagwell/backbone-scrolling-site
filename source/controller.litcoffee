@@ -191,11 +191,14 @@ The navigate function is bound to all clicks on local urls.
 
         route = ltrim route, '/'
 
+        section = @_fragmentToSection route
+
+        try
+          route = section.getRoute()
+
         super route, options
 
         @updatePageMeta route
-
-        section = @_fragmentToSection route
 
         @currentRoute = route
 

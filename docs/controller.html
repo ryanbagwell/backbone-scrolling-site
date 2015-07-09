@@ -68,10 +68,8 @@ _ = <span class="hljs-built_in">require</span> <span class="hljs-string">'unders
 Backbone = <span class="hljs-built_in">require</span> <span class="hljs-string">'backbone'</span>
 ltrim = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore.string/ltrim'</span>
 trim = <span class="hljs-built_in">require</span> <span class="hljs-string">'underscore.string/trim'</span>
-debounce = <span class="hljs-built_in">require</span> <span class="hljs-string">'debounce'</span>
 Array = <span class="hljs-built_in">require</span> <span class="hljs-string">'./lib/array.unique'</span>
 <span class="hljs-built_in">require</span> <span class="hljs-string">'jquery.scrollto'</span>
-xtend = <span class="hljs-built_in">require</span> <span class="hljs-string">'xtend'</span>
 mixins = <span class="hljs-built_in">require</span> <span class="hljs-string">'./base'</span>
 SinglePageScrollingView = <span class="hljs-built_in">require</span> <span class="hljs-string">'./view'</span></pre></div></div>
             
@@ -506,7 +504,7 @@ to notify all views that the window has been resized</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>    $(<span class="hljs-built_in">window</span>).<span class="hljs-literal">on</span> <span class="hljs-string">'resize'</span>, <span class="hljs-function">=&gt;</span>
-      debounce (<span class="hljs-function">=&gt;</span> <span class="hljs-property">@notify</span> <span class="hljs-string">'windowResized'</span>), <span class="hljs-number">500</span></pre></div></div>
+      _.debounce (<span class="hljs-function">=&gt;</span> <span class="hljs-property">@notify</span> <span class="hljs-string">'windowResized'</span>), <span class="hljs-number">500</span></pre></div></div>
             
         </li>
         
@@ -575,18 +573,21 @@ a responsive breakpoint threshold is crossed</p>
 
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-property">@ready</span>
 
-    options = xtend
+    options = _.extend {},
       <span class="hljs-attribute">trigger</span>: <span class="hljs-literal">true</span>
       <span class="hljs-attribute">scroll</span>: <span class="hljs-literal">true</span>
     , options
 
     route = ltrim route, <span class="hljs-string">'/'</span>
 
+    section = <span class="hljs-property">@_fragmentToSection</span> route
+
+    <span class="hljs-keyword">try</span>
+      route = section.getRoute()
+
     <span class="hljs-keyword">super</span> route, options
 
     <span class="hljs-property">@updatePageMeta</span> route
-
-    section = <span class="hljs-property">@_fragmentToSection</span> route
 
     <span class="hljs-property">@currentRoute</span> = route
 
@@ -618,7 +619,7 @@ a responsive breakpoint threshold is crossed</p>
     defaultOptions =
       <span class="hljs-attribute">onAfter</span>: <span class="hljs-property">@afterScroll</span>.bind(@)
 
-    options = xtend defaultOptions, <span class="hljs-property">@options</span>.scrollToOptions
+    options = _.extend {}, defaultOptions, <span class="hljs-property">@options</span>.scrollToOptions
 
     $.scrollTo el, <span class="hljs-property">@options</span>.scrollTime, options</pre></div></div>
             
@@ -721,7 +722,7 @@ which checks to see if all views are ‘ready’.</p>
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> section.view
       <span class="hljs-property">@sections</span>[name].view = SinglePageScrollingView
 
-    opts = xtend <span class="hljs-property">@options</span>,
+    opts = _.extend {}, <span class="hljs-property">@options</span>,
             <span class="hljs-attribute">notifications</span>: <span class="hljs-property">@notifications</span>
             <span class="hljs-attribute">pageName</span>: name
             <span class="hljs-attribute">currentResolution</span>: <span class="hljs-property">@_getResolution</span>().name
