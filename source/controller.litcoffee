@@ -394,7 +394,7 @@ and the most visible section has changed.
 
         try
           route = section.instance.getRoute()
-          _logMessage "Got route string from #{section.instance.options.pageName}"
+          @_logMessage "Got route string from #{section.instance.options.pageName}"
         catch e
           route = section.route
 
