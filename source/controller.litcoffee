@@ -202,9 +202,9 @@ The navigate function is bound to all clicks on local urls.
         section = @_fragmentToSection route
 
         try
-          _logMessage "Trying to get route string from #{section.instance.options.pageName}"
+          @_logMessage "Trying to get route string from #{section.instance.options.pageName}"
           route = section.instance.getRoute()
-          _logMessage "Got route string from #{section.instance.options.pageName}"
+          @_logMessage "Got route string from #{section.instance.options.pageName}"
 
         super route, options
 

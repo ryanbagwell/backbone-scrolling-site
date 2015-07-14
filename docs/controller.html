@@ -602,9 +602,9 @@ a responsive breakpoint threshold is crossed</p>
     section = <span class="hljs-property">@_fragmentToSection</span> route
 
     <span class="hljs-keyword">try</span>
-      _logMessage <span class="hljs-string">"Trying to get route string from <span class="hljs-subst">#{section.instance.options.pageName}</span>"</span>
+      <span class="hljs-property">@_logMessage</span> <span class="hljs-string">"Trying to get route string from <span class="hljs-subst">#{section.instance.options.pageName}</span>"</span>
       route = section.instance.getRoute()
-      _logMessage <span class="hljs-string">"Got route string from <span class="hljs-subst">#{section.instance.options.pageName}</span>"</span>
+      <span class="hljs-property">@_logMessage</span> <span class="hljs-string">"Got route string from <span class="hljs-subst">#{section.instance.options.pageName}</span>"</span>
 
     <span class="hljs-keyword">super</span> route, options
 
