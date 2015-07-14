@@ -181,12 +181,16 @@ Initialize any section views.
         for name, params of @sections
           if params.el?.length
             @loadSection params, name
+          else
+            @_logMessage "Ignoring #{name} section because no corresponding element exists"
 
 The navigate function is bound to all clicks on local urls.
 
       navigate: (route, options) ->
 
         return if not @ready
+
+        @_logMessage "Navigating to #{route}"
 
         options = _.extend {},
           trigger: true
@@ -198,7 +202,9 @@ The navigate function is bound to all clicks on local urls.
         section = @_fragmentToSection route
 
         try
-          route = section.getRoute()
+          _logMessage "Trying to get route string from #{section.instance.options.pageName}"
+          route = section.instance.getRoute()
+          _logMessage "Got route string from #{section.instance.options.pageName}"
 
         super route, options
 
@@ -388,6 +394,7 @@ and the most visible section has changed.
 
         try
           route = section.instance.getRoute()
+          _logMessage "Got route string from #{section.instance.options.pageName}"
         catch e
           route = section.route
 

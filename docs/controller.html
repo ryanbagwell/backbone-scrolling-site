@@ -569,7 +569,9 @@ a responsive breakpoint threshold is crossed</p>
             
             <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">for</span> name, params <span class="hljs-keyword">of</span> <span class="hljs-property">@sections</span>
       <span class="hljs-keyword">if</span> params.el?.length
-        <span class="hljs-property">@loadSection</span> params, name</pre></div></div>
+        <span class="hljs-property">@loadSection</span> params, name
+      <span class="hljs-keyword">else</span>
+        <span class="hljs-property">@_logMessage</span> <span class="hljs-string">"Ignoring <span class="hljs-subst">#{name}</span> section because no corresponding element exists"</span></pre></div></div>
             
         </li>
         
@@ -588,6 +590,8 @@ a responsive breakpoint threshold is crossed</p>
 
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> <span class="hljs-keyword">not</span> <span class="hljs-property">@ready</span>
 
+    <span class="hljs-property">@_logMessage</span> <span class="hljs-string">"Navigating to <span class="hljs-subst">#{route}</span>"</span>
+
     options = _.extend {},
       <span class="hljs-attribute">trigger</span>: <span class="hljs-literal">true</span>
       <span class="hljs-attribute">scroll</span>: <span class="hljs-literal">true</span>
@@ -598,7 +602,9 @@ a responsive breakpoint threshold is crossed</p>
     section = <span class="hljs-property">@_fragmentToSection</span> route
 
     <span class="hljs-keyword">try</span>
-      route = section.getRoute()
+      _logMessage <span class="hljs-string">"Trying to get route string from <span class="hljs-subst">#{section.instance.options.pageName}</span>"</span>
+      route = section.instance.getRoute()
+      _logMessage <span class="hljs-string">"Got route string from <span class="hljs-subst">#{section.instance.options.pageName}</span>"</span>
 
     <span class="hljs-keyword">super</span> route, options
 
@@ -937,6 +943,7 @@ and the most visible section has changed.</p>
 
     <span class="hljs-keyword">try</span>
       route = section.instance.getRoute()
+      _logMessage <span class="hljs-string">"Got route string from <span class="hljs-subst">#{section.instance.options.pageName}</span>"</span>
     <span class="hljs-keyword">catch</span> e
       route = section.route
 

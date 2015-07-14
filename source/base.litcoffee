@@ -52,7 +52,7 @@ viewport. Returns the height of visible portion of the element.
             [section, name, args...] = arguments
             if section.instance?
               section.instance.receiveNavigation.apply(section.instance, args)
-            @_logMessage 'Route triggered'
+            @_logMessage "Route triggered: #{name}"
             @notify "#{name}:navigate"
 
     module.exports = methods
