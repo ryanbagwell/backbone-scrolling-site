@@ -152,7 +152,7 @@ Specifies the element that the controller will scroll the page to
 when navigate is called.
 
       getScrollToElement: ->
-        return "##{@options.pageName}"
+        @$el
 
 Parses a requested url and returns its parts
 
