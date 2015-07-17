@@ -9,9 +9,10 @@ First, declare the dependencies
 
     $ = require "jquery"
     _ = require "underscore"
-    mixins = require './base'
     Backbone = require "backbone"
     Q = require 'q'
+    mixins = require './base'
+
 
     class SinglePageScrollingView extends Backbone.View
 

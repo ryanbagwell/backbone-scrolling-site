@@ -5,10 +5,10 @@ It has a number of dependencies.
     $ = require 'jquery'
     _ = require 'underscore'
     Backbone = require 'backbone'
+    require 'jquery.scrollto'
     ltrim = require 'underscore.string/ltrim'
     trim = require 'underscore.string/trim'
     Array = require './lib/array.unique'
-    require 'jquery.scrollto'
     mixins = require './base'
     SinglePageScrollingView = require './view'
 
@@ -18,6 +18,8 @@ consist key=>value pairs. The key will become the name of the view (i.e. 'home')
 route: the route that will trigger a scrolling navigation event to that section
 el: the html element that will attach to the view
 view: an uninitialized view that is a subclasee of SinglePageScrollingView
+
+
 
     class SinglePageScrollingController extends Backbone.Router
 
@@ -123,8 +125,6 @@ Merge our options with the defaultOptions
 
         @options = _.extend {}, @defaultOptions, options
 
-        # @[name] = method.bind(@) for name, method of Base
-
         super(options)
 
 
@@ -203,7 +203,7 @@ The navigate function is bound to all clicks on local urls.
 
         try
           @_logMessage "Trying to get route string from #{section.instance.options.pageName}"
-          route = section.instance.getRoute()
+          route = section.instance.getRoute(route)
           @_logMessage "Got route string from #{section.instance.options.pageName}"
 
         super route, options
@@ -232,7 +232,7 @@ Scrolls the page to the target section.
 
         options = _.extend {}, defaultOptions, @options.scrollToOptions
 
-        $.scrollTo el, @options.scrollTime, options
+        $(window).scrollTo el, @options.scrollTime, options
 
 
 A method to call after the page has stopped scrolling.
