@@ -225,6 +225,11 @@ The navigate function is bound to all clicks on local urls.
 Scrolls the page to the target section.
 
       scrollToSection: (el) ->
+
+        return if @scrolling
+
+        @_logMessage('Starting scroll')
+
         @scrolling = true
 
         defaultOptions =
@@ -238,6 +243,7 @@ Scrolls the page to the target section.
 A method to call after the page has stopped scrolling.
 
       afterScroll: ->
+        @_logMessage('Ending scroll')
         @scrolling = false
 
 Each time a view is ready, it triggers a call to the appLoaded method,
@@ -387,7 +393,10 @@ and the most visible section has changed.
       navigateOnScroll: (e) ->
 
         return unless @options.navigateOnManualScroll
+
         return if @scrolling
+
+        @_logMessage("Navigating on scroll")
 
         section = _.max @sections, (section) =>
           @inViewport(section.el)
