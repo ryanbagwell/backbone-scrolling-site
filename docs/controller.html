@@ -621,6 +621,11 @@ a responsive breakpoint threshold is crossed</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">scrollToSection</span>: <span class="hljs-function"><span class="hljs-params">(el)</span> -&gt;</span>
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> <span class="hljs-property">@scrolling</span>
+
+    <span class="hljs-property">@_logMessage</span>(<span class="hljs-string">'Starting scroll'</span>)
+
     <span class="hljs-property">@scrolling</span> = <span class="hljs-literal">true</span>
 
     defaultOptions =
@@ -644,6 +649,7 @@ a responsive breakpoint threshold is crossed</p>
             </div>
             
             <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">afterScroll</span>: <span class="hljs-function">-&gt;</span>
+    <span class="hljs-property">@_logMessage</span>(<span class="hljs-string">'Ending scroll'</span>)
     <span class="hljs-property">@scrolling</span> = <span class="hljs-literal">false</span></pre></div></div>
             
         </li>
@@ -922,7 +928,10 @@ and the most visible section has changed.</p>
             <div class="content"><div class='highlight'><pre>  <span class="hljs-attribute">navigateOnScroll</span>: <span class="hljs-function"><span class="hljs-params">(e)</span> -&gt;</span>
 
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@options</span>.navigateOnManualScroll
+
     <span class="hljs-keyword">return</span> <span class="hljs-keyword">if</span> <span class="hljs-property">@scrolling</span>
+
+    <span class="hljs-property">@_logMessage</span>(<span class="hljs-string">"Navigating on scroll"</span>)
 
     section = _.max <span class="hljs-property">@sections</span>, <span class="hljs-function"><span class="hljs-params">(section)</span> =&gt;</span>
       <span class="hljs-property">@inViewport</span>(section.el)
