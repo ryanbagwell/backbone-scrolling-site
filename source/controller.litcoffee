@@ -375,7 +375,12 @@ one of our sections, and returns the section object
 
           for name, section of @sections
               continue unless section.route?
-              regex = @_routeToRegExp(section.route)
+
+              if section.route instanceof RegExp
+                regex = section.route
+              else
+                regex = @_routeToRegExp(section.route)
+
               return section if regex.test(fragment)
 
 Dispatches a namespaced event notification
