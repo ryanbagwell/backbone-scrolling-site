@@ -889,7 +889,12 @@ one of our sections, and returns the section object</p>
 
       <span class="hljs-keyword">for</span> name, section <span class="hljs-keyword">of</span> <span class="hljs-property">@sections</span>
           <span class="hljs-keyword">continue</span> <span class="hljs-keyword">unless</span> section.route?
-          regex = <span class="hljs-property">@_routeToRegExp</span>(section.route)
+
+          <span class="hljs-keyword">if</span> section.route <span class="hljs-keyword">instanceof</span> RegExp
+            regex = section.route
+          <span class="hljs-keyword">else</span>
+            regex = <span class="hljs-property">@_routeToRegExp</span>(section.route)
+
           <span class="hljs-keyword">return</span> section <span class="hljs-keyword">if</span> regex.test(fragment)</pre></div></div>
             
         </li>
