@@ -476,7 +476,7 @@ Bind all 'a' tags whose href attributes match a section's route
           root: root
 
         if silent isnt true
-          @navigate window.location.pathname
+          @navigate window.location.pathname + window.location.search
 
 Export the class
 
