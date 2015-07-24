@@ -204,7 +204,7 @@ The navigate function is bound to all clicks on local urls.
         try
           @_logMessage "Trying to get route string from #{section.instance.options.pageName}"
           route = section.instance.getRoute(route)
-          @_logMessage "Got route string from #{section.instance.options.pageName}"
+          @_logMessage "Got route string from #{section.instance.options.pageName}: #{route}"
 
         super route, options
 
