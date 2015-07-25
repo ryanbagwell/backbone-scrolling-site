@@ -197,14 +197,14 @@ The navigate function is bound to all clicks on local urls.
           scroll: true
         , options
 
-        route = ltrim route, '/'
-
         section = @_fragmentToSection route
 
         try
           @_logMessage "Trying to get route string from #{section.instance.options.pageName}"
           route = section.instance.getRoute(route)
           @_logMessage "Got route string from #{section.instance.options.pageName}: #{route}"
+
+        route = ltrim route, '/'
 
         super route, options
 
