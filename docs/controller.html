@@ -1019,7 +1019,9 @@ and the most visible section has changed.</p>
       e.preventDefault()
       <span class="hljs-property">@navigate</span> $(e.currentTarget).attr <span class="hljs-string">'href'</span>
 
-    $(<span class="hljs-string">'body'</span>).<span class="hljs-literal">on</span> <span class="hljs-string">'click.scrollingSite.route'</span>, selectors, handler
+    <span class="hljs-keyword">if</span> selectors
+      $(<span class="hljs-string">'body'</span>).<span class="hljs-literal">on</span> <span class="hljs-string">'click.scrollingSite.route'</span>, selectors, handler
+      $(selectors).attr <span class="hljs-string">'data-scrolling-site-bound'</span>, <span class="hljs-string">'true'</span>
 
   <span class="hljs-attribute">startHistory</span>: <span class="hljs-function"><span class="hljs-params">(pushState = <span class="hljs-literal">true</span>, silent = <span class="hljs-literal">false</span>, root = <span class="hljs-string">'/'</span>)</span> -&gt;</span>
 

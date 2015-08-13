@@ -3082,7 +3082,10 @@ var ScrollingSite =
 	        return _this.navigate($(e.currentTarget).attr('href'));
 	      };
 	    })(this);
-	    return $('body').on('click.scrollingSite.route', selectors, handler);
+	    if (selectors) {
+	      $('body').on('click.scrollingSite.route', selectors, handler);
+	      return $(selectors).attr('data-scrolling-site-bound', 'true');
+	    }
 	  };
 	
 	  SinglePageScrollingController.prototype.startHistory = function(pushState, silent, root) {
