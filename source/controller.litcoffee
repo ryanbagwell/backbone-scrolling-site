@@ -462,7 +462,9 @@ Bind all 'a' tags whose href attributes match a section's route
           e.preventDefault()
           @navigate $(e.currentTarget).attr 'href'
 
-        $('body').on 'click.scrollingSite.route', selectors, handler
+        if selectors
+          $('body').on 'click.scrollingSite.route', selectors, handler
+          $(selectors).attr 'data-scrolling-site-bound', 'true'
 
       startHistory: (pushState = true, silent = false, root = '/') ->
 
